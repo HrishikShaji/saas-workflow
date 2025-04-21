@@ -2,6 +2,8 @@ import BreadcrumbHeader from "@/components/BreadcrumbHeader";
 import DesktopSidebar from "@/components/Sidebar";
 import { ModeToggle } from "@/components/ThemeModeToggle";
 import { Separator } from "@/components/ui/separator";
+import UserInfo from "@/components/UserInfo";
+import { SignedIn, UserButton } from "@clerk/nextjs";
 import { ReactNode } from "react";
 
 export default function layout({ children }: { children: ReactNode }) {
@@ -12,6 +14,7 @@ export default function layout({ children }: { children: ReactNode }) {
         <BreadcrumbHeader />
         <div className="gap-1 flex items-center">
           <ModeToggle />
+          <UserInfo />
         </div>
       </header>
       <Separator />
