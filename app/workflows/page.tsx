@@ -1,16 +1,18 @@
 import { getWorkflowsForUser } from "@/actions/workflows/getWorkflowsForUser";
 import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Skeleton } from "@/components/ui/skeleton";
+import CreateWorkflowDialog from "@/components/workflow/CreateWorkflowDialog";
 import { AlertCircle, InboxIcon } from "lucide-react";
 import { Suspense } from "react";
 
 export default function Page() {
-  return <div className="flex-1 flex flex-col h-full">
+  return <div className="flex-1 flex flex-col h-full p-10">
     <div className="flex justify-between">
       <div className="flex flex-col">
         <h1 className="text-3xl font-bold">Workflows</h1>
         <p className="text-muted-foreground">Manage your workflows</p>
       </div>
+      <CreateWorkflowDialog />
     </div>
     <div className="h-full py-6">
       <Suspense fallback={<UserFlowsSkeleton />}>
@@ -54,6 +56,7 @@ async function UserWorkflows() {
             Click the button below to create your first workflow
           </p>
         </div>
+        <CreateWorkflowDialog triggerText="Create your first workflow" />
       </div>
     )
   }
