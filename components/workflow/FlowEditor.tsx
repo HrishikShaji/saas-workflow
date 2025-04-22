@@ -10,8 +10,11 @@ interface Props {
 }
 
 const nodeTypes = {
-	Node: NodeComponent
+	FlowScrapeNode: NodeComponent
 }
+
+const snapGrid: [number, number] = [50, 50]
+const fitViewOptions = { padding: 2 }
 
 export default function FlowEditor({ workflow }: Props) {
 	const [nodes, setNodes, onNodesChange] = useNodesState([createFlowNode(TaskType.LAUNCH_BROWSER)])
@@ -24,8 +27,12 @@ export default function FlowEditor({ workflow }: Props) {
 			onNodesChange={onNodesChange}
 			onEdgesChange={onEdgesChange}
 			nodeTypes={nodeTypes}
+			snapToGrid={true}
+			snapGrid={snapGrid}
+			fitView
+			fitViewOptions={fitViewOptions}
 		>
-			<Controls position="top-left" />
+			<Controls fitViewOptions={fitViewOptions} position="top-left" />
 			<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
 		</ReactFlow>
 	</main>
