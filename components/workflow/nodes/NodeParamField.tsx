@@ -16,7 +16,6 @@ export default function NodeParamField({ param, nodeId }: Props) {
 	const node = getNode(nodeId) as AppNode
 
 	const value = node?.data.inputs?.[param.name]
-	console.log("value", value, nodeId)
 	const updateNodeParamValue = useCallback((newValue: string) => {
 		updateNodeData(nodeId, {
 			inputs: {
