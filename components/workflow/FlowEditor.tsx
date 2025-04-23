@@ -1,4 +1,4 @@
-import { addEdge, Background, BackgroundVariant, Connection, Controls, Edge, ReactFlow, useEdgesState, useNodesState, useReactFlow } from "@xyflow/react"
+import { addEdge, Background, BackgroundVariant, Connection, Controls, Edge, getOutgoers, ReactFlow, useEdgesState, useNodesState, useReactFlow } from "@xyflow/react"
 import "@xyflow/react/dist/style.css"
 import NodeComponent from "./nodes/NodeComponent"
 import { useCallback, useEffect } from "react"
@@ -7,6 +7,7 @@ import { createFlowNode } from "@/lib/workflow/createFlowNode"
 import { TaskType } from "@/types/task"
 import { AppNode } from "@/types/appNode"
 import DeletableEdge from "./edges/DeletableEdge"
+import { TaskRegistry } from "@/lib/workflow/task/registry"
 
 
 interface Props {
@@ -81,6 +82,43 @@ export default function FlowEditor({ workflow }: Props) {
 
 	console.log(nodes)
 
+	const isValidConnection = useCallback((connection: Edge | Connection) => {
+
+		//no self connection allowed
+
+		if (connection.target === connection.source) {
+			return false
+		}
+		//same taskparam type connection
+		const source = nodes.find((node) => node.id === connection.source)
+		const target = nodes.find((node) => node.id === connection.target)
+
+		if (!source || !target) return false
+
+		const sourceTask = TaskRegistry[source.data.type]
+		const targetTask = TaskRegistry[target.data.type]
+
+		const output = sourceTask.outputs.find((o) => o.name === connection.sourceHandle)
+		const input = targetTask.inputs.find((o) => o.name === connection.targetHandle)
+
+		if (input?.type !== output?.type) return false
+
+		const hasCycle = (node: AppNode, visited = new Set()) => {
+			if (visited.has(node.id)) return false;
+
+			visited.add(node.id);
+
+			for (const outgoer of getOutgoers(node, nodes, edges)) {
+				if (outgoer.id === connection.source) return true;
+				if (hasCycle(outgoer, visited)) return true;
+			}
+		};
+
+		const detectedCycle = hasCycle(target)
+		return !detectedCycle
+
+	}, [nodes])
+
 	return <main className="h-full w-full">
 		<ReactFlow
 			nodes={nodes}
@@ -96,6 +134,7 @@ export default function FlowEditor({ workflow }: Props) {
 			onDrop={onDrop}
 			onConnect={onConnect}
 			edgeTypes={edgeTypes}
+			isValidConnection={isValidConnection}
 		>
 			<Controls fitViewOptions={fitViewOptions} position="top-left" />
 			<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
