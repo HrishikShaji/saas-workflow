@@ -6,6 +6,7 @@ import { Workflow } from "@/lib/generated/prisma"
 import { createFlowNode } from "@/lib/workflow/createFlowNode"
 import { TaskType } from "@/types/task"
 import { AppNode } from "@/types/appNode"
+import DeletableEdge from "./edges/DeletableEdge"
 
 
 interface Props {
@@ -16,13 +17,17 @@ const nodeTypes = {
 	FlowScrapeNode: NodeComponent
 }
 
+const edgeTypes = {
+	default: DeletableEdge
+}
+
 const snapGrid: [number, number] = [50, 50]
 const fitViewOptions = { padding: 2 }
 
 export default function FlowEditor({ workflow }: Props) {
 	const [nodes, setNodes, onNodesChange] = useNodesState<AppNode>([])
 	const [edges, setEdges, onEdgesChange] = useEdgesState<Edge>([])
-	const { setViewport, screenToFlowPosition } = useReactFlow()
+	const { setViewport, screenToFlowPosition, updateNodeData } = useReactFlow()
 
 	useEffect(() => {
 		try {
@@ -58,7 +63,23 @@ export default function FlowEditor({ workflow }: Props) {
 
 	const onConnect = useCallback((connection: Connection) => {
 		setEdges((edges) => addEdge({ ...connection, animated: true }, edges))
-	}, [])
+		console.log("this is connection", connection)
+
+		if (!connection.targetHandle) return;
+		const node = nodes.find((node) => node.id === connection.target)
+		if (!node) return;
+		const nodeInputs = node.data.inputs
+		updateNodeData(node.id, {
+			inputs: {
+				...nodeInputs,
+				[connection.targetHandle]: ""
+			}
+		})
+
+		console.log("@updated node", node.id)
+	}, [setEdges, updateNodeData, nodes])
+
+	console.log(nodes)
 
 	return <main className="h-full w-full">
 		<ReactFlow
@@ -74,6 +95,7 @@ export default function FlowEditor({ workflow }: Props) {
 			onDragOver={onDragOver}
 			onDrop={onDrop}
 			onConnect={onConnect}
+			edgeTypes={edgeTypes}
 		>
 			<Controls fitViewOptions={fitViewOptions} position="top-left" />
 			<Background variant={BackgroundVariant.Dots} gap={12} size={1} />
