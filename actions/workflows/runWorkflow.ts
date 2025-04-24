@@ -2,18 +2,20 @@
 
 import { prisma } from "@/lib/prisma";
 import { flowToExecutionPlan } from "@/lib/workflow/executionPlan";
-import { WorkflowExecutionPlan } from "@/types/workflow";
+import { TaskRegistry } from "@/lib/workflow/task/registry";
+import { ExecutionPhaseStatus, WorkflowExecutionPlan, WorkflowExecutionStatus, WorkflowExecutionTrigger } from "@/types/workflow";
+import { redirect } from "next/navigation";
 
-export async function runWorkflow(form: { worklowId: string; flowDefinition?: string }) {
-	const { worklowId, flowDefinition } = form;
+export async function runWorkflow(form: { workflowId: string; flowDefinition?: string }) {
+	const { workflowId, flowDefinition } = form;
 
-	if (!worklowId) {
+	if (!workflowId) {
 		throw new Error("workflowId is required")
 	}
 
 	const workflow = await prisma.workflow.findUnique({
 		where: {
-			id: worklowId
+			id: workflowId
 		}
 	})
 
@@ -39,5 +41,36 @@ export async function runWorkflow(form: { worklowId: string; flowDefinition?: st
 	}
 
 	executionPlan = result.executionPlan;
-	console.log("Execution plan", executionPlan)
+
+	const execution = await prisma.workflowExecution.create({
+		data: {
+			workflowId,
+			status: WorkflowExecutionStatus.PENDING,
+			startedAt: new Date(),
+			trigger: WorkflowExecutionTrigger.MANUAL,
+			phases: {
+				create: executionPlan.flatMap(phase => {
+					return phase.nodes.flatMap((node) => {
+						return {
+							status: ExecutionPhaseStatus.CREATED,
+							number: phase.phase,
+							node: JSON.stringify(node),
+							name: TaskRegistry[node.data.type].label,
+						}
+					})
+				})
+			}
+		},
+		select: {
+			id: true,
+			phases: true
+		}
+	})
+
+
+	if (!execution) {
+		throw new Error("workflow execution not created")
+	}
+
+	redirect(`/workflows/runs/${workflowId}/${execution.id}`)
 }

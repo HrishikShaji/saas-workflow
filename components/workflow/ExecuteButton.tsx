@@ -27,7 +27,7 @@ export default function ExecuteButton({ workflowId }: Props) {
 			}
 
 			mutate({
-				worklowId: workflowId,
+				workflowId,
 				flowDefinition: JSON.stringify(toObject())
 
 			})
