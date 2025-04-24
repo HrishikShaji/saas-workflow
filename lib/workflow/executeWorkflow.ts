@@ -7,6 +7,7 @@ import { AppNode } from "@/types/appNode";
 import { TaskRegistry } from "./task/registry";
 import { ExecutorRegistry } from "./executor/registry";
 import { run } from "node:test";
+import { Environment, ExecutionEnvironment } from "@/types/executor";
 
 export async function executeWorkflow(executionId: string) {
 	const execution = await prisma.workflowExecution.findUnique({
@@ -23,7 +24,7 @@ export async function executeWorkflow(executionId: string) {
 		throw new Error("execution not found")
 	}
 
-	const environment = {
+	const environment: Environment = {
 		phases: {}
 	}
 
@@ -34,7 +35,7 @@ export async function executeWorkflow(executionId: string) {
 	let executionFailed = false;
 	for (const phase of execution.phases) {
 
-		const phaseExecution = await executeWorkflowPhase(phase)
+		const phaseExecution = await executeWorkflowPhase(phase, environment)
 		if (!phaseExecution.success) {
 			executionFailed = true
 			break;
@@ -103,10 +104,10 @@ async function finalizeWorkflowExecution(executionId: string, workflowId: string
 	})
 }
 
-async function executeWorkflowPhase(phase: ExecutionPhase) {
+async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environment) {
 	const startedAt = new Date();
 	const node = JSON.parse(phase.node) as AppNode;
-
+	setupEnvironmentForPhase(node, environment)
 
 	await prisma.executionPhase.update({
 		where: { id: phase.id },
@@ -119,7 +120,7 @@ async function executeWorkflowPhase(phase: ExecutionPhase) {
 	const creditsRequired = TaskRegistry[node.data.type].credits;
 	console.log(`Executing phase ${phase.name} with ${creditsRequired} credits required`)
 
-	const success = await executePhase(phase, node)
+	const success = await executePhase(phase, node, environment)
 	await finalizePhase(phase.id, success)
 	return { success }
 
@@ -140,11 +141,32 @@ async function finalizePhase(phaseId: string, success: boolean) {
 }
 
 
-async function executePhase(phase: ExecutionPhase, node: AppNode): Promise<boolean> {
+async function executePhase(phase: ExecutionPhase, node: AppNode, environment: Environment): Promise<boolean> {
 	const runFn = ExecutorRegistry[node.data.type]
 	if (!runFn) {
 		return false
 	}
 
-	return await runFn()
+	const executionEnvironment: ExecutionEnvironment = createExecutionEnvironment(node, environment)
+
+	return await runFn(executionEnvironment)
+}
+
+function setupEnvironmentForPhase(node: AppNode, environment: Environment) {
+	environment.phases[node.id] = { inputs: {}, outputs: {} }
+	const inputs = TaskRegistry[node.data.type].inputs;
+	for (const input of inputs) {
+		const inputValue = node.data.inputs[input.name];
+		if (inputValue) {
+			environment.phases[node.id].inputs[input.name] = inputValue;
+			continue;
+		}
+	}
+}
+
+function createExecutionEnvironment(node: AppNode, environment: Environment) {
+
+	return {
+		getInput: (name: string) => environment.phases[node.id]?.inputs[name]
+	}
 }
