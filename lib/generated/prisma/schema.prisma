@@ -12,13 +12,16 @@ datasource db {
 }
 
 model Workflow {
-  id          String   @id @default(cuid())
-  name        String
-  description String?
-  definition  String
-  status      String
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  id            String    @id @default(cuid())
+  name          String
+  description   String?
+  definition    String
+  status        String
+  lastRunAt     DateTime?
+  lastRunId     String?
+  lastRunStatus String?
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
 
   executions WorkflowExecution[]
 
@@ -33,6 +36,8 @@ model WorkflowExecution {
   createdAt   DateTime  @default(now())
   startedAt   DateTime?
   completedAt DateTime?
+
+  creditsConsumed Int @default(0)
 
   phases ExecutionPhase[]
 

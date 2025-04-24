@@ -5,11 +5,13 @@ import { WorkflowExecutionStatus } from "@/types/workflow"
 import { useQuery } from "@tanstack/react-query"
 import { formatDistanceToNow } from "date-fns"
 import { CalendarIcon, CircleDashedIcon, ClockIcon, CoinsIcon, Loader, LucideIcon, WorkflowIcon } from "lucide-react"
-import { ReactNode } from "react"
+import { ReactNode, useState } from "react"
 import { Separator } from "../ui/separator"
 import { Button } from "../ui/button"
 import { Badge } from "../ui/badge"
 import { datesToDurationString } from "@/lib/helper/datesToDurationString"
+import { getPhasesTotalCost } from "@/lib/helper/phases"
+import { getWorkflowPhaseDetails } from "@/actions/workflows/getWorkflowPhaseDetails"
 
 type ExecutionData = Awaited<ReturnType<typeof getWorkflowExecutionWithPhases>>
 
@@ -18,6 +20,7 @@ interface Props {
 }
 
 export default function ExecutionViewer({ initialData }: Props) {
+	const [selectedPhase, setSelectedPhase] = useState<string | null>(null)
 
 	const { data, isLoading } = useQuery({
 		queryKey: ["execution", initialData?.id],
@@ -26,7 +29,17 @@ export default function ExecutionViewer({ initialData }: Props) {
 		refetchInterval: (q) => q.state.data?.status === WorkflowExecutionStatus.RUNNING ? 1000 : false
 	})
 
+	const phaseDetails = useQuery({
+		queryKey: ["phaseDetails", selectedPhase],
+		enabled: selectedPhase !== null,
+		queryFn: () => getWorkflowPhaseDetails(selectedPhase!)
+	})
+
+	const isRunning = data?.status === WorkflowExecutionStatus.RUNNING
+
 	const duration = datesToDurationString(data?.completedAt, data?.startedAt)
+
+	const creditsConsumed = getPhasesTotalCost(data?.phases || [])
 
 	return <div className="flex w-full h-full">
 		<aside className="w-[300px] min-w-[300px] max-w-[300px] border-r-2 border-seperate flex flex-grow flex-col overflow-hidden">
@@ -49,7 +62,7 @@ export default function ExecutionViewer({ initialData }: Props) {
 				<ExecutionLabel
 					icon={CoinsIcon}
 					label="Credits consumed"
-					value={"TODO"}
+					value={creditsConsumed}
 				/>
 			</div>
 			<Separator />
@@ -62,15 +75,25 @@ export default function ExecutionViewer({ initialData }: Props) {
 			<Separator />
 			<div className="overflow-auto h-full px-2 py-4 flex flex-col gap-1">
 				{data?.phases.map((phase, i) => (
-					<Button key={phase.id} className="w-full justify-between">
+					<Button key={phase.id} className="w-full justify-between"
+						onClick={() => {
+							if (isRunning) return;
+							setSelectedPhase(phase.id)
+						}}
+						style={{ background: selectedPhase === phase.id ? "blue" : "" }}
+					>
 						<div className="flex items-center gap-2">
 							<Badge variant="outline" className="text-white">{i + 1}</Badge>
 							<p className="font-semibold text-white">{phase.name}</p>
 						</div>
+						<p className="text-xs text-muted-foreground">{phase.status}</p>
 					</Button>
 				))}
 			</div>
 		</aside>
+		<div className="flex w-full h-full">
+			<pre>{JSON.stringify(phaseDetails.data, null, 4)}</pre>
+		</div>
 	</div>
 }
 
