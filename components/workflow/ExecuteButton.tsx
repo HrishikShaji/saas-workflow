@@ -14,11 +14,15 @@ export default function ExecuteButton({ workflowId }: Props) {
 	const generate = useExecutionPlan()
 	const { toObject } = useReactFlow()
 
-	const { mutate, isPending } = useMutation({
+	const { mutate, isPending, error } = useMutation({
 		mutationFn: runWorkflow,
 		onSuccess: () => toast.success("Execution started", { id: "flow-execution" }),
-		onError: () => toast.error("Something went wrong", { id: "flow-execution" })
+		onError: () => toast.error("Something has went wrong", { id: "flow-execution" })
 	})
+
+	console.log(error)
+
+
 	return <Button
 		onClick={() => {
 			const plan = generate();

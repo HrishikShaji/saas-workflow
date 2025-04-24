@@ -33,10 +33,12 @@ export async function runWorkflow(form: { workflowId: string; flowDefinition?: s
 	const result = flowToExecutionPlan(flow.nodes, flow.edges)
 
 	if (result.error) {
+		console.error("flow definition not valid")
 		throw new Error("flow definition not valid")
 	}
 
 	if (!result.executionPlan) {
+		console.error("no execution plan")
 		throw new Error("no execution plan generated")
 	}
 
@@ -69,6 +71,7 @@ export async function runWorkflow(form: { workflowId: string; flowDefinition?: s
 
 
 	if (!execution) {
+		console.error("not created")
 		throw new Error("workflow execution not created")
 	}
 

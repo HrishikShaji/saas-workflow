@@ -1,3 +1,5 @@
+"use client"
+
 import { useRouter } from "next/navigation";
 import { Button } from "../ui/button";
 import TooltipWrapper from "./TooltipWrapper";
@@ -9,9 +11,10 @@ interface Props {
 	title: string;
 	workflowId: string;
 	subTitle?: string;
+	hideButtons?: boolean
 }
 
-export default function Topbar({ workflowId, title, subTitle }: Props) {
+export default function Topbar({ workflowId, title, subTitle, hideButtons = false }: Props) {
 	const router = useRouter()
 	return <header className="flex p-2 border-p-2 border-separate justify-between w-full h-[60px] sticky top-0 z-10">
 		<div className="flex gap-1 flex-1">
@@ -28,8 +31,12 @@ export default function Topbar({ workflowId, title, subTitle }: Props) {
 			</div>
 		</div>
 		<div className="flex gap-1 flex-1 justify-end">
-			<ExecuteButton workflowId={workflowId} />
-			<SaveButton workflowId={workflowId} />
+			{hideButtons === false && (
+				<>
+					<ExecuteButton workflowId={workflowId} />
+					<SaveButton workflowId={workflowId} />
+				</>
+			)}
 		</div>
 	</header>
 }
