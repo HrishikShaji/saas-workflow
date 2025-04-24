@@ -1,8 +1,7 @@
 import { AppNode, AppNodeMissingInput } from "@/types/appNode";
 import { WorkflowExecutionPlan, WorkflowExecutionPlanPhase } from "@/types/workflow";
-import { Edge, getIncomers } from "@xyflow/react";
+import { Edge } from "@xyflow/react";
 import { TaskRegistry } from "./task/registry";
-import { getISODay } from "date-fns";
 
 export enum FlowToExecutionPlanValidationError {
 	"NO_ENTRY_POINT",
@@ -122,4 +121,19 @@ function getInvalidInputs(node: AppNode, edges: Edge[], planned: Set<string>) {
 	}
 
 	return invalidInputs;
+}
+
+function getIncomers(node: AppNode, nodes: AppNode[], edges: Edge[]) {
+	if (!node.id) {
+		return []
+	}
+
+	const incomerIds = new Set();
+	edges.forEach((edge) => {
+		if (edge.target === node.id) {
+			incomerIds.add(edge.source)
+		}
+	})
+
+	return nodes.filter((n) => incomerIds.has(n.id))
 }
