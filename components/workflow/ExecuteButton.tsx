@@ -5,6 +5,7 @@ import { useMutation } from "@tanstack/react-query";
 import { runWorkflow } from "@/actions/workflows/runWorkflow";
 import { toast } from "sonner";
 import { useReactFlow } from "@xyflow/react";
+import { useRouter } from "next/navigation";
 
 interface Props {
 	workflowId: string;
@@ -12,11 +13,15 @@ interface Props {
 
 export default function ExecuteButton({ workflowId }: Props) {
 	const generate = useExecutionPlan()
+	const router = useRouter()
 	const { toObject } = useReactFlow()
 
 	const { mutate, isPending, error } = useMutation({
 		mutationFn: runWorkflow,
-		onSuccess: () => toast.success("Execution started", { id: "flow-execution" }),
+		onSuccess: (execution) => {
+			toast.success("Execution started", { id: "flow-execution" })
+			router.push(`/workflow/runs/${workflowId}/${execution.id}`)
+		},
 		onError: () => toast.error("Something has went wrong", { id: "flow-execution" })
 	})
 

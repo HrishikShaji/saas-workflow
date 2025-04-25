@@ -80,5 +80,5 @@ export async function runWorkflow(form: { workflowId: string; flowDefinition?: s
 	executeWorkflow(execution.id)
 
 	revalidatePath("/workflow/runs")
-	redirect(`/workflow/runs/${workflowId}/${execution.id}`)
+	return execution
 }
