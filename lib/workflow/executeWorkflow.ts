@@ -10,6 +10,7 @@ import { run } from "node:test";
 import { Environment, ExecutionEnvironment } from "@/types/executor";
 import { TaskParamType } from "@/types/task";
 import { Browser, Page } from "puppeteer";
+import { Edge } from "@xyflow/react";
 
 export async function executeWorkflow(executionId: string) {
 	const execution = await prisma.workflowExecution.findUnique({
@@ -26,6 +27,8 @@ export async function executeWorkflow(executionId: string) {
 		throw new Error("execution not found")
 	}
 
+	const edges = JSON.parse(execution.workflow.definition).edges as Edge[]
+
 	const environment: Environment = {
 		phases: {}
 	}
@@ -37,7 +40,7 @@ export async function executeWorkflow(executionId: string) {
 	let executionFailed = false;
 	for (const phase of execution.phases) {
 
-		const phaseExecution = await executeWorkflowPhase(phase, environment)
+		const phaseExecution = await executeWorkflowPhase(phase, environment, edges)
 		if (!phaseExecution.success) {
 			executionFailed = true
 			break;
@@ -108,10 +111,10 @@ async function finalizeWorkflowExecution(executionId: string, workflowId: string
 	})
 }
 
-async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environment) {
+async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environment, edges: Edge[]) {
 	const startedAt = new Date();
 	const node = JSON.parse(phase.node) as AppNode;
-	setupEnvironmentForPhase(node, environment)
+	setupEnvironmentForPhase(node, environment, edges)
 
 	await prisma.executionPhase.update({
 		where: { id: phase.id },
@@ -159,7 +162,7 @@ async function executePhase(phase: ExecutionPhase, node: AppNode, environment: E
 	return await runFn(executionEnvironment)
 }
 
-function setupEnvironmentForPhase(node: AppNode, environment: Environment) {
+function setupEnvironmentForPhase(node: AppNode, environment: Environment, edges: Edge[]) {
 	environment.phases[node.id] = { inputs: {}, outputs: {} }
 	const inputs = TaskRegistry[node.data.type].inputs;
 	for (const input of inputs) {
@@ -169,7 +172,18 @@ function setupEnvironmentForPhase(node: AppNode, environment: Environment) {
 			environment.phases[node.id].inputs[input.name] = inputValue;
 			continue;
 		}
+		const connectedEdge = edges.find((edge) => edge.target === node.id && edge.targetHandle === input.name)
+
+		if (!connectedEdge) {
+			console.error("Misssing edge for input", input.name, "node id:", node.id)
+			continue;
+		}
+
+		const outputValue = environment.phases[connectedEdge.source].outputs[connectedEdge.sourceHandle!]
+
+		environment.phases[node.id].inputs[input.name] = outputValue
 	}
+
 }
 
 function createExecutionEnvironment(node: AppNode, environment: Environment): ExecutionEnvironment<any> {
