@@ -8,6 +8,8 @@ import { TaskRegistry } from "./task/registry";
 import { ExecutorRegistry } from "./executor/registry";
 import { run } from "node:test";
 import { Environment, ExecutionEnvironment } from "@/types/executor";
+import { TaskParamType } from "@/types/task";
+import { Browser, Page } from "puppeteer";
 
 export async function executeWorkflow(executionId: string) {
 	const execution = await prisma.workflowExecution.findUnique({
@@ -44,6 +46,9 @@ export async function executeWorkflow(executionId: string) {
 
 	await finalizeWorkflowExecution(executionId, execution.workflowId, executionFailed, creditsConsumed)
 
+	await cleanupEnvironment(environment)
+
+	//maybe do revalidatePath
 }
 
 async function initializeWorkflowExecution(executionId: string, workflowId: string) {
@@ -112,20 +117,22 @@ async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environm
 		where: { id: phase.id },
 		data: {
 			status: ExecutionPhaseStatus.RUNNING,
-			startedAt
+			startedAt,
+			inputs: JSON.stringify(environment.phases[node.id].inputs)
 		}
 	})
 
 	const creditsRequired = TaskRegistry[node.data.type].credits;
 	console.log(`Executing phase ${phase.name} with ${creditsRequired} credits required`)
 
+	const outputs = environment.phases[node.id].outputs
 	const success = await executePhase(phase, node, environment)
-	await finalizePhase(phase.id, success)
+	await finalizePhase(phase.id, success, outputs)
 	return { success }
 
 }
 
-async function finalizePhase(phaseId: string, success: boolean) {
+async function finalizePhase(phaseId: string, success: boolean, outputs: any) {
 	const finalStatus = success ? ExecutionPhaseStatus.COMPLETED : ExecutionPhaseStatus.FAILED
 
 	await prisma.executionPhase.update({
@@ -134,7 +141,8 @@ async function finalizePhase(phaseId: string, success: boolean) {
 		},
 		data: {
 			status: finalStatus,
-			completedAt: new Date()
+			completedAt: new Date(),
+			outputs: JSON.stringify(outputs)
 		}
 	})
 }
@@ -146,7 +154,7 @@ async function executePhase(phase: ExecutionPhase, node: AppNode, environment: E
 		return false
 	}
 
-	const executionEnvironment: ExecutionEnvironment = createExecutionEnvironment(node, environment)
+	const executionEnvironment: ExecutionEnvironment<any> = createExecutionEnvironment(node, environment)
 
 	return await runFn(executionEnvironment)
 }
@@ -155,6 +163,7 @@ function setupEnvironmentForPhase(node: AppNode, environment: Environment) {
 	environment.phases[node.id] = { inputs: {}, outputs: {} }
 	const inputs = TaskRegistry[node.data.type].inputs;
 	for (const input of inputs) {
+		if (input.type === TaskParamType.BROWSER_INSTANCE) continue;
 		const inputValue = node.data.inputs[input.name];
 		if (inputValue) {
 			environment.phases[node.id].inputs[input.name] = inputValue;
@@ -163,9 +172,22 @@ function setupEnvironmentForPhase(node: AppNode, environment: Environment) {
 	}
 }
 
-function createExecutionEnvironment(node: AppNode, environment: Environment) {
+function createExecutionEnvironment(node: AppNode, environment: Environment): ExecutionEnvironment<any> {
 
 	return {
-		getInput: (name: string) => environment.phases[node.id]?.inputs[name]
+		getInput: (name: string) => environment.phases[node.id]?.inputs[name],
+		getBrowser: () => environment.browser,
+		setBrowser: (browser: Browser) => (environment.browser = browser),
+		getPage: () => environment.page,
+		setPage: (page: Page) => (environment.page = page),
+		setOutput: (name: string, value: string) => {
+			environment.phases[node.id].outputs[name] = value
+		}
+	}
+}
+
+async function cleanupEnvironment(environment: Environment) {
+	if (environment.browser) {
+		await environment.browser.close().catch(err => console.error("cannot close browser", err))
 	}
 }
