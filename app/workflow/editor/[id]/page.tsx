@@ -2,7 +2,7 @@ import Editor from "@/components/workflow/Editor";
 import { prisma } from "@/lib/prisma";
 
 export default async function Page({ params }: { params: { id: string } }) {
-	const { id } = params
+	const { id } = await params
 
 	const workflow = await prisma.workflow.findUnique({
 		where: {

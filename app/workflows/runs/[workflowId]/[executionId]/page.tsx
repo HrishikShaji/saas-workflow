@@ -4,12 +4,14 @@ import Topbar from "@/components/workflow/Topbar";
 import { Loader } from "lucide-react";
 import { Suspense } from "react";
 
-export default function Page({ params }: { params: { executionId: string; workflowId: string } }) {
+export default async function Page({ params }: { params: { executionId: string; workflowId: string } }) {
+
+    const { workflowId, executionId } = await params
 
     return <div className="flex flex-col h-screen w-full overflow-hidden">
-        <Topbar workflowId={params.workflowId}
+        <Topbar workflowId={workflowId}
             title="workflow run details"
-            subTitle={`Run ID:${params.executionId}`}
+            subTitle={`Run ID:${executionId}`}
             hideButtons
         />
         <section className="flex h-full overflow-auto">
@@ -18,7 +20,7 @@ export default function Page({ params }: { params: { executionId: string; workfl
                     <Loader className="size-10 animate-spin stroke-primary" />
                 </div>
             }>
-                <ExecutionViewerWrapper executionId={params.executionId} />
+                <ExecutionViewerWrapper executionId={executionId} />
             </Suspense>
         </section>
 
