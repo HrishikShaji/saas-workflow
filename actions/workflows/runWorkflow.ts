@@ -5,6 +5,7 @@ import { executeWorkflow } from "@/lib/workflow/executeWorkflow";
 import { flowToExecutionPlan } from "@/lib/workflow/executionPlan";
 import { TaskRegistry } from "@/lib/workflow/task/registry";
 import { ExecutionPhaseStatus, WorkflowExecutionPlan, WorkflowExecutionStatus, WorkflowExecutionTrigger } from "@/types/workflow";
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 
 export async function runWorkflow(form: { workflowId: string; flowDefinition?: string }) {
@@ -77,5 +78,7 @@ export async function runWorkflow(form: { workflowId: string; flowDefinition?: s
 	}
 
 	executeWorkflow(execution.id)
-	redirect(`/workflows/runs/${workflowId}/${execution.id}`)
+
+	revalidatePath("/workflow/runs")
+	redirect(`/workflow/runs/${workflowId}/${execution.id}`)
 }
