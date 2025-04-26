@@ -36,6 +36,7 @@ status String
 createdAt DateTime @default(now())
 startedAt DateTime?
 completedAt DateTime?
+definition String @default("{}")
 
 creditsConsumed Int @default(0)
 

@@ -8,7 +8,7 @@ export async function pageToHtmlExecutor(environment: ExecutionEnvironment<typeo
 		console.log("launch browser executed @@ENV", JSON.stringify(environment, null, 4))
 		const html = await environment.getPage()!.content()
 		console.log("@@PAGE", html)
-		environment.setOutput("Website URL", html)
+		environment.setOutput("Html", html)
 		return true
 	} catch (error) {
 		return false

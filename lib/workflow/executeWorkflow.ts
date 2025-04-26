@@ -27,7 +27,7 @@ export async function executeWorkflow(executionId: string) {
 		throw new Error("execution not found")
 	}
 
-	const edges = JSON.parse(execution.workflow.definition).edges as Edge[]
+	const edges = JSON.parse(execution.definition).edges as Edge[]
 
 	const environment: Environment = {
 		phases: {}
@@ -180,6 +180,7 @@ function setupEnvironmentForPhase(node: AppNode, environment: Environment, edges
 		}
 
 		const outputValue = environment.phases[connectedEdge.source].outputs[connectedEdge.sourceHandle!]
+		console.log("this is the output value", outputValue, connectedEdge)
 
 		environment.phases[node.id].inputs[input.name] = outputValue
 	}
