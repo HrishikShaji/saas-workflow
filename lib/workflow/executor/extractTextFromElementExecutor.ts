@@ -11,12 +11,14 @@ export async function extractTextFromElementExecutor(environment: ExecutionEnvir
 		const selector = environment.getInput("Selector")
 		if (!selector) {
 			console.error("no selector", selector)
+			environment.log.error("selector not defined")
 			return false;
 		}
 
 		const html = environment.getInput("Html")
 		if (!html) {
 			console.error("no html", html)
+			environment.log.error("html not defined")
 			return false;
 		}
 
@@ -24,11 +26,13 @@ export async function extractTextFromElementExecutor(environment: ExecutionEnvir
 		const element = $(selector)
 
 		if (!element) {
+			environment.log.error("Element not found")
 			console.error("Element not found")
 		}
 
 		const extractedText = $.text(element)
 		if (!extractedText) {
+			environment.log.error("Element has no text")
 			console.error("Element has no text")
 			return false
 		}
@@ -36,7 +40,8 @@ export async function extractTextFromElementExecutor(environment: ExecutionEnvir
 		environment.setOutput("Extracted text", extractedText)
 
 		return true
-	} catch (error) {
+	} catch (error: any) {
+		environment.log.error(error.message)
 		return false
 	}
 }

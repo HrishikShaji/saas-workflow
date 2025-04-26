@@ -16,7 +16,8 @@ export async function launchBrowserExecutor(environment: ExecutionEnvironment<ty
 		await page.goto(websiteUrl)
 		environment.setPage(page)
 		return true
-	} catch (error) {
+	} catch (error: any) {
+		environment.log.error(error.message)
 		return false
 	}
 }
