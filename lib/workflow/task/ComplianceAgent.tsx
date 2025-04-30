@@ -1,12 +1,12 @@
 import { TaskParamType, TaskType } from "@/types/task";
 import { WorkflowTask } from "@/types/workflow";
-import { CodeIcon, GlobeIcon, LucideProps } from "lucide-react";
+import { Bot, CodeIcon, GlobeIcon, LucideProps } from "lucide-react";
 
 export const ComplianceAgentTask = {
 	type: TaskType.COMPLIANCE_AGENT,
 	label: "Check Compliance",
 	icon: (props: LucideProps) => (
-		<CodeIcon className="stroke-rose-400" {...props} />
+		<Bot className="stroke-rose-400" {...props} />
 	),
 	isEntryPoint: false,
 	inputs: [

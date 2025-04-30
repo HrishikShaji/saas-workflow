@@ -4,10 +4,13 @@ import { Skeleton } from "@/components/ui/skeleton";
 import CreateWorkflowDialog from "@/components/workflow/CreateWorkflowDialog";
 import WorkflowCard from "@/components/workflow/WorkflowCard";
 import { AlertCircle, InboxIcon } from "lucide-react";
+import { Poppins } from "next/font/google";
 import { Suspense } from "react";
 
+const poppins = Poppins({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"] })
+
 export default function Page() {
-  return <div className="flex-1 flex flex-col h-full p-10">
+  return <div className={`${poppins.className} flex-1 flex flex-col h-full p-10`}>
     <div className="flex justify-between">
       <div className="flex flex-col">
         <h1 className="text-3xl font-bold">Workflows</h1>

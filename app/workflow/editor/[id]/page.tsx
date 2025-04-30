@@ -1,5 +1,8 @@
 import Editor from "@/components/workflow/Editor";
 import { prisma } from "@/lib/prisma";
+import { Poppins } from "next/font/google";
+
+const poppins = Poppins({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"] })
 
 export default async function Page({ params }: { params: { id: string } }) {
 	const { id } = await params
@@ -14,7 +17,7 @@ export default async function Page({ params }: { params: { id: string } }) {
 		return <div>Workflow not found</div>
 	}
 
-	return <div className="h-screen p-20 bg-neutral-200">
+	return <div className={`h-screen  bg-neutral-200 ${poppins.className} `}>
 		<Editor workflow={workflow} />
 	</div>
 }

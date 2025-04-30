@@ -35,5 +35,6 @@ export default function SaveButton({ workflowId }: Props) {
 		}}
 	>
 		<CheckIcon size={16} className="stroke-green-500" />
+		Save
 	</Button >
 }

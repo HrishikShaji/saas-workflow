@@ -6,11 +6,11 @@ import { Button } from "../ui/button"
 import { TaskRegistry } from "@/lib/workflow/task/registry"
 
 export default function TaskMenu() {
-	return <aside className="w-[340px]  min-w-[340px] max-w-[340px] border-r-2 border-black border-separate h-full p-2 px-4 overflow-auto">
-		<Accordion type="multiple" className="w-full" defaultValue={["extraction"]}>
-			<AccordionItem value="extraction">
+	return <aside className="w-[250px]  min-w-[250px] max-w-[250px]  bg-white border-separate h-full p-2 px-4 overflow-auto">
+		<Accordion type="multiple" className="w-full" defaultValue={["ai"]}>
+			<AccordionItem value="ai">
 				<AccordionTrigger className="font-bold">
-					Data extraction
+					AI Agents
 				</AccordionTrigger>
 				<AccordionContent className="flex flex-col gap-1">
 					<TaskMenuBtn taskType={TaskType.PROMPT_GENERATOR} />
@@ -19,6 +19,13 @@ export default function TaskMenu() {
 					<TaskMenuBtn taskType={TaskType.COMPLIANCE_AGENT} />
 					<TaskMenuBtn taskType={TaskType.TONE_AGENT} />
 					<TaskMenuBtn taskType={TaskType.RISK_REVIEW_AGENT} />
+				</AccordionContent>
+			</AccordionItem>
+			<AccordionItem value="extraction">
+				<AccordionTrigger className="font-bold">
+					Data extraction
+				</AccordionTrigger>
+				<AccordionContent className="flex flex-col gap-1">
 					<TaskMenuBtn taskType={TaskType.LAUNCH_BROWSER} />
 					<TaskMenuBtn taskType={TaskType.PAGE_TO_HTML} />
 					<TaskMenuBtn taskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT} />
@@ -39,12 +46,12 @@ function TaskMenuBtn({ taskType }: { taskType: TaskType }) {
 	return (
 		<Button
 			variant="secondary"
-			className="flex justify-between items-center gap-2 border w-full"
+			className="flex justify-start items-center gap-2 border w-full "
 			draggable
 			onDragStart={(e) => onDragStart(e, taskType)}
 		>
-			<task.icon size={20} />
-			{task.label}
+			<task.icon className="text-black" size={20} />
+			<span className="w-full truncate text-ellipsis text-left">{task.label}</span>
 		</Button>
 	)
 }

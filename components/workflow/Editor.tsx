@@ -14,7 +14,7 @@ interface Props {
 export default function Editor({ workflow }: Props) {
 	return <FlowValidationContextProvider>
 		<ReactFlowProvider>
-			<div className="flex flex-col h-full w-full overflow-hidden rounded-3xl border-2 border-black">
+			<div className="flex flex-col h-full w-full overflow-hidden  ">
 				<Topbar title="Workflow Editor" subTitle={workflow.name} workflowId={workflow.id} />
 				<section className="flex h-full overflow-auto">
 					<TaskMenu />

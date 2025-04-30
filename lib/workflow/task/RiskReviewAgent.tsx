@@ -1,13 +1,13 @@
 
 import { TaskParamType, TaskType } from "@/types/task";
 import { WorkflowTask } from "@/types/workflow";
-import { CodeIcon, GlobeIcon, LucideProps } from "lucide-react";
+import { Bot, CodeIcon, GlobeIcon, LucideProps } from "lucide-react";
 
 export const RiskReviewAgentTask = {
 	type: TaskType.RISK_REVIEW_AGENT,
 	label: "Risk Review",
 	icon: (props: LucideProps) => (
-		<CodeIcon className="stroke-rose-400" {...props} />
+		<Bot className="stroke-rose-400" {...props} />
 	),
 	isEntryPoint: false,
 	inputs: [

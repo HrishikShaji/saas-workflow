@@ -42,7 +42,7 @@ export default function ExecuteButton({ workflowId }: Props) {
 			})
 		}}
 		disabled={isPending}
-		variant="outline" className="flex items-center gap-2">
+		variant="outline" className=" flex items-center gap-2">
 		<PlayIcon size={16} className="stroke-orange-500" />
 		Execute
 	</Button>

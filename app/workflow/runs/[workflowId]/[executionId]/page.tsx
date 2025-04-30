@@ -2,13 +2,16 @@ import { getWorkflowExecutionWithPhases } from "@/actions/workflows/getWorkflowE
 import ExecutionViewer from "@/components/workflow/ExecutionViewer";
 import Topbar from "@/components/workflow/Topbar";
 import { Loader } from "lucide-react";
+import { Poppins } from "next/font/google";
 import { Suspense } from "react";
+
+const poppins = Poppins({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"] })
 
 export default async function Page({ params }: { params: { executionId: string; workflowId: string } }) {
 
     const { workflowId, executionId } = await params
 
-    return <div className="flex flex-col h-screen w-full overflow-hidden">
+    return <div className={`flex flex-col h-screen w-full overflow-hidden ${poppins.className}`}>
         <Topbar workflowId={workflowId}
             title="workflow run details"
             subTitle={`Run ID:${executionId}`}

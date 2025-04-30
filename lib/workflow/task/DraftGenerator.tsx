@@ -1,12 +1,12 @@
 import { TaskParamType, TaskType } from "@/types/task";
 import { WorkflowTask } from "@/types/workflow";
-import { CodeIcon, GlobeIcon, LucideProps } from "lucide-react";
+import { Bot, CodeIcon, GlobeIcon, LucideProps } from "lucide-react";
 
 export const DraftGeneratorTask = {
 	type: TaskType.DRAFT_GENERATOR,
 	label: "Get Draft",
 	icon: (props: LucideProps) => (
-		<CodeIcon className="stroke-rose-400" {...props} />
+		<Bot className="stroke-rose-400" {...props} />
 	),
 	isEntryPoint: false,
 	inputs: [
