@@ -6,6 +6,10 @@ import { WorkflowTask } from "@/types/workflow";
 import { extractTextFromElementExecutor } from "./extractTextFromElementExecutor";
 import { promptGeneratorExecutor } from "./promptGeneratorExecutor";
 import { draftGeneratorExecutor } from "./draftGeneratorExecutor";
+import { clarityGeneratorExecutor } from "./clarityAgentExecutor";
+import { complianceAgentExecutor } from "./complianceAgentExecutor";
+import { toneAgentExecutor } from "./toneAgentExecutor";
+import { riskReviewAgentExecutor } from "./riskReviewAgentExecutor";
 
 type ExecutorFn<T extends WorkflowTask> = (environment: ExecutionEnvironment<T>) => Promise<boolean>
 
@@ -18,5 +22,9 @@ export const ExecutorRegistry: RegistryType = {
 	PAGE_TO_HTML: pageToHtmlExecutor,
 	EXTRACT_TEXT_FROM_ELEMENT: extractTextFromElementExecutor,
 	PROMPT_GENERATOR: promptGeneratorExecutor,
-	DRAFT_GENERATOR: draftGeneratorExecutor
+	DRAFT_GENERATOR: draftGeneratorExecutor,
+	CLARITY_AGENT: clarityGeneratorExecutor,
+	COMPLIANCE_AGENT: complianceAgentExecutor,
+	TONE_AGENT: toneAgentExecutor,
+	RISK_REVIEW_AGENT: riskReviewAgentExecutor
 }

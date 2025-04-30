@@ -14,10 +14,18 @@ export const PromptGeneratorTask = {
 		{
 			name: "input",
 			type: TaskParamType.STRING,
-			helperText: "create a legal document",
+			helperText: "Legal compliance",
+			required: true,
+			hideHandle: true
+		},
+		{
+			name: "use case",
+			type: TaskParamType.STRING,
+			helperText: "Create a legal document",
 			required: true,
 			hideHandle: true
 		}
+
 	] as const,
 	outputs: [
 		{ name: "AI Response", type: TaskParamType.AI_RESPONSE }

@@ -15,6 +15,10 @@ export default function TaskMenu() {
 				<AccordionContent className="flex flex-col gap-1">
 					<TaskMenuBtn taskType={TaskType.PROMPT_GENERATOR} />
 					<TaskMenuBtn taskType={TaskType.DRAFT_GENERATOR} />
+					<TaskMenuBtn taskType={TaskType.CLARITY_AGENT} />
+					<TaskMenuBtn taskType={TaskType.COMPLIANCE_AGENT} />
+					<TaskMenuBtn taskType={TaskType.TONE_AGENT} />
+					<TaskMenuBtn taskType={TaskType.RISK_REVIEW_AGENT} />
 					<TaskMenuBtn taskType={TaskType.LAUNCH_BROWSER} />
 					<TaskMenuBtn taskType={TaskType.PAGE_TO_HTML} />
 					<TaskMenuBtn taskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT} />
