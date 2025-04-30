@@ -141,3 +141,4 @@ export default function FlowEditor({ workflow }: Props) {
 		</ReactFlow>
 	</main>
 }
+

@@ -5,6 +5,7 @@ import { useReactFlow } from "@xyflow/react";
 import { AppNode } from "@/types/appNode";
 import { useCallback } from "react";
 import BrowserInstanceParam from "./params/BrowserInstanceParam";
+import AiResponseParam from "./params/AIResponseParam";
 
 interface Props {
 	param: TaskParam;
@@ -30,6 +31,13 @@ export default function NodeParamField({ param, nodeId, disabled }: Props) {
 	switch (param.type) {
 		case TaskParamType.STRING:
 			return <StringParam
+				param={param}
+				value={value}
+				updateNodeParamValue={updateNodeParamValue}
+				disabled={disabled}
+			/>
+		case TaskParamType.AI_RESPONSE:
+			return <AiResponseParam
 				param={param}
 				value={value}
 				updateNodeParamValue={updateNodeParamValue}
