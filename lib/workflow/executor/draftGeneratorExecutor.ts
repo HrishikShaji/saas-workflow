@@ -1,21 +1,24 @@
-
 import { Environment, ExecutionEnvironment } from "@/types/executor"
-import { PromptGeneratorTask } from "../task/PromptGenerator"
 import { DraftGeneratorTask } from "../task/DraftGenerator"
+import { getAIResponse } from "../ai/getAIResponse"
 
 export async function draftGeneratorExecutor(environment: ExecutionEnvironment<typeof DraftGeneratorTask>) {
 	try {
-		console.log("launch browser executed @@ENV", JSON.stringify(environment, null, 4))
+		environment.log.info("Starting draft generation process")
 		const input = environment.getInput("AI Generated Content")
-		environment.log.info("Input received")
 
-		const aiResponse = `For this ${input} ,final response is ${input}`
+		environment.log.info("Sending request to OpenAI")
+
+		const aiResponse = await getAIResponse({
+			systemMessage: "You are a helpful assistant that generates high-quality drafts based on provided input.",
+			query: `Please generate a comprehensive draft based on the following input: ${input}`
+		})
 		environment.setOutput("AI Response", aiResponse)
-		environment.log.info(`Response is outputted`)
+		environment.log.info("Draft generation completed successfully")
 
 		return true
 	} catch (error: any) {
-		environment.log.error(error.message)
+		environment.log.error(`Draft generation failed: ${error.message}`)
 		return false
 	}
 }
