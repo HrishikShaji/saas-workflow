@@ -19,6 +19,7 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from ".
 import { cn } from "@/lib/utils"
 import { LogLevel } from "@/types/log"
 import PhaseStatusBadge from "./PhaseStatusBadge"
+import ViewResponse from "./ViewResponse"
 
 type ExecutionData = Awaited<ReturnType<typeof getWorkflowExecutionWithPhases>>
 
@@ -147,11 +148,13 @@ export default function ExecutionViewer({ initialData }: Props) {
 						</Badge>
 					</div>
 					<ParameterViewer
+						type="input"
 						title="Inputs"
 						subTitle="Inputs used for this phase"
 						paramJSON={phaseDetails.data.inputs}
 					/>
 					<ParameterViewer
+						type="output"
 						title="Outputs"
 						subTitle="Outputs used for this phase"
 						paramJSON={phaseDetails.data.outputs}
@@ -183,7 +186,7 @@ function ExecutionLabel({ icon, label, value }: { icon: LucideIcon; label: React
 	)
 }
 
-function ParameterViewer({ title, subTitle, paramJSON }: { title: string; subTitle: string; paramJSON: string | null }) {
+function ParameterViewer({ title, subTitle, paramJSON, type }: { type: "input" | "output"; title: string; subTitle: string; paramJSON: string | null }) {
 	const params = paramJSON ? JSON.parse(paramJSON) : undefined
 	return <Card>
 		<CardHeader className="rounded-lg rounded-b-none border-b py-4 bg-gray-50 dark:bg-background">
@@ -202,7 +205,10 @@ function ParameterViewer({ title, subTitle, paramJSON }: { title: string; subTit
 				{params && Object.entries(params).map(([key, value]) => (
 					<div className="flex justify-between items-center space-y-1" key={key}>
 						<p className="text-sm text-muted-foreground flex-1 basis-1/3">{key}</p>
-						<Input readOnly className="flex-1 basis-2/3" value={value as string} />
+						<div className="flex gap-2 items-center flex-1 basis-2/3">
+							<Input readOnly className="" value={value as string} />
+							<ViewResponse type={type} response={value as string} />
+						</div>
 					</div>
 				))}
 			</div>
