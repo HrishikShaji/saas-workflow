@@ -6,6 +6,7 @@ import { AppNode } from "@/types/appNode";
 import { useCallback } from "react";
 import BrowserInstanceParam from "./params/BrowserInstanceParam";
 import AiResponseParam from "./params/AIResponseParam";
+import OptionsParam from "./params/OptionsParam";
 
 interface Props {
 	param: TaskParam;
@@ -38,6 +39,13 @@ export default function NodeParamField({ param, nodeId, disabled }: Props) {
 			/>
 		case TaskParamType.AI_RESPONSE:
 			return <AiResponseParam
+				param={param}
+				value={value}
+				updateNodeParamValue={updateNodeParamValue}
+				disabled={disabled}
+			/>
+		case TaskParamType.OPTIONS:
+			return <OptionsParam
 				param={param}
 				value={value}
 				updateNodeParamValue={updateNodeParamValue}

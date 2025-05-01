@@ -6,12 +6,46 @@ export async function draftGeneratorExecutor(environment: ExecutionEnvironment<t
 	try {
 		environment.log.info("Starting draft generation process")
 		const input = environment.getInput("AI Generated Content")
+		const law = environment.getInput("Law")
+		const tone = environment.getInput("Tone")
+		const special = environment.getInput("Special")
 
+		const parties = environment.getInput("Parties")
+		const parsedParties = JSON.parse(parties)
+		const partiesString = parsedParties.join(',')
+
+		const obligations = environment.getInput("Obligations")
+		const parsedObligations = JSON.parse(obligations)
+		const obligationsString = parsedObligations.join(",")
+
+		const risks = environment.getInput("Risks")
+		const parsedRisks = JSON.parse(risks)
+		const risksString = parsedRisks.join(",")
+
+		const mustHaves = environment.getInput("Must Haves")
+		const parsedMustHaves = JSON.parse(mustHaves)
+		const mustHavesString = parsedMustHaves.join(",")
+
+
+		console.log("these are options", parties, parsedParties, partiesString)
 		environment.log.info("Sending request to OpenAI")
+		const systemMessage = "You are a legal drafting expert.";
+		const query = `Create the first draft of a document titles '${input}'.
+		Parties:${partiesString}
+		Obligations:${obligationsString}
+		Risks to cover:${risksString}
+		Must-have clauses:${mustHavesString}
+		Applicable Law:${law}
+		Tone:${tone}
+		Special Instructions:${special}
+
+                Structure it with headings and proper legal format
+		`;
+
 
 		const aiResponse = await getAIResponse({
-			systemMessage: "You are a helpful assistant that generates high-quality drafts based on provided input.",
-			query: `Please generate a comprehensive draft based on the following input: ${input}`
+			systemMessage,
+			query
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Draft generation completed successfully")

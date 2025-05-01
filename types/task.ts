@@ -13,7 +13,8 @@ export enum TaskType {
 export enum TaskParamType {
         STRING = "STRING",
         BROWSER_INSTANCE = "BROWSER_INSTANCE",
-        AI_RESPONSE = "AI_RESPONSE"
+        AI_RESPONSE = "AI_RESPONSE",
+        OPTIONS = "OPTIONS"
 }
 
 export interface TaskParam {

@@ -14,6 +14,41 @@ export const DraftGeneratorTask = {
 			name: "AI Generated Content",
 			type: TaskParamType.AI_RESPONSE,
 			required: true,
+		},
+		{
+			name: "Parties",
+			type: TaskParamType.OPTIONS,
+			required: true
+		},
+		{
+			name: "Obligations",
+			type: TaskParamType.OPTIONS,
+			required: true
+		},
+		{
+			name: "Risks",
+			type: TaskParamType.OPTIONS,
+			required: true,
+		},
+		{
+			name: "Must Haves",
+			type: TaskParamType.OPTIONS,
+			required: true,
+		},
+		{
+			name: "Law",
+			type: TaskParamType.STRING,
+			required: true,
+		},
+		{
+			name: "Tone",
+			type: TaskParamType.STRING,
+			required: true
+		},
+		{
+			name: "Special",
+			type: TaskParamType.STRING,
+			required: true
 		}
 	] as const,
 	outputs: [
