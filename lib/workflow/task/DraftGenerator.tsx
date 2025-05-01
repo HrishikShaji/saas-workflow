@@ -36,16 +36,6 @@ export const DraftGeneratorTask = {
 			required: true,
 		},
 		{
-			name: "Law",
-			type: TaskParamType.STRING,
-			required: true,
-		},
-		{
-			name: "Tone",
-			type: TaskParamType.STRING,
-			required: true
-		},
-		{
 			name: "Special",
 			type: TaskParamType.STRING,
 			required: true

@@ -7,7 +7,8 @@ export enum TaskType {
         CLARITY_AGENT = "CLARITY_AGENT",
         COMPLIANCE_AGENT = "COMPLIANCE_AGENT",
         TONE_AGENT = "TONE_AGENT",
-        RISK_REVIEW_AGENT = "RISK_REVIEW_AGENT"
+        RISK_REVIEW_AGENT = "RISK_REVIEW_AGENT",
+        POLISHER_AGENT = "POLISHER_AGENT"
 }
 
 export enum TaskParamType {

@@ -14,6 +14,11 @@ export const ComplianceAgentTask = {
 			name: "AI Generated Content",
 			type: TaskParamType.AI_RESPONSE,
 			required: true,
+		},
+		{
+			name: "Law",
+			type: TaskParamType.STRING,
+			required: true
 		}
 	] as const,
 	outputs: [

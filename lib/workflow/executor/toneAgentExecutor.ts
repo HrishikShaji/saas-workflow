@@ -6,12 +6,18 @@ export async function toneAgentExecutor(environment: ExecutionEnvironment<typeof
 	try {
 		environment.log.info("Starting tone improving process")
 		const input = environment.getInput("AI Generated Content")
+		const tone = environment.getInput("Tone")
 
 		environment.log.info("Sending request to OpenAI")
 
+		const systemMessage = "You are a language expert"
+		const query = `Adjust the tone of the following legal draft to be ${tone}
+                ---
+                ${input}
+                `
 		const aiResponse = await getAIResponse({
-			systemMessage: "You are a helpful assistant makes a document more friendly and casual.",
-			query: `Please generate a friendly and casual draft based on the following input: ${input}`
+			systemMessage,
+			query
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Draft generation completed successfully")

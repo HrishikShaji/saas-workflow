@@ -2,9 +2,9 @@ import { TaskParamType, TaskType } from "@/types/task";
 import { WorkflowTask } from "@/types/workflow";
 import { Bot, CodeIcon, GlobeIcon, LucideProps } from "lucide-react";
 
-export const ToneAgentTask = {
-	type: TaskType.TONE_AGENT,
-	label: "Setup Tone",
+export const PolisherAgentTask = {
+	type: TaskType.POLISHER_AGENT,
+	label: "Polisher Agent",
 	icon: (props: LucideProps) => (
 		<Bot className="stroke-rose-400" {...props} />
 	),
@@ -13,11 +13,6 @@ export const ToneAgentTask = {
 		{
 			name: "AI Generated Content",
 			type: TaskParamType.AI_RESPONSE,
-			required: true,
-		},
-		{
-			name: "Tone",
-			type: TaskParamType.STRING,
 			required: true,
 		}
 	] as const,

@@ -6,12 +6,19 @@ export async function complianceAgentExecutor(environment: ExecutionEnvironment<
 	try {
 		environment.log.info("Starting compliance process")
 		const input = environment.getInput("AI Generated Content")
+		const law = environment.getInput("Law")
 
 		environment.log.info("Sending request to OpenAI")
 
+		const systemMessage = "You are a compliance checker"
+		const query = `Review the following legal draft for compliance with ${law}.
+		Fix any missing mandatory clauses or legal issues:
+		---
+		${input}
+		`
 		const aiResponse = await getAIResponse({
-			systemMessage: "You are a helpful assistant that check compliance in a legal document.",
-			query: `Please generate a compliant document based on the following input: ${input}`
+			systemMessage,
+			query
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Compliance checking completed successfully")

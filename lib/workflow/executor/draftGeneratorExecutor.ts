@@ -6,8 +6,6 @@ export async function draftGeneratorExecutor(environment: ExecutionEnvironment<t
 	try {
 		environment.log.info("Starting draft generation process")
 		const input = environment.getInput("AI Generated Content")
-		const law = environment.getInput("Law")
-		const tone = environment.getInput("Tone")
 		const special = environment.getInput("Special")
 
 		const parties = environment.getInput("Parties")
@@ -35,8 +33,6 @@ export async function draftGeneratorExecutor(environment: ExecutionEnvironment<t
 		Obligations:${obligationsString}
 		Risks to cover:${risksString}
 		Must-have clauses:${mustHavesString}
-		Applicable Law:${law}
-		Tone:${tone}
 		Special Instructions:${special}
 
                 Structure it with headings and proper legal format

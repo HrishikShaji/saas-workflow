@@ -10,6 +10,7 @@ import { clarityGeneratorExecutor } from "./clarityAgentExecutor";
 import { complianceAgentExecutor } from "./complianceAgentExecutor";
 import { toneAgentExecutor } from "./toneAgentExecutor";
 import { riskReviewAgentExecutor } from "./riskReviewAgentExecutor";
+import { polisherAgentExecutor } from "./polisherAgentExecutor";
 
 type ExecutorFn<T extends WorkflowTask> = (environment: ExecutionEnvironment<T>) => Promise<boolean>
 
@@ -26,5 +27,6 @@ export const ExecutorRegistry: RegistryType = {
 	CLARITY_AGENT: clarityGeneratorExecutor,
 	COMPLIANCE_AGENT: complianceAgentExecutor,
 	TONE_AGENT: toneAgentExecutor,
-	RISK_REVIEW_AGENT: riskReviewAgentExecutor
+	RISK_REVIEW_AGENT: riskReviewAgentExecutor,
+	POLISHER_AGENT: polisherAgentExecutor
 }

@@ -9,9 +9,14 @@ export async function clarityGeneratorExecutor(environment: ExecutionEnvironment
 
 		environment.log.info("Sending request to OpenAI")
 
+		const systemMessage = "You are an editor"
+		const query = `Simplify and clarify the following legal draft while keeping it formal and legally sound:
+		---
+		${input}
+		`
 		const aiResponse = await getAIResponse({
-			systemMessage: "You are a helpful assistant makes a document in more clarity,makes it easy to read but formal.",
-			query: `Please generate a clarity draft based on the following input: ${input}`
+			systemMessage,
+			query
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Draft generation completed successfully")

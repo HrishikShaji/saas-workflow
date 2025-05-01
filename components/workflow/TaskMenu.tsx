@@ -19,6 +19,7 @@ export default function TaskMenu() {
 					<TaskMenuBtn taskType={TaskType.COMPLIANCE_AGENT} />
 					<TaskMenuBtn taskType={TaskType.TONE_AGENT} />
 					<TaskMenuBtn taskType={TaskType.RISK_REVIEW_AGENT} />
+					<TaskMenuBtn taskType={TaskType.POLISHER_AGENT} />
 				</AccordionContent>
 			</AccordionItem>
 			<AccordionItem value="extraction">
