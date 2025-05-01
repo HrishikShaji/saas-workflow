@@ -7,7 +7,9 @@ import { Suspense } from "react";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"] })
 
-export default async function Page({ params }: { params: { executionId: string; workflowId: string } }) {
+type tParams = Promise<{ workflowId: string; executionId: string }>;
+
+export default async function Page({ params }: { params: tParams }) {
 
     const { workflowId, executionId } = await params
 

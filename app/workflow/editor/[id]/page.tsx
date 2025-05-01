@@ -3,10 +3,11 @@ import { prisma } from "@/lib/prisma";
 import { Poppins } from "next/font/google";
 
 const poppins = Poppins({ subsets: ["latin"], weight: ["100", "200", "300", "400", "500", "600", "700", "800", "900"] })
+type tParams = Promise<{ id: string }>;
 
-export default async function Page({ params }: { params: { id: string } }) {
+export default async function Page({ params }: { params: tParams }) {
+
 	const { id } = await params
-
 	const workflow = await prisma.workflow.findUnique({
 		where: {
 			id
