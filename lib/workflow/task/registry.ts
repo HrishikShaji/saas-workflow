@@ -10,6 +10,7 @@ import { ComplianceAgentTask } from "./ComplianceAgent";
 import { ToneAgentTask } from "./ToneAgent";
 import { RiskReviewAgentTask } from "./RiskReviewAgent";
 import { PolisherAgentTask } from "./PolisherAgent";
+import { OptionsAgentTask } from "./OptionsAgent";
 
 type Registry = {
 	[K in TaskType]: WorkflowTask & { type: K }
@@ -25,5 +26,6 @@ export const TaskRegistry: Registry = {
 	COMPLIANCE_AGENT: ComplianceAgentTask,
 	TONE_AGENT: ToneAgentTask,
 	RISK_REVIEW_AGENT: RiskReviewAgentTask,
-	POLISHER_AGENT: PolisherAgentTask
+	POLISHER_AGENT: PolisherAgentTask,
+	OPTIONS_AGENT: OptionsAgentTask
 }

@@ -4,5 +4,6 @@ export const colorForHandle: Record<TaskParamType, string> = {
 	BROWSER_INSTANCE: "!bg-sky-400",
 	STRING: "!bg-amber-400",
 	AI_RESPONSE: "!bg-blue-500",
-	OPTIONS: "!bg-green-500"
+	OPTIONS: "!bg-green-500",
+	NUMBER: "!bg-red-500"
 }

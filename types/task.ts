@@ -8,14 +8,16 @@ export enum TaskType {
         COMPLIANCE_AGENT = "COMPLIANCE_AGENT",
         TONE_AGENT = "TONE_AGENT",
         RISK_REVIEW_AGENT = "RISK_REVIEW_AGENT",
-        POLISHER_AGENT = "POLISHER_AGENT"
+        POLISHER_AGENT = "POLISHER_AGENT",
+        OPTIONS_AGENT = "OPTIONS_AGENT"
 }
 
 export enum TaskParamType {
         STRING = "STRING",
         BROWSER_INSTANCE = "BROWSER_INSTANCE",
         AI_RESPONSE = "AI_RESPONSE",
-        OPTIONS = "OPTIONS"
+        OPTIONS = "OPTIONS",
+        NUMBER = "NUMBER"
 }
 
 export interface TaskParam {
