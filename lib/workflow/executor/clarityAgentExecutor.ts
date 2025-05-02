@@ -1,6 +1,7 @@
 import { Environment, ExecutionEnvironment } from "@/types/executor"
 import { getAIResponse } from "../ai/getAIResponse"
 import { ClarityAgentTask } from "../task/ClarityAgent"
+import { getOpenRouterResponse } from "../ai/getOpenRouterResponse"
 
 export async function clarityGeneratorExecutor(environment: ExecutionEnvironment<typeof ClarityAgentTask>) {
 	try {
@@ -14,7 +15,7 @@ export async function clarityGeneratorExecutor(environment: ExecutionEnvironment
 		---
 		${input}
 		`
-		const aiResponse = await getAIResponse({
+		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
 			query
 		})

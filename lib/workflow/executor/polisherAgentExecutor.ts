@@ -3,6 +3,7 @@ import { Environment, ExecutionEnvironment } from "@/types/executor"
 import { getAIResponse } from "../ai/getAIResponse"
 import { RiskReviewAgentTask } from "../task/RiskReviewAgent"
 import { PolisherAgentTask } from "../task/PolisherAgent"
+import { getOpenRouterResponse } from "../ai/getOpenRouterResponse"
 
 export async function polisherAgentExecutor(environment: ExecutionEnvironment<typeof PolisherAgentTask>) {
 	try {
@@ -16,7 +17,7 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
                 ---
                 ${input}
                 `
-		const aiResponse = await getAIResponse({
+		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
 			query
 		})

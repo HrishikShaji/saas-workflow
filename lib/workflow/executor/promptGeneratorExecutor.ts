@@ -1,6 +1,7 @@
 import { Environment, ExecutionEnvironment } from "@/types/executor"
 import { PromptGeneratorTask } from "../task/PromptGenerator"
 import { getAIResponse } from "../ai/getAIResponse"
+import { getOpenRouterResponse } from "../ai/getOpenRouterResponse"
 
 export async function promptGeneratorExecutor(environment: ExecutionEnvironment<typeof PromptGeneratorTask>) {
 	try {
@@ -10,7 +11,7 @@ export async function promptGeneratorExecutor(environment: ExecutionEnvironment<
 		environment.log.info("Input received")
 
 
-		const aiResponse = await getAIResponse({
+		const aiResponse = await getOpenRouterResponse({
 			systemMessage: `You are an agent who improves Prompts to get most out of an LLM with context ${useCase}.only return the improved prompt no additional text`,
 			query: input
 		})

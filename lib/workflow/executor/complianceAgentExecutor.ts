@@ -1,6 +1,7 @@
 import { Environment, ExecutionEnvironment } from "@/types/executor"
 import { getAIResponse } from "../ai/getAIResponse"
 import { ComplianceAgentTask } from "../task/ComplianceAgent"
+import { getOpenRouterResponse } from "../ai/getOpenRouterResponse"
 
 export async function complianceAgentExecutor(environment: ExecutionEnvironment<typeof ComplianceAgentTask>) {
 	try {
@@ -16,7 +17,7 @@ export async function complianceAgentExecutor(environment: ExecutionEnvironment<
 		---
 		${input}
 		`
-		const aiResponse = await getAIResponse({
+		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
 			query
 		})

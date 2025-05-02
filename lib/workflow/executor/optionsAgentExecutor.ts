@@ -2,6 +2,7 @@
 import { Environment, ExecutionEnvironment } from "@/types/executor"
 import { getAIResponse } from "../ai/getAIResponse"
 import { OptionsAgentTask } from "../task/OptionsAgent"
+import { getOpenRouterResponse } from "../ai/getOpenRouterResponse"
 
 export async function optionsAgentExecutor(environment: ExecutionEnvironment<typeof OptionsAgentTask>) {
 	try {
@@ -13,7 +14,7 @@ export async function optionsAgentExecutor(environment: ExecutionEnvironment<typ
 		environment.log.info("Sending request to OpenAI")
 
 		const systemMessageTemplate = `${systemMessage}.return only a array of strings ,no additional text.return only ${noOfOptions} items`
-		const aiResponse = await getAIResponse({
+		const aiResponse = await getOpenRouterResponse({
 			systemMessage: systemMessageTemplate,
 			query: prompt
 		})

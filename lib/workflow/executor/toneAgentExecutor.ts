@@ -1,6 +1,7 @@
 import { Environment, ExecutionEnvironment } from "@/types/executor"
 import { getAIResponse } from "../ai/getAIResponse"
 import { ToneAgentTask } from "../task/ToneAgent"
+import { getOpenRouterResponse } from "../ai/getOpenRouterResponse"
 
 export async function toneAgentExecutor(environment: ExecutionEnvironment<typeof ToneAgentTask>) {
 	try {
@@ -15,7 +16,7 @@ export async function toneAgentExecutor(environment: ExecutionEnvironment<typeof
                 ---
                 ${input}
                 `
-		const aiResponse = await getAIResponse({
+		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
 			query
 		})

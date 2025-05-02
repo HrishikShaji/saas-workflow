@@ -1,6 +1,7 @@
 import { Environment, ExecutionEnvironment } from "@/types/executor"
 import { DraftGeneratorTask } from "../task/DraftGenerator"
 import { getAIResponse } from "../ai/getAIResponse"
+import { getOpenRouterResponse } from "../ai/getOpenRouterResponse"
 
 export async function draftGeneratorExecutor(environment: ExecutionEnvironment<typeof DraftGeneratorTask>) {
 	try {
@@ -39,7 +40,7 @@ export async function draftGeneratorExecutor(environment: ExecutionEnvironment<t
 		`;
 
 
-		const aiResponse = await getAIResponse({
+		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
 			query
 		})

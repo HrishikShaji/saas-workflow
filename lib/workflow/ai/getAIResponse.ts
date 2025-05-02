@@ -1,14 +1,15 @@
 import OpenAI from "openai"
 
 const openai = new OpenAI({
-	apiKey: process.env.OPENAI_API_KEY,
+	baseURL: "https://openrouter.ai/api/v1",
+	apiKey: process.env.OPEN_ROUTER_API_KEY,
 })
 
 
 export async function getAIResponse({ systemMessage, query }: { systemMessage: string; query: string }) {
 
 	const completion = await openai.chat.completions.create({
-		model: "gpt-4o-mini",
+		model: "meta-llama/llama-4-maverick",
 		messages: [
 			{
 				role: "system",
