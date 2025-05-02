@@ -85,7 +85,7 @@ export default function FlowEditor({ workflow }: Props) {
 	const isValidConnection = useCallback((connection: Edge | Connection) => {
 
 		//no self connection allowed
-
+		console.log("this is connection source and target", connection.source, connection.target)
 		if (connection.target === connection.source) {
 			return false
 		}
@@ -97,11 +97,16 @@ export default function FlowEditor({ workflow }: Props) {
 
 		const sourceTask = TaskRegistry[source.data.type]
 		const targetTask = TaskRegistry[target.data.type]
+		// temporary fix
+		const sourceHandleId = connection.sourceHandle?.split("-")[1]
 
-		const output = sourceTask.outputs.find((o) => o.name === connection.sourceHandle)
+		const output = sourceTask.outputs.find((o) => o.name === sourceHandleId)
 		const input = targetTask.inputs.find((o) => o.name === connection.targetHandle)
 
-		if (input?.type !== output?.type) return false
+		if (input?.type !== output?.type) {
+			//console.error("this is why returned", connection.sourceHandle, sourceHandleId, connection.targetHandle)
+			return false
+		}
 
 		const hasCycle = (node: AppNode, visited = new Set()) => {
 			if (visited.has(node.id)) return false;

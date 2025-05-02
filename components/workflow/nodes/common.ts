@@ -7,3 +7,11 @@ export const colorForHandle: Record<TaskParamType, string> = {
 	OPTIONS: "!bg-green-500",
 	NUMBER: "!bg-red-500"
 }
+
+export const colorForEdge: Record<TaskParamType, string> = {
+	BROWSER_INSTANCE: "#38bdf8",
+	STRING: "#fbbf24",
+	AI_RESPONSE: "#3b82f6",
+	OPTIONS: "#22c55e",
+	NUMBER: "#ef4444"
+}
