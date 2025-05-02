@@ -97,16 +97,11 @@ export default function FlowEditor({ workflow }: Props) {
 
 		const sourceTask = TaskRegistry[source.data.type]
 		const targetTask = TaskRegistry[target.data.type]
-		// temporary fix
-		const sourceHandleId = connection.sourceHandle?.split("-")[1]
 
-		const output = sourceTask.outputs.find((o) => o.name === sourceHandleId)
+		const output = sourceTask.outputs.find((o) => o.name === connection.sourceHandle)
 		const input = targetTask.inputs.find((o) => o.name === connection.targetHandle)
 
-		if (input?.type !== output?.type) {
-			//console.error("this is why returned", connection.sourceHandle, sourceHandleId, connection.targetHandle)
-			return false
-		}
+		if (input?.type !== output?.type) return false
 
 		const hasCycle = (node: AppNode, visited = new Set()) => {
 			if (visited.has(node.id)) return false;
