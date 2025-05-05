@@ -1,4 +1,6 @@
 
+import { nodeSettings } from "@/lib/constants";
+import { SettingsParamType } from "@/types/settings";
 import { TaskParamType, TaskType } from "@/types/task";
 import { WorkflowTask } from "@/types/workflow";
 import { Bot, GlobeIcon, LucideProps } from "lucide-react";
@@ -30,5 +32,6 @@ export const PromptGeneratorTask = {
 	outputs: [
 		{ name: "AI Response", type: TaskParamType.AI_RESPONSE }
 	] as const,
+	settings: nodeSettings,
 	credits: 5
 } satisfies WorkflowTask

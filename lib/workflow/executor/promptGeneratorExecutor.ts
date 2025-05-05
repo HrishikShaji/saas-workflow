@@ -8,6 +8,7 @@ export async function promptGeneratorExecutor(environment: ExecutionEnvironment<
 		console.log("launch browser executed @@ENV", JSON.stringify(environment, null, 4))
 		const input = environment.getInput("input")
 		const useCase = environment.getInput("use case")
+		const settings = environment.getSetting("Model")
 		environment.log.info("Input received")
 
 

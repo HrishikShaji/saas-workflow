@@ -11,12 +11,14 @@ export type Environment = {
                 {
                         inputs: Record<string, string>;
                         outputs: Record<string, string>;
+                        settings: Record<string, string>;
                 }
         >
 }
 
 export type ExecutionEnvironment<T extends WorkflowTask> = {
         getInput(name: T["inputs"][number]["name"]): string;
+        getSetting(name: T["settings"][number]["name"]): string;
         setOutput(name: T["outputs"][number]["name"], value: string): void;
         getBrowser(): Browser | undefined;
         setBrowser(browser: Browser): void;

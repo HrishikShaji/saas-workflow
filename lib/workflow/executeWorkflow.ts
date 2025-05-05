@@ -176,8 +176,17 @@ async function executePhase(phase: ExecutionPhase, node: AppNode, environment: E
 }
 
 function setupEnvironmentForPhase(node: AppNode, environment: Environment, edges: Edge[]) {
-	environment.phases[node.id] = { inputs: {}, outputs: {} }
+	environment.phases[node.id] = { inputs: {}, outputs: {}, settings: {} }
 	const inputs = TaskRegistry[node.data.type].inputs;
+
+	//added settings
+	const settings = TaskRegistry[node.data.type].settings;
+	for (const setting of settings) {
+		if (setting.value) {
+			environment.phases[node.id].settings[setting.name] = setting.value
+		}
+	}
+
 	for (const input of inputs) {
 		if (input.type === TaskParamType.BROWSER_INSTANCE) continue;
 		const inputValue = node.data.inputs[input.name];
@@ -204,6 +213,7 @@ function createExecutionEnvironment(node: AppNode, environment: Environment, log
 
 	return {
 		getInput: (name: string) => environment.phases[node.id]?.inputs[name],
+		getSetting: (name: string) => environment.phases[node.id]?.settings[name],
 		getBrowser: () => environment.browser,
 		setBrowser: (browser: Browser) => (environment.browser = browser),
 		getPage: () => environment.page,

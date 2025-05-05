@@ -1,3 +1,4 @@
+import { nodeSettings } from "@/lib/constants";
 import { TaskParamType, TaskType } from "@/types/task";
 import { WorkflowTask } from "@/types/workflow";
 import { Bot, CodeIcon, GlobeIcon, LucideProps } from "lucide-react";
@@ -32,5 +33,6 @@ export const OptionsAgentTask = {
 			type: TaskParamType.OPTIONS
 		}
 	] as const,
+	settings: nodeSettings,
 	credits: 2
 } satisfies WorkflowTask

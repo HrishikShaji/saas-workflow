@@ -1,5 +1,4 @@
-
-
+import { nodeSettings } from "@/lib/constants";
 import { TaskParamType, TaskType } from "@/types/task";
 import { WorkflowTask } from "@/types/workflow";
 import { CodeIcon, GlobeIcon, LucideProps, TextIcon } from "lucide-react";
@@ -30,5 +29,6 @@ export const ExtractTextFromElement = {
 			type: TaskParamType.STRING
 		},
 	] as const,
+	settings: nodeSettings,
 	credits: 2
 } satisfies WorkflowTask

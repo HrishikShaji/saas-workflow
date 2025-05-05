@@ -1,3 +1,4 @@
+import { nodeSettings } from "@/lib/constants";
 import { TaskParamType, TaskType } from "@/types/task";
 import { WorkflowTask } from "@/types/workflow";
 import { GlobeIcon, LucideProps } from "lucide-react";
@@ -21,5 +22,6 @@ export const LaunchBrowserTask = {
 	outputs: [
 		{ name: "Web page", type: TaskParamType.BROWSER_INSTANCE }
 	] as const,
+	settings: nodeSettings,
 	credits: 5
 } satisfies WorkflowTask
