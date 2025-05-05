@@ -8,7 +8,8 @@ export function createFlowNode(nodeType: TaskType, position?: { x: number; y: nu
 		type: "FlowScrapeNode",
 		data: {
 			type: nodeType,
-			inputs: {}
+			inputs: {},
+			settings: {},
 		},
 		position: position ?? { x: 0, y: 0 }
 	}

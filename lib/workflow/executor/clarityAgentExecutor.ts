@@ -7,6 +7,9 @@ export async function clarityGeneratorExecutor(environment: ExecutionEnvironment
 	try {
 		environment.log.info("Starting clarity improving process")
 		const input = environment.getInput("AI Generated Content")
+		const setting = environment.getSetting("Model")
+
+		console.log("@@CLARITY SETTING", setting)
 
 		environment.log.info("Sending request to OpenAI")
 

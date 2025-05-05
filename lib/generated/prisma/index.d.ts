@@ -3575,6 +3575,7 @@ export namespace Prisma {
     completedAt: Date | null
     inputs: string | null
     outputs: string | null
+    settings: string | null
     creditsCost: number | null
     workflowExecutionId: string | null
   }
@@ -3589,6 +3590,7 @@ export namespace Prisma {
     completedAt: Date | null
     inputs: string | null
     outputs: string | null
+    settings: string | null
     creditsCost: number | null
     workflowExecutionId: string | null
   }
@@ -3603,6 +3605,7 @@ export namespace Prisma {
     completedAt: number
     inputs: number
     outputs: number
+    settings: number
     creditsCost: number
     workflowExecutionId: number
     _all: number
@@ -3629,6 +3632,7 @@ export namespace Prisma {
     completedAt?: true
     inputs?: true
     outputs?: true
+    settings?: true
     creditsCost?: true
     workflowExecutionId?: true
   }
@@ -3643,6 +3647,7 @@ export namespace Prisma {
     completedAt?: true
     inputs?: true
     outputs?: true
+    settings?: true
     creditsCost?: true
     workflowExecutionId?: true
   }
@@ -3657,6 +3662,7 @@ export namespace Prisma {
     completedAt?: true
     inputs?: true
     outputs?: true
+    settings?: true
     creditsCost?: true
     workflowExecutionId?: true
     _all?: true
@@ -3758,6 +3764,7 @@ export namespace Prisma {
     completedAt: Date | null
     inputs: string | null
     outputs: string | null
+    settings: string | null
     creditsCost: number | null
     workflowExecutionId: string
     _count: ExecutionPhaseCountAggregateOutputType | null
@@ -3791,6 +3798,7 @@ export namespace Prisma {
     completedAt?: boolean
     inputs?: boolean
     outputs?: boolean
+    settings?: boolean
     creditsCost?: boolean
     workflowExecutionId?: boolean
     execution?: boolean | WorkflowExecutionDefaultArgs<ExtArgs>
@@ -3808,6 +3816,7 @@ export namespace Prisma {
     completedAt?: boolean
     inputs?: boolean
     outputs?: boolean
+    settings?: boolean
     creditsCost?: boolean
     workflowExecutionId?: boolean
     execution?: boolean | WorkflowExecutionDefaultArgs<ExtArgs>
@@ -3823,6 +3832,7 @@ export namespace Prisma {
     completedAt?: boolean
     inputs?: boolean
     outputs?: boolean
+    settings?: boolean
     creditsCost?: boolean
     workflowExecutionId?: boolean
     execution?: boolean | WorkflowExecutionDefaultArgs<ExtArgs>
@@ -3838,11 +3848,12 @@ export namespace Prisma {
     completedAt?: boolean
     inputs?: boolean
     outputs?: boolean
+    settings?: boolean
     creditsCost?: boolean
     workflowExecutionId?: boolean
   }
 
-  export type ExecutionPhaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "number" | "node" | "name" | "startedAt" | "completedAt" | "inputs" | "outputs" | "creditsCost" | "workflowExecutionId", ExtArgs["result"]["executionPhase"]>
+  export type ExecutionPhaseOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "status" | "number" | "node" | "name" | "startedAt" | "completedAt" | "inputs" | "outputs" | "settings" | "creditsCost" | "workflowExecutionId", ExtArgs["result"]["executionPhase"]>
   export type ExecutionPhaseInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     execution?: boolean | WorkflowExecutionDefaultArgs<ExtArgs>
     logs?: boolean | ExecutionPhase$logsArgs<ExtArgs>
@@ -3871,6 +3882,7 @@ export namespace Prisma {
       completedAt: Date | null
       inputs: string | null
       outputs: string | null
+      settings: string | null
       creditsCost: number | null
       workflowExecutionId: string
     }, ExtArgs["result"]["executionPhase"]>
@@ -4307,6 +4319,7 @@ export namespace Prisma {
     readonly completedAt: FieldRef<"ExecutionPhase", 'DateTime'>
     readonly inputs: FieldRef<"ExecutionPhase", 'String'>
     readonly outputs: FieldRef<"ExecutionPhase", 'String'>
+    readonly settings: FieldRef<"ExecutionPhase", 'String'>
     readonly creditsCost: FieldRef<"ExecutionPhase", 'Int'>
     readonly workflowExecutionId: FieldRef<"ExecutionPhase", 'String'>
   }
@@ -5860,6 +5873,7 @@ export namespace Prisma {
     completedAt: 'completedAt',
     inputs: 'inputs',
     outputs: 'outputs',
+    settings: 'settings',
     creditsCost: 'creditsCost',
     workflowExecutionId: 'workflowExecutionId'
   };
@@ -6139,6 +6153,7 @@ export namespace Prisma {
     completedAt?: DateTimeNullableFilter<"ExecutionPhase"> | Date | string | null
     inputs?: StringNullableFilter<"ExecutionPhase"> | string | null
     outputs?: StringNullableFilter<"ExecutionPhase"> | string | null
+    settings?: StringNullableFilter<"ExecutionPhase"> | string | null
     creditsCost?: IntNullableFilter<"ExecutionPhase"> | number | null
     workflowExecutionId?: StringFilter<"ExecutionPhase"> | string
     execution?: XOR<WorkflowExecutionScalarRelationFilter, WorkflowExecutionWhereInput>
@@ -6155,6 +6170,7 @@ export namespace Prisma {
     completedAt?: SortOrderInput | SortOrder
     inputs?: SortOrderInput | SortOrder
     outputs?: SortOrderInput | SortOrder
+    settings?: SortOrderInput | SortOrder
     creditsCost?: SortOrderInput | SortOrder
     workflowExecutionId?: SortOrder
     execution?: WorkflowExecutionOrderByWithRelationInput
@@ -6174,6 +6190,7 @@ export namespace Prisma {
     completedAt?: DateTimeNullableFilter<"ExecutionPhase"> | Date | string | null
     inputs?: StringNullableFilter<"ExecutionPhase"> | string | null
     outputs?: StringNullableFilter<"ExecutionPhase"> | string | null
+    settings?: StringNullableFilter<"ExecutionPhase"> | string | null
     creditsCost?: IntNullableFilter<"ExecutionPhase"> | number | null
     workflowExecutionId?: StringFilter<"ExecutionPhase"> | string
     execution?: XOR<WorkflowExecutionScalarRelationFilter, WorkflowExecutionWhereInput>
@@ -6190,6 +6207,7 @@ export namespace Prisma {
     completedAt?: SortOrderInput | SortOrder
     inputs?: SortOrderInput | SortOrder
     outputs?: SortOrderInput | SortOrder
+    settings?: SortOrderInput | SortOrder
     creditsCost?: SortOrderInput | SortOrder
     workflowExecutionId?: SortOrder
     _count?: ExecutionPhaseCountOrderByAggregateInput
@@ -6212,6 +6230,7 @@ export namespace Prisma {
     completedAt?: DateTimeNullableWithAggregatesFilter<"ExecutionPhase"> | Date | string | null
     inputs?: StringNullableWithAggregatesFilter<"ExecutionPhase"> | string | null
     outputs?: StringNullableWithAggregatesFilter<"ExecutionPhase"> | string | null
+    settings?: StringNullableWithAggregatesFilter<"ExecutionPhase"> | string | null
     creditsCost?: IntNullableWithAggregatesFilter<"ExecutionPhase"> | number | null
     workflowExecutionId?: StringWithAggregatesFilter<"ExecutionPhase"> | string
   }
@@ -6463,6 +6482,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     inputs?: string | null
     outputs?: string | null
+    settings?: string | null
     creditsCost?: number | null
     execution: WorkflowExecutionCreateNestedOneWithoutPhasesInput
     logs?: ExecutionLogCreateNestedManyWithoutExecutionPhaseInput
@@ -6478,6 +6498,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     inputs?: string | null
     outputs?: string | null
+    settings?: string | null
     creditsCost?: number | null
     workflowExecutionId: string
     logs?: ExecutionLogUncheckedCreateNestedManyWithoutExecutionPhaseInput
@@ -6493,6 +6514,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inputs?: NullableStringFieldUpdateOperationsInput | string | null
     outputs?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableStringFieldUpdateOperationsInput | string | null
     creditsCost?: NullableIntFieldUpdateOperationsInput | number | null
     execution?: WorkflowExecutionUpdateOneRequiredWithoutPhasesNestedInput
     logs?: ExecutionLogUpdateManyWithoutExecutionPhaseNestedInput
@@ -6508,6 +6530,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inputs?: NullableStringFieldUpdateOperationsInput | string | null
     outputs?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableStringFieldUpdateOperationsInput | string | null
     creditsCost?: NullableIntFieldUpdateOperationsInput | number | null
     workflowExecutionId?: StringFieldUpdateOperationsInput | string
     logs?: ExecutionLogUncheckedUpdateManyWithoutExecutionPhaseNestedInput
@@ -6523,6 +6546,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     inputs?: string | null
     outputs?: string | null
+    settings?: string | null
     creditsCost?: number | null
     workflowExecutionId: string
   }
@@ -6537,6 +6561,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inputs?: NullableStringFieldUpdateOperationsInput | string | null
     outputs?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableStringFieldUpdateOperationsInput | string | null
     creditsCost?: NullableIntFieldUpdateOperationsInput | number | null
   }
 
@@ -6550,6 +6575,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inputs?: NullableStringFieldUpdateOperationsInput | string | null
     outputs?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableStringFieldUpdateOperationsInput | string | null
     creditsCost?: NullableIntFieldUpdateOperationsInput | number | null
     workflowExecutionId?: StringFieldUpdateOperationsInput | string
   }
@@ -6901,6 +6927,7 @@ export namespace Prisma {
     completedAt?: SortOrder
     inputs?: SortOrder
     outputs?: SortOrder
+    settings?: SortOrder
     creditsCost?: SortOrder
     workflowExecutionId?: SortOrder
   }
@@ -6920,6 +6947,7 @@ export namespace Prisma {
     completedAt?: SortOrder
     inputs?: SortOrder
     outputs?: SortOrder
+    settings?: SortOrder
     creditsCost?: SortOrder
     workflowExecutionId?: SortOrder
   }
@@ -6934,6 +6962,7 @@ export namespace Prisma {
     completedAt?: SortOrder
     inputs?: SortOrder
     outputs?: SortOrder
+    settings?: SortOrder
     creditsCost?: SortOrder
     workflowExecutionId?: SortOrder
   }
@@ -7451,6 +7480,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     inputs?: string | null
     outputs?: string | null
+    settings?: string | null
     creditsCost?: number | null
     logs?: ExecutionLogCreateNestedManyWithoutExecutionPhaseInput
   }
@@ -7465,6 +7495,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     inputs?: string | null
     outputs?: string | null
+    settings?: string | null
     creditsCost?: number | null
     logs?: ExecutionLogUncheckedCreateNestedManyWithoutExecutionPhaseInput
   }
@@ -7539,6 +7570,7 @@ export namespace Prisma {
     completedAt?: DateTimeNullableFilter<"ExecutionPhase"> | Date | string | null
     inputs?: StringNullableFilter<"ExecutionPhase"> | string | null
     outputs?: StringNullableFilter<"ExecutionPhase"> | string | null
+    settings?: StringNullableFilter<"ExecutionPhase"> | string | null
     creditsCost?: IntNullableFilter<"ExecutionPhase"> | number | null
     workflowExecutionId?: StringFilter<"ExecutionPhase"> | string
   }
@@ -7705,6 +7737,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     inputs?: string | null
     outputs?: string | null
+    settings?: string | null
     creditsCost?: number | null
     execution: WorkflowExecutionCreateNestedOneWithoutPhasesInput
   }
@@ -7719,6 +7752,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     inputs?: string | null
     outputs?: string | null
+    settings?: string | null
     creditsCost?: number | null
     workflowExecutionId: string
   }
@@ -7749,6 +7783,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inputs?: NullableStringFieldUpdateOperationsInput | string | null
     outputs?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableStringFieldUpdateOperationsInput | string | null
     creditsCost?: NullableIntFieldUpdateOperationsInput | number | null
     execution?: WorkflowExecutionUpdateOneRequiredWithoutPhasesNestedInput
   }
@@ -7763,6 +7798,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inputs?: NullableStringFieldUpdateOperationsInput | string | null
     outputs?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableStringFieldUpdateOperationsInput | string | null
     creditsCost?: NullableIntFieldUpdateOperationsInput | number | null
     workflowExecutionId?: StringFieldUpdateOperationsInput | string
   }
@@ -7823,6 +7859,7 @@ export namespace Prisma {
     completedAt?: Date | string | null
     inputs?: string | null
     outputs?: string | null
+    settings?: string | null
     creditsCost?: number | null
   }
 
@@ -7836,6 +7873,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inputs?: NullableStringFieldUpdateOperationsInput | string | null
     outputs?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableStringFieldUpdateOperationsInput | string | null
     creditsCost?: NullableIntFieldUpdateOperationsInput | number | null
     logs?: ExecutionLogUpdateManyWithoutExecutionPhaseNestedInput
   }
@@ -7850,6 +7888,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inputs?: NullableStringFieldUpdateOperationsInput | string | null
     outputs?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableStringFieldUpdateOperationsInput | string | null
     creditsCost?: NullableIntFieldUpdateOperationsInput | number | null
     logs?: ExecutionLogUncheckedUpdateManyWithoutExecutionPhaseNestedInput
   }
@@ -7864,6 +7903,7 @@ export namespace Prisma {
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     inputs?: NullableStringFieldUpdateOperationsInput | string | null
     outputs?: NullableStringFieldUpdateOperationsInput | string | null
+    settings?: NullableStringFieldUpdateOperationsInput | string | null
     creditsCost?: NullableIntFieldUpdateOperationsInput | number | null
   }
 

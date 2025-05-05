@@ -9,6 +9,7 @@ export async function promptGeneratorExecutor(environment: ExecutionEnvironment<
 		const input = environment.getInput("input")
 		const useCase = environment.getInput("use case")
 		const settings = environment.getSetting("Model")
+		console.log("@@SETTINGS", settings)
 		environment.log.info("Input received")
 
 

@@ -41,6 +41,7 @@ export async function executeWorkflow(executionId: string) {
 
 	let creditsConsumed = 0
 	let executionFailed = false;
+	//console.log("these are execution phases initially", execution.phases)
 	for (const phase of execution.phases) {
 
 		const phaseExecution = await executeWorkflowPhase(phase, environment, edges)
@@ -115,9 +116,11 @@ async function finalizeWorkflowExecution(executionId: string, workflowId: string
 }
 
 async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environment, edges: Edge[]) {
+
 	const logCollector = createLogCollector()
 	const startedAt = new Date();
 	const node = JSON.parse(phase.node) as AppNode;
+
 	setupEnvironmentForPhase(node, environment, edges)
 
 	await prisma.executionPhase.update({
@@ -125,7 +128,8 @@ async function executeWorkflowPhase(phase: ExecutionPhase, environment: Environm
 		data: {
 			status: ExecutionPhaseStatus.RUNNING,
 			startedAt,
-			inputs: JSON.stringify(environment.phases[node.id].inputs)
+			inputs: JSON.stringify(environment.phases[node.id].inputs),
+			settings: JSON.stringify(environment.phases[node.id].settings)
 		}
 	})
 
@@ -182,8 +186,8 @@ function setupEnvironmentForPhase(node: AppNode, environment: Environment, edges
 	//added settings
 	const settings = TaskRegistry[node.data.type].settings;
 	for (const setting of settings) {
-		if (setting.value) {
-			environment.phases[node.id].settings[setting.name] = setting.value
+		if (node.data.settings && node.data.settings[setting.name]) {
+			environment.phases[node.id].settings[setting.name] = node.data.settings[setting.name]
 		}
 	}
 
@@ -202,7 +206,6 @@ function setupEnvironmentForPhase(node: AppNode, environment: Environment, edges
 		}
 
 		const outputValue = environment.phases[connectedEdge.source].outputs[connectedEdge.sourceHandle!]
-		console.log("this is the output value", outputValue, connectedEdge)
 
 		environment.phases[node.id].inputs[input.name] = outputValue
 	}
@@ -210,7 +213,6 @@ function setupEnvironmentForPhase(node: AppNode, environment: Environment, edges
 }
 
 function createExecutionEnvironment(node: AppNode, environment: Environment, logCollector: LogCollector): ExecutionEnvironment<any> {
-
 	return {
 		getInput: (name: string) => environment.phases[node.id]?.inputs[name],
 		getSetting: (name: string) => environment.phases[node.id]?.settings[name],

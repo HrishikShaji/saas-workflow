@@ -9,10 +9,9 @@ import {
 	DialogTitle,
 	DialogTrigger,
 } from "@/components/ui/dialog"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
 import { WorkflowTask } from "@/types/workflow"
 import { Settings } from "lucide-react"
+import NodeSettingsParamField from "./NodeSettingsParamField"
 
 interface Props {
 	task: WorkflowTask;
@@ -40,13 +39,13 @@ export default function NodeSettings({ task, nodeId }: Props) {
 					</DialogDescription>
 				</DialogHeader>
 				<div className="grid gap-4 py-4">
-					{task.settings.map((input) => (
-						<div key={input.name} className="grid grid-cols-4 items-center gap-4">
-							<Label htmlFor="name" className="text-right">
-								{input.name}
-							</Label>
-							<Input id="name" value={input.value} className="col-span-3" />
-						</div>
+					{task.settings.map((input, i) => (
+						<NodeSettingsParamField
+							key={i}
+							param={input}
+							disabled={false}
+							nodeId={nodeId}
+						/>
 					))}
 				</div>
 				<DialogFooter>

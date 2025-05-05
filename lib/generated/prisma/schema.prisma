@@ -55,6 +55,7 @@ model ExecutionPhase {
   completedAt DateTime?
   inputs      String?
   outputs     String?
+  settings    String?
 
   creditsCost         Int?
   workflowExecutionId String

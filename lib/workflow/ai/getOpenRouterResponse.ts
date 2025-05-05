@@ -29,12 +29,12 @@ export async function getOpenRouterResponse({ systemMessage, query }: { systemMe
 			}
 		}),
 	});
-	console.log("this is open router response", response)
+	//	console.log("this is open router response", response)
 	const result = await response.json()
 
 	const aiResponse = result.choices[0]?.message?.content || "No response generated"
-	console.log("this is open router result", result)
-	console.log("this is aiRespone", aiResponse)
+	//	console.log("this is open router result", result)
+	//	console.log("this is aiRespone", aiResponse)
 	return aiResponse
 }
 
