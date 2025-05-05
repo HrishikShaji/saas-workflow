@@ -9,6 +9,7 @@ export function cn(...inputs: ClassValue[]) {
 }
 
 export async function updateVectorDB(client: Pinecone, indexName: string, namespace: string, docs: Document[], progressCallback: (fileName: string, total: number, chunksUpserted: number, isComplete: boolean) => void) {
+        {/*
         const modelName = "mixedbread-ai/mxbai-embed-large-v1"
         const extractor = await pipeline("feature-extraction", modelName)
         console.log(extractor)
@@ -16,6 +17,7 @@ export async function updateVectorDB(client: Pinecone, indexName: string, namesp
         for (const doc of docs) {
                 await processDocument(client, indexName, namespace, doc, extractor)
         }
+*/}
 }
 
 function processDocument(client: Pinecone, indexName: string, namespace: string, doc: Document, extractor: any) {

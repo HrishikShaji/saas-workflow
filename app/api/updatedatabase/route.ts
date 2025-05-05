@@ -14,6 +14,7 @@ export async function POST(request: Request) {
 		const stream = new TransformStream();
 		const writer = stream.writable.getWriter();
 
+		{/*
 		const loader = new DirectoryLoader("./documents", {
 			".pdf": (path: string) => new PDFLoader(path, { splitPages: false }),
 			".txt": (path: string) => new TextLoader(path)
@@ -36,6 +37,7 @@ export async function POST(request: Request) {
 			}
 		});
 
+	*/}
 		return new NextResponse(stream.readable, {
 			headers: {
 				'Content-Type': 'text/event-stream',
