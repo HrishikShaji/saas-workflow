@@ -107,7 +107,7 @@ export default function NodeSettingsMultiSelectParam({
 
 			<div className="relative" id={`${id}-dropdown`}>
 				{/* Selected items */}
-				<div className="min-h-10 w-full rounded-md border border-input bg-transparent px-3 py-2 text-sm shadow-sm">
+				<div className="min-h-10 w-full rounded-md border border-input bg-transparent px-3 pr-10 py-2 text-sm shadow-sm">
 					{value.length > 0 ? (
 						<div className="flex flex-col gap-1.5">
 							{value.map((item, index) => (
