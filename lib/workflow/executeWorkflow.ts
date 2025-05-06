@@ -205,7 +205,35 @@ function setupEnvironmentForPhase(node: AppNode, environment: Environment, edges
 			continue;
 		}
 
-		const outputValue = environment.phases[connectedEdge.source].outputs[connectedEdge.sourceHandle!]
+		// Check if source node exists in environment
+		const sourcePhase = environment.phases[connectedEdge.source];
+		if (!sourcePhase) {
+			console.error(
+				"Source node not processed yet or doesn't exist:",
+				connectedEdge.source,
+				"for input",
+				input.name,
+				"in node",
+				node.id
+			);
+			continue;
+		}
+
+		// Check if sourceHandle exists in outputs
+		const outputValue = sourcePhase.outputs[connectedEdge.sourceHandle!];
+		if (outputValue === undefined) {
+			console.error(
+				"Output not found:",
+				connectedEdge.sourceHandle,
+				"from node",
+				connectedEdge.source,
+				"for input",
+				input.name,
+				"in node",
+				node.id
+			);
+			continue;
+		}
 
 		environment.phases[node.id].inputs[input.name] = outputValue
 	}

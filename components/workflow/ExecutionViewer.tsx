@@ -45,17 +45,20 @@ export default function ExecutionViewer({ initialData }: Props) {
 
 	const isRunning = data?.status === WorkflowExecutionStatus.RUNNING
 
+	{/*
+
 	useEffect(() => {
 		const phases = data?.phases || []
 		if (isRunning) {
 			const phaseToSelect = phases.toSorted((a, b) => a.startedAt! > b.startedAt! ? -1 : 1)[0]
-			setSelectedPhase(phaseToSelect.id)
+			//setSelectedPhase(phaseToSelect.id)
 			return;
 		}
 
 		const phaseToSelect = phases.toSorted((a, b) => a.completedAt! > b.completedAt! ? -1 : 1)[0]
 		setSelectedPhase(phaseToSelect.id)
 	}, [data?.phases, isRunning, setSelectedPhase])
+*/}
 
 	const duration = datesToDurationString(data?.completedAt, data?.startedAt)
 
@@ -97,7 +100,7 @@ export default function ExecutionViewer({ initialData }: Props) {
 				{data?.phases.map((phase, i) => (
 					<Button key={phase.id} className="w-full justify-between"
 						onClick={() => {
-							if (isRunning) return;
+							//if (isRunning) return;
 							setSelectedPhase(phase.id)
 						}}
 						style={{ background: selectedPhase === phase.id ? "blue" : "" }}
@@ -112,7 +115,8 @@ export default function ExecutionViewer({ initialData }: Props) {
 			</div>
 		</aside>
 		<div className="flex w-full h-full p-5">
-			{isRunning && (
+			{/*
+					{isRunning && (
 				<div className="flex items-center flex-col gap-2 justify-center h-full w-full">
 					<p className="font-bold">Run is in Progress</p>
 				</div>
@@ -127,7 +131,9 @@ export default function ExecutionViewer({ initialData }: Props) {
 					</div>
 				</div>
 			)}
-			{!isRunning && selectedPhase && phaseDetails.data && (
+
+		*/}
+			{selectedPhase && phaseDetails.data && (
 				<div className="flex flex-col py-4 container gap-4 overflow-auto">
 					<div className="flex gap-2 items-center">
 						<Badge variant="outline" className="space-x-4">
