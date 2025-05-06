@@ -10,7 +10,7 @@ export default function StringParam({ param, value, updateNodeParamValue, disabl
 	const id = useId()
 
 	useEffect(() => {
-		console.log("this is latest value", value)
+		//		console.log("this is latest value", value)
 		setInternalValue(value || "")
 	}, [value])
 

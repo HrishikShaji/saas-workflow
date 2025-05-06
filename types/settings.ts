@@ -1,6 +1,7 @@
 export enum SettingsParamType {
         STRING = "STRING",
-        NUMBER = "NUMBER"
+        NUMBER = "NUMBER",
+        DROPDOWN = "DROPDOWN"
 }
 
 
@@ -10,6 +11,6 @@ export interface SettingsParam {
         helperText?: string;
         required?: boolean;
         hideHandle?: boolean;
-        value?: string;
+        value: string;
         [key: string]: any
 }

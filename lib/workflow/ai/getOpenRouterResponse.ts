@@ -1,6 +1,11 @@
 
+interface Props {
+	systemMessage: string;
+	query: string;
+	model: string;
+}
 
-export async function getOpenRouterResponse({ systemMessage, query }: { systemMessage: string; query: string }) {
+export async function getOpenRouterResponse({ systemMessage, query, model }: Props) {
 
 
 	const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -10,7 +15,7 @@ export async function getOpenRouterResponse({ systemMessage, query }: { systemMe
 			'Content-Type': 'application/json',
 		},
 		body: JSON.stringify({
-			'model': 'meta-llama/llama-4-maverick',
+			'model': model,
 			'messages': [
 				{
 					'role': 'system',

@@ -25,7 +25,7 @@ export default function ExecuteButton({ workflowId }: Props) {
 		onError: () => toast.error("Something has went wrong", { id: "flow-execution" })
 	})
 
-	console.log(error)
+	//	console.log(error)
 
 
 	return <Button

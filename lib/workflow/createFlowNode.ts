@@ -1,5 +1,6 @@
 import { AppNode, AppNodeData } from "@/types/appNode";
 import { TaskType } from "@/types/task";
+import { nodeSettings } from "../constants";
 
 export function createFlowNode(nodeType: TaskType, position?: { x: number; y: number }): AppNode {
 	return {
@@ -9,7 +10,9 @@ export function createFlowNode(nodeType: TaskType, position?: { x: number; y: nu
 		data: {
 			type: nodeType,
 			inputs: {},
-			settings: {},
+			settings: {
+				"Model": "meta-llama/llama-4-maverick"
+			},
 		},
 		position: position ?? { x: 0, y: 0 }
 	}

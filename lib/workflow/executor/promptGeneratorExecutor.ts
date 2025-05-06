@@ -8,14 +8,17 @@ export async function promptGeneratorExecutor(environment: ExecutionEnvironment<
 		console.log("launch browser executed @@ENV", JSON.stringify(environment, null, 4))
 		const input = environment.getInput("input")
 		const useCase = environment.getInput("use case")
-		const settings = environment.getSetting("Model")
-		console.log("@@SETTINGS", settings)
 		environment.log.info("Input received")
+		const model = environment.getSetting("Model")
+		console.log("@@MODEL", model)
+
+		environment.log.info(`Sending request to ${model}`)
 
 
 		const aiResponse = await getOpenRouterResponse({
 			systemMessage: `You are an agent who improves Prompts to get most out of an LLM with context ${useCase}.only return the improved prompt no additional text`,
-			query: input
+			query: input,
+			model
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info(`Response is outputted`)

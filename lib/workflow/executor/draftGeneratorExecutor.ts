@@ -26,8 +26,12 @@ export async function draftGeneratorExecutor(environment: ExecutionEnvironment<t
 		const mustHavesString = parsedMustHaves.join(",")
 
 
-		console.log("these are options", parties, parsedParties, partiesString)
-		environment.log.info("Sending request to OpenAI")
+		//console.log("these are options", parties, parsedParties, partiesString)
+		const model = environment.getSetting("Model")
+		console.log("@@MODEL", model)
+
+		environment.log.info(`Sending request to ${model}`)
+
 		const systemMessage = "You are a legal drafting expert.";
 		const query = `Create the first draft of a document titles '${input}'.
 		Parties:${partiesString}
@@ -42,7 +46,8 @@ export async function draftGeneratorExecutor(environment: ExecutionEnvironment<t
 
 		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
-			query
+			query,
+			model
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Draft generation completed successfully")

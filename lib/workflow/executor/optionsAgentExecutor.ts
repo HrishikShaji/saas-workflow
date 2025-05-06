@@ -11,12 +11,16 @@ export async function optionsAgentExecutor(environment: ExecutionEnvironment<typ
 		const prompt = environment.getInput("Prompt")
 		const noOfOptions = environment.getInput("No of Options")
 
-		environment.log.info("Sending request to OpenAI")
+		const model = environment.getSetting("Model")
+		console.log("@@MODEL", model)
+
+		environment.log.info(`Sending request to ${model}`)
 
 		const systemMessageTemplate = `${systemMessage}.return only a array of strings ,no additional text.return only ${noOfOptions} items`
 		const aiResponse = await getOpenRouterResponse({
 			systemMessage: systemMessageTemplate,
-			query: prompt
+			query: prompt,
+			model
 		})
 		console.log("this is ai response", aiResponse)
 		environment.setOutput("Options", aiResponse)

@@ -7,11 +7,10 @@ export async function clarityGeneratorExecutor(environment: ExecutionEnvironment
 	try {
 		environment.log.info("Starting clarity improving process")
 		const input = environment.getInput("AI Generated Content")
-		const setting = environment.getSetting("Model")
+		const model = environment.getSetting("Model")
+		console.log("@@MODEL", model)
 
-		console.log("@@CLARITY SETTING", setting)
-
-		environment.log.info("Sending request to OpenAI")
+		environment.log.info(`Sending request to ${model}`)
 
 		const systemMessage = "You are an editor"
 		const query = `Simplify and clarify the following legal draft while keeping it formal and legally sound:
@@ -20,7 +19,8 @@ export async function clarityGeneratorExecutor(environment: ExecutionEnvironment
 		`
 		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
-			query
+			query,
+			model
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Draft generation completed successfully")

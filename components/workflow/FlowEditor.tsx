@@ -64,7 +64,7 @@ export default function FlowEditor({ workflow }: Props) {
 
 	const onConnect = useCallback((connection: Connection) => {
 		setEdges((edges) => addEdge({ ...connection, animated: true }, edges))
-		console.log("this is connection", connection)
+		//		console.log("this is connection", connection)
 
 		if (!connection.targetHandle) return;
 		const node = nodes.find((node) => node.id === connection.target)
@@ -77,15 +77,15 @@ export default function FlowEditor({ workflow }: Props) {
 			}
 		})
 
-		console.log("@updated node", node.id)
+		//		console.log("@updated node", node.id)
 	}, [setEdges, updateNodeData, nodes])
 
-	console.log(nodes)
+	//	console.log(nodes)
 
 	const isValidConnection = useCallback((connection: Edge | Connection) => {
 
 		//no self connection allowed
-		console.log("this is connection source and target", connection.source, connection.target)
+		//		console.log("this is connection source and target", connection.source, connection.target)
 		if (connection.target === connection.source) {
 			return false
 		}

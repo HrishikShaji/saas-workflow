@@ -10,7 +10,10 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 		environment.log.info("Starting polishing process")
 		const input = environment.getInput("AI Generated Content")
 
-		environment.log.info("Sending request to OpenAI")
+		const model = environment.getSetting("Model")
+		console.log("@@MODEL", model)
+
+		environment.log.info(`Sending request to ${model}`)
 
 		const systemMessage = "You are a professional formatter"
 		const query = `Polish the following legal draft into a clean, professional document ready for export:
@@ -19,7 +22,8 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
                 `
 		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
-			query
+			query,
+			model
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Polishing process completed successfully")

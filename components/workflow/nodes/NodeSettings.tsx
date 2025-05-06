@@ -20,7 +20,6 @@ interface Props {
 
 export default function NodeSettings({ task, nodeId }: Props) {
 
-	console.log("@@TASK", task)
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
@@ -48,9 +47,6 @@ export default function NodeSettings({ task, nodeId }: Props) {
 						/>
 					))}
 				</div>
-				<DialogFooter>
-					<Button type="submit">Save changes</Button>
-				</DialogFooter>
 			</DialogContent>
 		</Dialog>
 	)

@@ -11,7 +11,7 @@ export default function AiResponseParam({ param, value, updateNodeParamValue, di
 	const id = useId()
 
 	useEffect(() => {
-		console.log("this is latest value", value)
+		//		console.log("this is latest value", value)
 		setInternalValue(value || "")
 	}, [value])
 

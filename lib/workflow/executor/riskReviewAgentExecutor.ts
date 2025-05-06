@@ -8,7 +8,10 @@ export async function riskReviewAgentExecutor(environment: ExecutionEnvironment<
 		environment.log.info("Starting risk review process")
 		const input = environment.getInput("AI Generated Content")
 
-		environment.log.info("Sending request to OpenAI")
+		const model = environment.getSetting("Model")
+		console.log("@@MODEL", model)
+
+		environment.log.info(`Sending request to ${model}`)
 
 		const systemMessage = "You are a legal risk analyst"
 		const query = `Review the draft below for risks like missing protections,liability issues,unenforceable clauses.
@@ -18,7 +21,8 @@ export async function riskReviewAgentExecutor(environment: ExecutionEnvironment<
                 `
 		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
-			query
+			query,
+			model
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Risk Review completed successfully")
