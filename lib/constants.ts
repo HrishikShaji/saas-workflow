@@ -25,4 +25,4 @@ export const models = [
 export const providersOrder = [
         "SambaNova",
         "Groq"
-] as const
+] 

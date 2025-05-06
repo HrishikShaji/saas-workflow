@@ -5,6 +5,8 @@ import { SettingsParam, SettingsParamType } from "@/types/settings";
 import SettingsStringParam from "./params/SettingsStringParam";
 import SettingsDropdownParam from "./params/SettingsDropdownParam";
 import SettingsNumberParam from "./params/SettingsNumberParam";
+import NodeSettingsMultiSelectParam from "./params/SettingsMultiSelectParam";
+import { providersOrder } from "@/lib/constants";
 
 interface Props {
 	param: SettingsParam;
@@ -49,6 +51,13 @@ export default function NodeSettingsParamField({ param, nodeId, disabled }: Prop
 				value={value}
 				updateNodeParamValue={updateNodeParamValue}
 				disabled={disabled}
+			/>
+		case SettingsParamType.ORDER:
+			return <NodeSettingsMultiSelectParam
+				options={providersOrder}
+				value={JSON.parse(value)}
+				onChange={(values) => updateNodeParamValue(JSON.stringify(values))}
+			//disabled={disabled}
 			/>
 
 		default: return (
