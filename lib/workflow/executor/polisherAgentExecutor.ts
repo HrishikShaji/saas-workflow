@@ -11,9 +11,12 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 		const input = environment.getInput("AI Generated Content")
 
 		const model = environment.getSetting("Model")
-		console.log("@@MODEL", model)
+		const temperature = parseInt(environment.getSetting("Temperature"))
+		const maxTokens = parseInt(environment.getSetting("Max Tokens"))
+		const providersOrder = JSON.parse(environment.getSetting("Providers Order"))
 
-		environment.log.info(`Sending request to ${model}`)
+		environment.log.info(`Sending request to ${model},temperature:${temperature},max tokens:${maxTokens},providers order:${JSON.stringify(providersOrder)}`)
+
 
 		const systemMessage = "You are a professional formatter"
 		const query = `Polish the following legal draft into a clean, professional document ready for export:
@@ -23,7 +26,10 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
 			query,
-			model
+			model,
+			temperature,
+			maxTokens,
+			providersOrder
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Polishing process completed successfully")

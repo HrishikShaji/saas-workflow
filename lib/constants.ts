@@ -1,7 +1,11 @@
 import { SettingsParam, SettingsParamType } from "@/types/settings";
 
+
 export const nodeSettings = [
-        { name: "Model", type: SettingsParamType.DROPDOWN, value: "meta-llama/llama-4-maverick" }
+        { name: "Model", type: SettingsParamType.DROPDOWN, value: "meta-llama/llama-4-maverick" },
+        { name: "Temperature", type: SettingsParamType.NUMBER, value: "" },
+        { name: "Max Tokens", type: SettingsParamType.NUMBER, value: "" },
+        { name: "Providers Order", type: SettingsParamType.ORDER, value: "" }
 ] as const satisfies SettingsParam[];
 
 export const models = [
@@ -18,3 +22,7 @@ export const models = [
         "perplexity/llama-3.1-sonar-small-128k-online"
 ] as const
 
+export const providersOrder = [
+        "SambaNova",
+        "Groq"
+] as const

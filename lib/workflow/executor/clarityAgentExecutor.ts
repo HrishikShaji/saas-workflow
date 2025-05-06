@@ -8,9 +8,12 @@ export async function clarityGeneratorExecutor(environment: ExecutionEnvironment
 		environment.log.info("Starting clarity improving process")
 		const input = environment.getInput("AI Generated Content")
 		const model = environment.getSetting("Model")
-		console.log("@@MODEL", model)
+		const temperature = parseInt(environment.getSetting("Temperature"))
+		const maxTokens = parseInt(environment.getSetting("Max Tokens"))
+		const providersOrder = JSON.parse(environment.getSetting("Providers Order"))
 
-		environment.log.info(`Sending request to ${model}`)
+		environment.log.info(`Sending request to ${model},temperature:${temperature},max tokens:${maxTokens},providers order:${JSON.stringify(providersOrder)}`)
+
 
 		const systemMessage = "You are an editor"
 		const query = `Simplify and clarify the following legal draft while keeping it formal and legally sound:
@@ -20,7 +23,10 @@ export async function clarityGeneratorExecutor(environment: ExecutionEnvironment
 		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
 			query,
-			model
+			model,
+			temperature,
+			maxTokens,
+			providersOrder
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Draft generation completed successfully")

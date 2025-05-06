@@ -10,9 +10,12 @@ export async function toneAgentExecutor(environment: ExecutionEnvironment<typeof
 		const tone = environment.getInput("Tone")
 
 		const model = environment.getSetting("Model")
-		console.log("@@MODEL", model)
+		const temperature = parseInt(environment.getSetting("Temperature"))
+		const maxTokens = parseInt(environment.getSetting("Max Tokens"))
+		const providersOrder = JSON.parse(environment.getSetting("Providers Order"))
 
-		environment.log.info(`Sending request to ${model}`)
+		environment.log.info(`Sending request to ${model},temperature:${temperature},max tokens:${maxTokens},providers order:${JSON.stringify(providersOrder)}`)
+
 
 		const systemMessage = "You are a language expert"
 		const query = `Adjust the tone of the following legal draft to be ${tone}
@@ -22,7 +25,10 @@ export async function toneAgentExecutor(environment: ExecutionEnvironment<typeof
 		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
 			query,
-			model
+			model,
+			temperature,
+			maxTokens,
+			providersOrder
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Draft generation completed successfully")

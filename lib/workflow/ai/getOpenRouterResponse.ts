@@ -3,9 +3,12 @@ interface Props {
 	systemMessage: string;
 	query: string;
 	model: string;
+	temperature: number;
+	maxTokens: number;
+	providersOrder: string[];
 }
 
-export async function getOpenRouterResponse({ systemMessage, query, model }: Props) {
+export async function getOpenRouterResponse({ systemMessage, query, model, temperature, maxTokens, providersOrder }: Props) {
 
 
 	const response = await fetch('https://openrouter.ai/api/v1/chat/completions', {
@@ -27,11 +30,10 @@ export async function getOpenRouterResponse({ systemMessage, query, model }: Pro
 				}
 			],
 			'provider': {
-				'order': [
-					"SambaNova",
-					"Groq"
-				]
-			}
+				'order': providersOrder
+			},
+			'temperature': temperature,
+			'max_tokens': maxTokens
 		}),
 	});
 	//	console.log("this is open router response", response)

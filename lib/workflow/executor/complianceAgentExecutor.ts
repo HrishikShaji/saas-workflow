@@ -10,9 +10,11 @@ export async function complianceAgentExecutor(environment: ExecutionEnvironment<
 		const law = environment.getInput("Law")
 
 		const model = environment.getSetting("Model")
-		console.log("@@MODEL", model)
+		const temperature = parseInt(environment.getSetting("Temperature"))
+		const maxTokens = parseInt(environment.getSetting("Max Tokens"))
+		const providersOrder = JSON.parse(environment.getSetting("Providers Order"))
 
-		environment.log.info(`Sending request to ${model}`)
+		environment.log.info(`Sending request to ${model},temperature:${temperature},max tokens:${maxTokens},providers order:${JSON.stringify(providersOrder)}`)
 
 		const systemMessage = "You are a compliance checker"
 		const query = `Review the following legal draft for compliance with ${law}.
@@ -23,7 +25,10 @@ export async function complianceAgentExecutor(environment: ExecutionEnvironment<
 		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
 			query,
-			model
+			model,
+			temperature,
+			maxTokens,
+			providersOrder
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Compliance checking completed successfully")

@@ -28,9 +28,11 @@ export async function draftGeneratorExecutor(environment: ExecutionEnvironment<t
 
 		//console.log("these are options", parties, parsedParties, partiesString)
 		const model = environment.getSetting("Model")
-		console.log("@@MODEL", model)
+		const temperature = parseInt(environment.getSetting("Temperature"))
+		const maxTokens = parseInt(environment.getSetting("Max Tokens"))
+		const providersOrder = JSON.parse(environment.getSetting("Providers Order"))
 
-		environment.log.info(`Sending request to ${model}`)
+		environment.log.info(`Sending request to ${model},temperature:${temperature},max tokens:${maxTokens},providers order:${JSON.stringify(providersOrder)}`)
 
 		const systemMessage = "You are a legal drafting expert.";
 		const query = `Create the first draft of a document titles '${input}'.
@@ -47,7 +49,10 @@ export async function draftGeneratorExecutor(environment: ExecutionEnvironment<t
 		const aiResponse = await getOpenRouterResponse({
 			systemMessage,
 			query,
-			model
+			model,
+			temperature,
+			maxTokens,
+			providersOrder
 		})
 		environment.setOutput("AI Response", aiResponse)
 		environment.log.info("Draft generation completed successfully")

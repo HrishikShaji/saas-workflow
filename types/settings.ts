@@ -1,7 +1,8 @@
 export enum SettingsParamType {
         STRING = "STRING",
         NUMBER = "NUMBER",
-        DROPDOWN = "DROPDOWN"
+        DROPDOWN = "DROPDOWN",
+        ORDER = "ORDER"
 }
 
 
