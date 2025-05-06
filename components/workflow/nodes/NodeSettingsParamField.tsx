@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import { SettingsParam, SettingsParamType } from "@/types/settings";
 import SettingsStringParam from "./params/SettingsStringParam";
 import SettingsDropdownParam from "./params/SettingsDropdownParam";
+import SettingsNumberParam from "./params/SettingsNumberParam";
 
 interface Props {
 	param: SettingsParam;
@@ -30,6 +31,13 @@ export default function NodeSettingsParamField({ param, nodeId, disabled }: Prop
 	switch (param.type) {
 		case SettingsParamType.STRING:
 			return <SettingsStringParam
+				param={param}
+				value={value}
+				updateNodeParamValue={updateNodeParamValue}
+				disabled={disabled}
+			/>
+		case SettingsParamType.NUMBER:
+			return <SettingsNumberParam
 				param={param}
 				value={value}
 				updateNodeParamValue={updateNodeParamValue}
