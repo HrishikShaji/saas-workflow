@@ -23,6 +23,14 @@ export default function TaskMenu() {
 					<TaskMenuBtn taskType={TaskType.OPTIONS_AGENT} />
 				</AccordionContent>
 			</AccordionItem>
+			<AccordionItem value="database">
+				<AccordionTrigger className="font-bold">
+					Database
+				</AccordionTrigger>
+				<AccordionContent className="flex flex-col gap-1">
+					<TaskMenuBtn taskType={TaskType.DATABASE_CONNECTOR} />
+				</AccordionContent>
+			</AccordionItem>
 			<AccordionItem value="extraction">
 				<AccordionTrigger className="font-bold">
 					Data extraction

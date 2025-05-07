@@ -6,6 +6,7 @@ import { LogCollector } from "./log";
 export type Environment = {
         browser?: Browser;
         page?: Page;
+        database?: any;
         phases: Record<
                 string,
                 {
@@ -22,6 +23,8 @@ export type ExecutionEnvironment<T extends WorkflowTask> = {
         setOutput(name: T["outputs"][number]["name"], value: string): void;
         getBrowser(): Browser | undefined;
         setBrowser(browser: Browser): void;
+        setDatabase(database: any): void;
+        getDatabase(): any | undefined;
         getPage(): Page | undefined;
         setPage(page: Page): void;
         log: LogCollector
