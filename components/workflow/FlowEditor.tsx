@@ -63,17 +63,17 @@ export default function FlowEditor({ workflow }: Props) {
 	}, [])
 
 	const onConnect = useCallback((connection: Connection) => {
-		setEdges((edges) => addEdge({ ...connection, animated: true }, edges))
-		//		console.log("this is connection", connection)
-
+		console.log("this is connection", connection)
 		if (!connection.targetHandle) return;
 		const node = nodes.find((node) => node.id === connection.target)
 		if (!node) return;
+		setEdges((edges) => addEdge({ ...connection, animated: true }, edges))
+		//		console.log("this is connection", connection)
 		const nodeInputs = node.data.inputs
 		updateNodeData(node.id, {
 			inputs: {
 				...nodeInputs,
-				[connection.targetHandle]: ""
+				[connection.targetHandle.split("-")[0]]: ""
 			}
 		})
 
@@ -85,7 +85,7 @@ export default function FlowEditor({ workflow }: Props) {
 	const isValidConnection = useCallback((connection: Edge | Connection) => {
 
 		//no self connection allowed
-		//		console.log("this is connection source and target", connection.source, connection.target)
+		//console.log("this is connection source and target", connection.sourceHandle, connection.targetHandle)
 		if (connection.target === connection.source) {
 			return false
 		}
@@ -98,10 +98,25 @@ export default function FlowEditor({ workflow }: Props) {
 		const sourceTask = TaskRegistry[source.data.type]
 		const targetTask = TaskRegistry[target.data.type]
 
-		const output = sourceTask.outputs.find((o) => o.name === connection.sourceHandle)
-		const input = targetTask.inputs.find((o) => o.name === connection.targetHandle)
+		console.log("@@SOURCE-TASK", sourceTask)
+		console.log("@@TARGET-TASK", targetTask)
 
-		if (input?.type !== output?.type) return false
+		const [sourceHandleId, sourceHandleType] = connection.sourceHandle?.split("-") as string[]
+		const [targetHandleId, targetHandleType] = connection.targetHandle?.split("-") as string[]
+
+		console.log("@@SOURCE-HANDLE-ID", sourceHandleId)
+		console.log("@@SOURCE-TYPE", sourceHandleType)
+		console.log("@@TARGET-HANDLE-ID", targetHandleId)
+		console.log("@@TARGET-TYPE", targetHandleType)
+
+		const output = sourceTask.outputs.find((o) => o.name === sourceHandleId)
+		const input = targetTask.inputs.find((o) => o.name === targetHandleId)
+
+		if (input?.type !== output?.type) {
+			console.log("Type is not same", output, input)
+			return false
+		}
+
 
 		const hasCycle = (node: AppNode, visited = new Set()) => {
 			if (visited.has(node.id)) return false;

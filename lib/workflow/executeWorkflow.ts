@@ -198,7 +198,7 @@ function setupEnvironmentForPhase(node: AppNode, environment: Environment, edges
 			environment.phases[node.id].inputs[input.name] = inputValue;
 			continue;
 		}
-		const connectedEdge = edges.find((edge) => edge.target === node.id && edge.targetHandle === input.name)
+		const connectedEdge = edges.find((edge) => edge.target === node.id && edge.targetHandle?.split("-")[0] === input.name)
 
 		if (!connectedEdge) {
 			console.error("Misssing edge for input", input.name, "node id:", node.id)
@@ -220,11 +220,11 @@ function setupEnvironmentForPhase(node: AppNode, environment: Environment, edges
 		}
 
 		// Check if sourceHandle exists in outputs
-		const outputValue = sourcePhase.outputs[connectedEdge.sourceHandle!];
+		const outputValue = sourcePhase.outputs[connectedEdge.sourceHandle?.split("-")[0]!];
 		if (outputValue === undefined) {
 			console.error(
 				"Output not found:",
-				connectedEdge.sourceHandle,
+				connectedEdge.sourceHandle?.split("-")[0],
 				"from node",
 				connectedEdge.source,
 				"for input",

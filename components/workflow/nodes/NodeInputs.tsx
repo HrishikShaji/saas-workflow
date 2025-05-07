@@ -17,7 +17,7 @@ export function NodeInputs({ children }: Props) {
 export function NodeInput({ input, nodeId }: { input: TaskParam; nodeId: string }) {
 	const edges = useEdges()
 	const { invalidInputs } = useFlowValidation()
-	const isConnected = edges.some(edge => edge.target === nodeId && edge.targetHandle === input.name)
+	const isConnected = edges.some(edge => edge.target === nodeId && edge.targetHandle?.split("-")[0] === input.name)
 
 	const hasErrors = invalidInputs.find((node) => node.nodeId === nodeId)?.inputs.find((invalidInput) => invalidInput === input.name)
 
@@ -26,7 +26,7 @@ export function NodeInput({ input, nodeId }: { input: TaskParam; nodeId: string 
 		{!input.hideHandle && (
 			<Handle
 				isConnectable={!isConnected}
-				id={input.name}
+				id={`${input.name}-${input.type}`}
 				type="target"
 				position={Position.Left}
 				className={cn("!bg-muted-foreground !border-2 !border-background !-left-2 !w-4 !h-4", colorForHandle[input.type])}
