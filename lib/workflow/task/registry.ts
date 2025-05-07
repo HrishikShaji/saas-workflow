@@ -12,6 +12,7 @@ import { RiskReviewAgentTask } from "./RiskReviewAgent";
 import { PolisherAgentTask } from "./PolisherAgent";
 import { OptionsAgentTask } from "./OptionsAgent";
 import { DatabaseConnectorTask } from "./DatabaseConnector";
+import { DatabaseOperatorTask } from "./DatabaseOperator";
 
 type Registry = {
 	[K in TaskType]: WorkflowTask & { type: K }
@@ -29,5 +30,6 @@ export const TaskRegistry: Registry = {
 	RISK_REVIEW_AGENT: RiskReviewAgentTask,
 	POLISHER_AGENT: PolisherAgentTask,
 	OPTIONS_AGENT: OptionsAgentTask,
-	DATABASE_CONNECTOR: DatabaseConnectorTask
+	DATABASE_CONNECTOR: DatabaseConnectorTask,
+	DATABASE_OPERATOR: DatabaseOperatorTask
 }

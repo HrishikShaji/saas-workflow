@@ -7,7 +7,7 @@ import { AppNode } from "@/types/appNode";
 import { TaskRegistry } from "./task/registry";
 import { ExecutorRegistry } from "./executor/registry";
 import { run } from "node:test";
-import { Environment, ExecutionEnvironment } from "@/types/executor";
+import { Environment, EnvironmentDatabase, ExecutionEnvironment } from "@/types/executor";
 import { TaskParamType } from "@/types/task";
 import { Browser, Page } from "puppeteer";
 import { Edge } from "@xyflow/react";
@@ -248,7 +248,7 @@ function createExecutionEnvironment(node: AppNode, environment: Environment, log
 		getBrowser: () => environment.browser,
 		setBrowser: (browser: Browser) => (environment.browser = browser),
 		getDatabase: () => environment.database,
-		setDatabase: (database: DataSource) => (environment.database = database),
+		setDatabase: (database: EnvironmentDatabase) => (environment.database = database),
 		getPage: () => environment.page,
 		setPage: (page: Page) => (environment.page = page),
 		setOutput: (name: string, value: string) => {

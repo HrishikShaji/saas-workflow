@@ -4,32 +4,32 @@ import { TaskParamType, TaskType } from "@/types/task";
 import { WorkflowTask } from "@/types/workflow";
 import { Bot, Database, GlobeIcon, LucideProps } from "lucide-react";
 
-export const DatabaseConnectorTask = {
-	type: TaskType.DATABASE_CONNECTOR,
-	label: "Database Connector",
+export const DatabaseOperatorTask = {
+	type: TaskType.DATABASE_OPERATOR,
+	label: "Database Operator",
 	icon: (props: LucideProps) => (
 		<Database className="stroke-pink-500" {...props} />
 	),
-	isEntryPoint: true,
+	isEntryPoint: false,
 	inputs: [
 		{
-			name: "Database URL",
+			name: "method",
 			type: TaskParamType.STRING,
-			helperText: "enter the database url",
+			helperText: "enter the method",
 			required: true,
-			hideHandle: true
+			hideHandle: false
 		},
 		{
-			name: "Database Provider",
+			name: "table",
 			type: TaskParamType.STRING,
-			helperText: "MongoDB or MySQL",
+			helperText: "blogs",
 			required: true,
-			hideHandle: true
+			hideHandle: false
 		}
 
 	] as const,
 	outputs: [
-		{ name: "Database", type: TaskParamType.STRING }
+		{ name: "Response", type: TaskParamType.STRING }
 	] as const,
 	settings: nodeSettings,
 	credits: 5

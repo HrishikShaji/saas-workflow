@@ -1,6 +1,6 @@
 import { Environment, ExecutionEnvironment } from "@/types/executor";
 import { DatabaseConnectorTask } from "../task/DatabaseConnector";
-import { createConnection, Connection } from 'typeorm';
+import { connectToMongoDB } from "@/lib/connectToMongoDB";
 
 export async function databaseConnectorExecutor(
 	environment: ExecutionEnvironment<typeof DatabaseConnectorTask>
@@ -11,25 +11,25 @@ export async function databaseConnectorExecutor(
 
 		let type: 'mysql' | 'postgres' | 'sqlite' | 'mongodb';
 
+		let database
+
 		switch (databaseProvider) {
 			case 'mysql': type = 'mysql'; break;
 			case 'postgresql': case 'postgres': type = 'postgres'; break;
 			case 'sqlite': type = 'sqlite'; break;
-			case 'mongodb': type = 'mongodb'; break;
+			case 'mongodb':
+				database = await connectToMongoDB(databaseUrl, "test")
+				break;
 			default: throw new Error(`Unsupported database provider: ${databaseProvider}`);
 		}
 
-		const connection = await createConnection({
-			type: type as any,
-			url: databaseUrl,
-			synchronize: false,
-			logging: false
+
+		console.log("this is database", database)
+		environment.setDatabase({
+			provider: databaseProvider,
+			instance: database
 		});
-
-		console.log("this is connection", connection)
-
-		environment.setDatabase(connection);
-		environment.log.info(`Successfully connected to ${databaseProvider} database using TypeORM`);
+		environment.log.info(`Successfully connected to ${databaseProvider}`);
 
 		return true;
 	} catch (error: any) {

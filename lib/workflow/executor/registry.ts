@@ -13,6 +13,7 @@ import { riskReviewAgentExecutor } from "./riskReviewAgentExecutor";
 import { polisherAgentExecutor } from "./polisherAgentExecutor";
 import { optionsAgentExecutor } from "./optionsAgentExecutor";
 import { databaseConnectorExecutor } from "./databaseConnectorExecutor";
+import { databaseOperatorExecutor } from "./databaseOperatorExecutor";
 
 type ExecutorFn<T extends WorkflowTask> = (environment: ExecutionEnvironment<T>) => Promise<boolean>
 
@@ -32,5 +33,6 @@ export const ExecutorRegistry: RegistryType = {
 	RISK_REVIEW_AGENT: riskReviewAgentExecutor,
 	POLISHER_AGENT: polisherAgentExecutor,
 	OPTIONS_AGENT: optionsAgentExecutor,
-	DATABASE_CONNECTOR: databaseConnectorExecutor
+	DATABASE_CONNECTOR: databaseConnectorExecutor,
+	DATABASE_OPERATOR: databaseOperatorExecutor
 }
