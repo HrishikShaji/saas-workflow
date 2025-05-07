@@ -2,11 +2,12 @@ import { Record } from "@/lib/generated/prisma/runtime/library";
 import { Browser, Page } from "puppeteer";
 import { WorkflowTask } from "./workflow";
 import { LogCollector } from "./log";
+import { DataSource } from "typeorm";
 
 export type Environment = {
         browser?: Browser;
         page?: Page;
-        database?: any;
+        database?: DataSource;
         phases: Record<
                 string,
                 {
@@ -23,8 +24,8 @@ export type ExecutionEnvironment<T extends WorkflowTask> = {
         setOutput(name: T["outputs"][number]["name"], value: string): void;
         getBrowser(): Browser | undefined;
         setBrowser(browser: Browser): void;
-        setDatabase(database: any): void;
-        getDatabase(): any | undefined;
+        setDatabase(database: DataSource): void;
+        getDatabase(): DataSource | undefined;
         getPage(): Page | undefined;
         setPage(page: Page): void;
         log: LogCollector

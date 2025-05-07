@@ -13,6 +13,7 @@ import { Browser, Page } from "puppeteer";
 import { Edge } from "@xyflow/react";
 import { LogCollector } from "@/types/log";
 import { createLogCollector } from "../log";
+import { DataSource } from "typeorm";
 
 export async function executeWorkflow(executionId: string) {
 	const execution = await prisma.workflowExecution.findUnique({
@@ -247,7 +248,7 @@ function createExecutionEnvironment(node: AppNode, environment: Environment, log
 		getBrowser: () => environment.browser,
 		setBrowser: (browser: Browser) => (environment.browser = browser),
 		getDatabase: () => environment.database,
-		setDatabase: (database: any) => (environment.database = database),
+		setDatabase: (database: DataSource) => (environment.database = database),
 		getPage: () => environment.page,
 		setPage: (page: Page) => (environment.page = page),
 		setOutput: (name: string, value: string) => {
