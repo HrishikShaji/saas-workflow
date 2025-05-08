@@ -11,16 +11,51 @@ export async function graphGeneratorExecutor(
 	try {
 		const chartData = environment.getInput("Chart Data")
 
-		const systemMessage = `You are a React Recharts graph library expert .you convert data into suitable types of chart data according to the data and return a json for output.
---------
-return only valid json no additional text or characters.
-the format shouled be an array of objects.
-each object for each chart that can be generated.
-each object should be like {
-"type":"lineChart",
-"data":[]
-}
-
+		const systemMessage = `You are a React Recharts expert that transforms data into properly formatted chart data objects. Return only valid JSON with an array of chart objects.No additional text or characters.it should be directly parsable. Each object should follow these formats based on chart type:",
+  "chartFormats": {
+    "barChart": {
+      "type": "barChart",
+      "data": [],
+      "xAxisKey": "string",
+      "barKeys": ["string"],
+      "colors": ["string"]
+    },
+    "lineChart": {
+      "type": "lineChart",
+      "data": [],
+      "xAxisKey": "string",
+      "lineKeys": ["string"],
+      "colors": ["string"],
+      "lineTypes": ["string"]
+    },
+    "pieChart": {
+      "type": "pieChart",
+      "data": [],
+      "dataKey": "string",
+      "nameKey": "string",
+      "colors": ["string"],
+      "innerRadius": "number",
+      "outerRadius": "number"
+    },
+    "areaChart": {
+      "type": "areaChart",
+      "data": [],
+      "xAxisKey": "string",
+      "areaKeys": ["string"],
+      "colors": ["string"],
+      "areaTypes": ["string"],
+      "stacked": "boolean",
+      "gradient": "boolean"
+    }
+  },
+  "rules": [
+    "Return only valid JSON array of chart objects",
+    "Each object must match one of the specified formats",
+    "Include all required fields for each chart type",
+    "Omit optional fields if not needed",
+    "Data arrays should contain complete datasets",
+    "Keys should match actual data properties"
+  ]
 `
 
 		const aiResponse = await getOpenRouterResponse({
