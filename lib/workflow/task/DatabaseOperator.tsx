@@ -20,9 +20,9 @@ export const DatabaseOperatorTask = {
 			hideHandle: false
 		},
 		{
-			name: "table",
+			name: "query",
 			type: TaskParamType.STRING,
-			helperText: "blogs",
+			helperText: "get me 10 users",
 			required: true,
 			hideHandle: false
 		}
