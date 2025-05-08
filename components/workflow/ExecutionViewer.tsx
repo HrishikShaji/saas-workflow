@@ -213,7 +213,7 @@ function ParameterViewer({ title, subTitle, paramJSON, type }: { type: "input" |
 						<p className="text-sm text-muted-foreground flex-1 basis-1/3">{key}</p>
 						<div className="flex gap-2 items-center flex-1 basis-2/3">
 							<Input readOnly className="" value={value as string} />
-							<ViewResponse type={type} response={value as string} />
+							<ViewResponse name={key} type={type} response={value as string} />
 						</div>
 					</div>
 				))}

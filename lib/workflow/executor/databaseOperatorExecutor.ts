@@ -33,7 +33,7 @@ export async function databaseOperatorExecutor(
 
 		})
 
-		console.log("this is ai response", aiResponse)
+		//		console.log("this is ai response", aiResponse)
 
 		const result = await getMongDBItemsInCollection({ db: instance.db, aiResponse })
 

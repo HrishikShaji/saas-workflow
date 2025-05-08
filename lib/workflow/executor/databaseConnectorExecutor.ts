@@ -24,7 +24,7 @@ export async function databaseConnectorExecutor(
 		}
 
 
-		console.log("this is database", database)
+		//		console.log("this is database", database)
 		environment.setDatabase({
 			provider: databaseProvider,
 			instance: database

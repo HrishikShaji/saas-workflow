@@ -14,6 +14,7 @@ import { OptionsAgentTask } from "./OptionsAgent";
 import { DatabaseConnectorTask } from "./DatabaseConnector";
 import { DatabaseOperatorTask } from "./DatabaseOperator";
 import { DatabaseAnalyserTask } from "./DatabaseAnalyser";
+import { GraphGeneratorTask } from "./GraphGenerator";
 
 type Registry = {
 	[K in TaskType]: WorkflowTask & { type: K }
@@ -33,5 +34,6 @@ export const TaskRegistry: Registry = {
 	OPTIONS_AGENT: OptionsAgentTask,
 	DATABASE_CONNECTOR: DatabaseConnectorTask,
 	DATABASE_OPERATOR: DatabaseOperatorTask,
-	DATABASE_ANALYSER: DatabaseAnalyserTask
+	DATABASE_ANALYSER: DatabaseAnalyserTask,
+	GRAPH_GENERATOR: GraphGeneratorTask
 }

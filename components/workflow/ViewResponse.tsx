@@ -12,13 +12,19 @@ import {
 	DialogTrigger,
 } from "@/components/ui/dialog"
 import styles from "../../styles/document.module.css"
+import GraphResponse from "./GraphResponse";
 
 interface Props {
 	response: string;
 	type: "input" | "output";
+	name: string;
 }
 
-export default function ViewResponse({ response, type }: Props) {
+export default function ViewResponse({ response, type, name }: Props) {
+
+	console.log("this is name", name)
+
+
 	return (
 		<Dialog>
 			<DialogTrigger asChild>
@@ -29,14 +35,19 @@ export default function ViewResponse({ response, type }: Props) {
 					<DialogTitle>{type}</DialogTitle>
 				</DialogHeader>
 				<div className="py-4 pr-5 max-h-[500px] overflow-y-auto">
-					<div className={styles.markdown}>
-						<ReactMarkdown
-							remarkPlugins={[remarkGfm]}
-							rehypePlugins={[rehypeRaw]}
-						>
-							{response}
-						</ReactMarkdown>
-					</div>
+					{name === "Graph Response" ?
+						<GraphResponse data={response} />
+						:
+
+						<div className={styles.markdown}>
+							<ReactMarkdown
+								remarkPlugins={[remarkGfm]}
+								rehypePlugins={[rehypeRaw]}
+							>
+								{response}
+							</ReactMarkdown>
+						</div>
+					}
 				</div>
 			</DialogContent>
 		</Dialog>

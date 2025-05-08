@@ -26,7 +26,7 @@ export async function databaseAnalyserExecutor(
 			}))
 		);
 
-		console.log(completeCollections)
+		//		console.log(completeCollections)
 
 		environment.setOutput("Database Collections", JSON.stringify(completeCollections));
 

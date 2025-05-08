@@ -15,6 +15,7 @@ import { optionsAgentExecutor } from "./optionsAgentExecutor";
 import { databaseConnectorExecutor } from "./databaseConnectorExecutor";
 import { databaseOperatorExecutor } from "./databaseOperatorExecutor";
 import { databaseAnalyserExecutor } from "./databaseAnalyserExecutor";
+import { graphGeneratorExecutor } from "./graphGeneratorExecutor";
 
 type ExecutorFn<T extends WorkflowTask> = (environment: ExecutionEnvironment<T>) => Promise<boolean>
 
@@ -36,5 +37,6 @@ export const ExecutorRegistry: RegistryType = {
 	OPTIONS_AGENT: optionsAgentExecutor,
 	DATABASE_CONNECTOR: databaseConnectorExecutor,
 	DATABASE_OPERATOR: databaseOperatorExecutor,
-	DATABASE_ANALYSER: databaseAnalyserExecutor
+	DATABASE_ANALYSER: databaseAnalyserExecutor,
+	GRAPH_GENERATOR: graphGeneratorExecutor
 }
