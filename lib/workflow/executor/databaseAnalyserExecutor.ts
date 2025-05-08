@@ -17,10 +17,10 @@ export async function databaseAnalyserExecutor(
 	try {
 
 		const collections = await instance.db.collections();
-		const collectionNames = collections.map(c => c.collectionName);
+		const collectionNames = collections.map((c: any) => c.collectionName);
 
 		const completeCollections = await Promise.all(
-			collectionNames.map(async name => ({
+			collectionNames.map(async (name: any) => ({
 				collectionName: name,
 				fields: await getMongoDBCollections(instance.db as Db, name)
 			}))
