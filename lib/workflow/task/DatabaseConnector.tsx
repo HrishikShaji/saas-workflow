@@ -29,7 +29,7 @@ export const DatabaseConnectorTask = {
 
 	] as const,
 	outputs: [
-		{ name: "Database", type: TaskParamType.STRING }
+		{ name: "Database", type: TaskParamType.DATABASE_INSTANCE }
 	] as const,
 	settings: nodeSettings,
 	credits: 5

@@ -1,6 +1,6 @@
 import { Environment, ExecutionEnvironment } from "@/types/executor";
 import { DatabaseConnectorTask } from "../task/DatabaseConnector";
-import { connectToMongoDB } from "@/lib/connectToMongoDB";
+import { connectToMongoDB } from "@/lib/database-ops/mongodb/connectToMongoDB";
 
 export async function databaseConnectorExecutor(
 	environment: ExecutionEnvironment<typeof DatabaseConnectorTask>

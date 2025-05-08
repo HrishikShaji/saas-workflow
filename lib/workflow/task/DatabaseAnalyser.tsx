@@ -1,35 +1,27 @@
 import { nodeSettings } from "@/lib/constants";
-import { SettingsParamType } from "@/types/settings";
 import { TaskParamType, TaskType } from "@/types/task";
 import { WorkflowTask } from "@/types/workflow";
 import { Bot, Database, GlobeIcon, LucideProps } from "lucide-react";
 
-export const DatabaseOperatorTask = {
-	type: TaskType.DATABASE_OPERATOR,
-	label: "Database Operator",
+export const DatabaseAnalyserTask = {
+	type: TaskType.DATABASE_ANALYSER,
+	label: "Database Analyser",
 	icon: (props: LucideProps) => (
 		<Database className="stroke-pink-500" {...props} />
 	),
 	isEntryPoint: false,
 	inputs: [
 		{
-			name: "Database Collections",
-			type: TaskParamType.STRING,
-			helperText: "database data",
+			name: "Database Instance",
+			type: TaskParamType.DATABASE_INSTANCE,
+			helperText: "database instance",
 			required: true,
 			hideHandle: false
 		},
-		{
-			name: "query",
-			type: TaskParamType.STRING,
-			helperText: "get me 10 users",
-			required: true,
-			hideHandle: false
-		}
 
 	] as const,
 	outputs: [
-		{ name: "Response", type: TaskParamType.STRING }
+		{ name: "Database Collections", type: TaskParamType.STRING }
 	] as const,
 	settings: nodeSettings,
 	credits: 5

@@ -8,6 +8,7 @@ import BrowserInstanceParam from "./params/BrowserInstanceParam";
 import AiResponseParam from "./params/AIResponseParam";
 import OptionsParam from "./params/OptionsParam";
 import NumberParam from "./params/NumberParam";
+import { Database } from "lucide-react";
 
 interface Props {
 	param: TaskParam;
@@ -65,6 +66,10 @@ export default function NodeParamField({ param, nodeId, disabled }: Props) {
 				value={""}
 				updateNodeParamValue={updateNodeParamValue}
 			/>
+		case TaskParamType.DATABASE_INSTANCE:
+			return <div>
+				<Database />
+			</div>
 		default: return (
 			<div className="w-full">
 				<p className="text-xs text-muted-foreground">Not implemented</p>

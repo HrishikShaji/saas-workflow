@@ -30,6 +30,7 @@ export default function TaskMenu() {
 				<AccordionContent className="flex flex-col gap-1">
 					<TaskMenuBtn taskType={TaskType.DATABASE_CONNECTOR} />
 					<TaskMenuBtn taskType={TaskType.DATABASE_OPERATOR} />
+					<TaskMenuBtn taskType={TaskType.DATABASE_ANALYSER} />
 				</AccordionContent>
 			</AccordionItem>
 			<AccordionItem value="extraction">
