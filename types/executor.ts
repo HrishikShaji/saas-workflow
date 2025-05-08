@@ -3,7 +3,7 @@ import { Browser, Page } from "puppeteer";
 import { WorkflowTask } from "./workflow";
 import { LogCollector } from "./log";
 import { DataSource } from "typeorm";
-import { MongoDBConnectionResult } from "@/lib/connectToMongoDB";
+import { MongoDBConnectionResult } from "@/lib/database-ops/mongodb/connectToMongoDB";
 
 export type EnvironmentDatabase = {
         provider: "mongodb" | "postgres" | "mysql" | "sqlite" | "postgresql",
