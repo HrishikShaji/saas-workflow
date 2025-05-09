@@ -82,11 +82,13 @@ export default function ExecutionViewer({ initialData }: Props) {
 					label="Duration"
 					value={duration ? duration : <Loader className="animate-spin " size={20} />}
 				/>
+				{/*
 				<ExecutionLabel
 					icon={CoinsIcon}
 					label="Credits consumed"
 					value={creditsConsumed}
 				/>
+				*/}
 			</div>
 			<Separator />
 			<div className="flex justify-center items-center py-2 px-4">
@@ -136,6 +138,7 @@ export default function ExecutionViewer({ initialData }: Props) {
 			{selectedPhase && phaseDetails.data && (
 				<div className="flex flex-col py-4 container gap-4 overflow-auto">
 					<div className="flex gap-2 items-center">
+						{/*
 						<Badge variant="outline" className="space-x-4">
 							<div className="flex gap-1 items-center">
 								<CoinsIcon size={18} className="stroke-muted-foreground" />
@@ -144,6 +147,7 @@ export default function ExecutionViewer({ initialData }: Props) {
 
 							</div>
 						</Badge>
+						*/}
 						<Badge variant="outline" className="space-x-4">
 							<div className="flex gap-1 items-center">
 								<ClockIcon size={18} className="stroke-muted-foreground" />
