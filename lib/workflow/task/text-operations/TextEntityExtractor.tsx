@@ -27,9 +27,9 @@ const entityOptions = [
 	{ value: 'adjectives', label: 'Adjectives' }
 ];
 
-export const EntityExtractorTask = {
-	type: TaskType.ENTITY_EXTRACTOR,
-	label: "Entity Extractor",
+export const TextEntityExtractorTask = {
+	type: TaskType.TEXT_ENTITY_EXTRACTOR,
+	label: "Text Entity Extractor",
 	icon: (props: LucideProps) => (
 		<File className="stroke-pink-500" {...props} />
 	),

@@ -1,14 +1,14 @@
 import { Environment, ExecutionEnvironment } from "@/types/executor"
-import { EntityExtractorTask } from "../task/EntityExtractor"
 import nlp from "compromise"
 import datePlugin from "compromise-dates"
 import { extractCreditCards, extractEmails, extractHashtags, extractIPs, extractMentions, extractPhoneNumbers, extractTimes, extractUrls } from "@/lib/textExtraction"
+import { TextEntityExtractorTask } from "../../task/text-operations/TextEntityExtractor"
 
 nlp.plugin(datePlugin)
 
 type EntityExtractor = (input: string | any) => any;
 
-export async function entityExtractorExecutor(environment: ExecutionEnvironment<typeof EntityExtractorTask>) {
+export async function textEntityExtractorExecutor(environment: ExecutionEnvironment<typeof TextEntityExtractorTask>) {
 	try {
 		const input = environment.getInput("input")
 		const entitiesToExtract = environment.getInput("entities")

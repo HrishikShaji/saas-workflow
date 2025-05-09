@@ -15,7 +15,13 @@ import { DatabaseConnectorTask } from "./DatabaseConnector";
 import { DatabaseOperatorTask } from "./DatabaseOperator";
 import { DatabaseAnalyserTask } from "./DatabaseAnalyser";
 import { GraphGeneratorTask } from "./GraphGenerator";
-import { EntityExtractorTask } from "./EntityExtractor";
+import { TextSummarizeTask } from "./text-operations/TextSummarizeTask";
+import { TextParaphrasingTask } from "./text-operations/TextParaphrasingTask";
+import { TextTranslatorTask } from "./text-operations/TextTranslatorTask";
+import { TextSimplifyTask } from "./text-operations/TextSimplifyTask";
+import { TextElaboratorTask } from "./text-operations/TextElaboratorTask";
+import { TextFormatConverterTask } from "./text-operations/TextFormatConverter";
+import { TextEntityExtractorTask } from "./text-operations/TextEntityExtractor";
 
 type Registry = {
 	[K in TaskType]: WorkflowTask & { type: K }
@@ -37,5 +43,11 @@ export const TaskRegistry: Registry = {
 	DATABASE_OPERATOR: DatabaseOperatorTask,
 	DATABASE_ANALYSER: DatabaseAnalyserTask,
 	GRAPH_GENERATOR: GraphGeneratorTask,
-	ENTITY_EXTRACTOR: EntityExtractorTask
+	TEXT_ENTITY_EXTRACTOR: TextEntityExtractorTask,
+	TEXT_SUMMARIZE: TextSummarizeTask,
+	TEXT_PARAPHRASING: TextParaphrasingTask,
+	TEXT_TRANSLATOR: TextTranslatorTask,
+	TEXT_SIMPLIFY: TextSimplifyTask,
+	TEXT_ELABORATOR: TextElaboratorTask,
+	TEXT_FORMAT_CONVERTER: TextFormatConverterTask
 }

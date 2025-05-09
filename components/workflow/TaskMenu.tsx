@@ -48,7 +48,13 @@ export default function TaskMenu() {
 					Text Operations
 				</AccordionTrigger>
 				<AccordionContent className="flex flex-col gap-1">
-					<TaskMenuBtn taskType={TaskType.ENTITY_EXTRACTOR} />
+					<TaskMenuBtn taskType={TaskType.TEXT_ENTITY_EXTRACTOR} />
+					<TaskMenuBtn taskType={TaskType.TEXT_SUMMARIZE} />
+					<TaskMenuBtn taskType={TaskType.TEXT_PARAPHRASING} />
+					<TaskMenuBtn taskType={TaskType.TEXT_TRANSLATOR} />
+					<TaskMenuBtn taskType={TaskType.TEXT_SIMPLIFY} />
+					<TaskMenuBtn taskType={TaskType.TEXT_ELABORATOR} />
+					<TaskMenuBtn taskType={TaskType.TEXT_FORMAT_CONVERTER} />
 				</AccordionContent>
 			</AccordionItem>
 			<AccordionItem value="generators">

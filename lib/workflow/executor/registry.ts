@@ -16,7 +16,13 @@ import { databaseConnectorExecutor } from "./databaseConnectorExecutor";
 import { databaseOperatorExecutor } from "./databaseOperatorExecutor";
 import { databaseAnalyserExecutor } from "./databaseAnalyserExecutor";
 import { graphGeneratorExecutor } from "./graphGeneratorExecutor";
-import { entityExtractorExecutor } from "./entityExtractorExecutor";
+import { textSummarizeExecutor } from "./text-operations/textSummarizeExecutor";
+import { textParaphrasingExecutor } from "./text-operations/textParaphrasingExecutor";
+import { textTranslatorExecutor } from "./text-operations/textTranslatorExecutor";
+import { textSimplifyExecutor } from "./text-operations/textSimplifyExecutor";
+import { textElaboratorExecutor } from "./text-operations/textElaboratorExecutor";
+import { textFormatConverterExecutor } from "./text-operations/textFormatConverterExecutor";
+import { textEntityExtractorExecutor } from "./text-operations/textEntityExtractorExecutor";
 
 type ExecutorFn<T extends WorkflowTask> = (environment: ExecutionEnvironment<T>) => Promise<boolean>
 
@@ -40,5 +46,11 @@ export const ExecutorRegistry: RegistryType = {
 	DATABASE_OPERATOR: databaseOperatorExecutor,
 	DATABASE_ANALYSER: databaseAnalyserExecutor,
 	GRAPH_GENERATOR: graphGeneratorExecutor,
-	ENTITY_EXTRACTOR: entityExtractorExecutor
+	TEXT_ENTITY_EXTRACTOR: textEntityExtractorExecutor,
+	TEXT_SUMMARIZE: textSummarizeExecutor,
+	TEXT_PARAPHRASING: textParaphrasingExecutor,
+	TEXT_TRANSLATOR: textTranslatorExecutor,
+	TEXT_SIMPLIFY: textSimplifyExecutor,
+	TEXT_ELABORATOR: textElaboratorExecutor,
+	TEXT_FORMAT_CONVERTER: textFormatConverterExecutor
 }
