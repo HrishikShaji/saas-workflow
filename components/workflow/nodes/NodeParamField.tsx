@@ -9,6 +9,7 @@ import AiResponseParam from "./params/AIResponseParam";
 import OptionsParam from "./params/OptionsParam";
 import NumberParam from "./params/NumberParam";
 import { Database } from "lucide-react";
+import SelectParam from "./params/SelectParam";
 
 interface Props {
 	param: TaskParam;
@@ -48,6 +49,13 @@ export default function NodeParamField({ param, nodeId, disabled }: Props) {
 			/>
 		case TaskParamType.OPTIONS:
 			return <OptionsParam
+				param={param}
+				value={value}
+				updateNodeParamValue={updateNodeParamValue}
+				disabled={disabled}
+			/>
+		case TaskParamType.SELECT:
+			return <SelectParam
 				param={param}
 				value={value}
 				updateNodeParamValue={updateNodeParamValue}

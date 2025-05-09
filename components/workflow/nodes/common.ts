@@ -6,7 +6,8 @@ export const colorForHandle: Record<TaskParamType, string> = {
 	AI_RESPONSE: "!bg-blue-500",
 	OPTIONS: "!bg-green-500",
 	NUMBER: "!bg-red-500",
-	DATABASE_INSTANCE: "!bg-purple-500"
+	DATABASE_INSTANCE: "!bg-purple-500",
+	SELECT: "!bg-black",
 }
 
 export const colorForEdge: Record<TaskParamType, string> = {
@@ -15,5 +16,6 @@ export const colorForEdge: Record<TaskParamType, string> = {
 	AI_RESPONSE: "#3b82f6",
 	OPTIONS: "#22c55e",
 	NUMBER: "#ef4444",
-	DATABASE_INSTANCE: '#a855f7'
+	DATABASE_INSTANCE: '#a855f7',
+	SELECT: "#000000"
 }

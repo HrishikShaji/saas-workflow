@@ -6,50 +6,64 @@ import { extractCreditCards, extractEmails, extractHashtags, extractIPs, extract
 
 nlp.plugin(datePlugin)
 
+type EntityExtractor = (input: string | any) => any;
 
 export async function entityExtractorExecutor(environment: ExecutionEnvironment<typeof EntityExtractorTask>) {
 	try {
 		const input = environment.getInput("input")
+		const entitiesToExtract = environment.getInput("entities")
+		const parsedEntities = JSON.parse(entitiesToExtract) as string[]
 		environment.log.info("Input received")
+
 		const model = environment.getSetting("Model")
 		const temperature = parseInt(environment.getSetting("Temperature"))
 		const maxTokens = parseInt(environment.getSetting("Max Tokens"))
 		const providersOrder = JSON.parse(environment.getSetting("Providers Order"))
 
-		console.log("this is input", input)
-		const doc: any = nlp(input);
+		const doc: any = nlp(input)
 
-		const entities = {
-			people: doc.people().out('array'),
-			organizations: doc.organizations().out('array'),
-			places: doc.places().out('array'),
-			dates: doc.dates().get(),
-			values: doc.values().out('array'),
-			money: doc.money().out('array'),
-			percentages: doc.percentages().out('array'),
-			possessives: doc.possessives().out('array'),
-			acronyms: doc.acronyms().out('array'),
-			quotes: doc.quotations().out('array'),
+		const entityExtractors: Record<string, EntityExtractor> = {
+			people: (d) => d.people().out('array'),
+			organizations: (d) => d.organizations().out('array'),
+			places: (d) => d.places().out('array'),
+			dates: (d) => d.dates().get(),
+			values: (d) => d.values().out('array'),
+			money: (d) => d.money().out('array'),
+			percentages: (d) => d.percentages().out('array'),
+			possessives: (d) => d.possessives().out('array'),
+			acronyms: (d) => d.acronyms().out('array'),
+			quotes: (d) => d.quotations().out('array'),
+			emailAddresses: extractEmails,
+			phoneNumbers: extractPhoneNumbers,
+			urls: extractUrls,
+			hashtags: extractHashtags,
+			mentions: extractMentions,
+			ipAddresses: extractIPs,
+			creditCards: extractCreditCards,
+			times: extractTimes,
+			nouns: (d) => d.nouns().out('array'),
+			verbs: (d) => d.verbs().out('array'),
+			adjectives: (d) => d.adjectives().out('array')
+		}
 
-			emailAddresses: extractEmails(input),
-			phoneNumbers: extractPhoneNumbers(input),
-			urls: extractUrls(input),
-			hashtags: extractHashtags(input),
-			mentions: extractMentions(input),
-			ipAddresses: extractIPs(input),
-			creditCards: extractCreditCards(input),
-			times: extractTimes(input),
+		const requiredEntities: Record<string, any> = {}
 
-			nouns: doc.nouns().out('array'),
-			verbs: doc.verbs().out('array'),
-			adjectives: doc.adjectives().out('array')
-		};
+		for (const entity of parsedEntities) {
+			if (entityExtractors[entity]) {
+				try {
+					requiredEntities[entity] = entityExtractors[entity](entityExtractors[entity].length === 1 ? doc : input)
+				} catch (error) {
+					environment.log.error(`Failed to extract entity ${entity}: ${error}`)
+					requiredEntities[entity] = []
+				}
+			} else {
+				environment.log.error(`Unknown entity type requested: ${entity}`)
+			}
+		}
 
-		console.log("these are entities", entities)
-		environment.log.info(`Sending request to ${model},temperature:${temperature},max tokens:${maxTokens},providers order:${JSON.stringify(providersOrder)}`)
-
-		environment.setOutput("AI Response", JSON.stringify(entities))
-		environment.log.info(`Response is outputted`)
+		environment.log.info(`Extracted entities: ${JSON.stringify(Object.keys(requiredEntities))}`)
+		environment.setOutput("AI Response", JSON.stringify(requiredEntities))
+		environment.log.info("Response is outputted")
 
 		return true
 	} catch (error: any) {

@@ -23,7 +23,8 @@ export enum TaskParamType {
         DATABASE_INSTANCE = "DATABASE_INSTANCE",
         AI_RESPONSE = "AI_RESPONSE",
         OPTIONS = "OPTIONS",
-        NUMBER = "NUMBER"
+        NUMBER = "NUMBER",
+        SELECT = "SELECT"
 }
 
 export interface TaskParam {
