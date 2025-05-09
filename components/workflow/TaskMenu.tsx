@@ -43,6 +43,14 @@ export default function TaskMenu() {
 					<TaskMenuBtn taskType={TaskType.EXTRACT_TEXT_FROM_ELEMENT} />
 				</AccordionContent>
 			</AccordionItem>
+			<AccordionItem value="text-operations">
+				<AccordionTrigger className="font-bold">
+					Text Operations
+				</AccordionTrigger>
+				<AccordionContent className="flex flex-col gap-1">
+					<TaskMenuBtn taskType={TaskType.ENTITY_EXTRACTOR} />
+				</AccordionContent>
+			</AccordionItem>
 			<AccordionItem value="generators">
 				<AccordionTrigger className="font-bold">
 					Generators

@@ -15,6 +15,7 @@ import { DatabaseConnectorTask } from "./DatabaseConnector";
 import { DatabaseOperatorTask } from "./DatabaseOperator";
 import { DatabaseAnalyserTask } from "./DatabaseAnalyser";
 import { GraphGeneratorTask } from "./GraphGenerator";
+import { EntityExtractorTask } from "./EntityExtractor";
 
 type Registry = {
 	[K in TaskType]: WorkflowTask & { type: K }
@@ -35,5 +36,6 @@ export const TaskRegistry: Registry = {
 	DATABASE_CONNECTOR: DatabaseConnectorTask,
 	DATABASE_OPERATOR: DatabaseOperatorTask,
 	DATABASE_ANALYSER: DatabaseAnalyserTask,
-	GRAPH_GENERATOR: GraphGeneratorTask
+	GRAPH_GENERATOR: GraphGeneratorTask,
+	ENTITY_EXTRACTOR: EntityExtractorTask
 }

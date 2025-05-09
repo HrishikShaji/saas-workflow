@@ -16,6 +16,7 @@ import { databaseConnectorExecutor } from "./databaseConnectorExecutor";
 import { databaseOperatorExecutor } from "./databaseOperatorExecutor";
 import { databaseAnalyserExecutor } from "./databaseAnalyserExecutor";
 import { graphGeneratorExecutor } from "./graphGeneratorExecutor";
+import { entityExtractorExecutor } from "./entityExtractorExecutor";
 
 type ExecutorFn<T extends WorkflowTask> = (environment: ExecutionEnvironment<T>) => Promise<boolean>
 
@@ -38,5 +39,6 @@ export const ExecutorRegistry: RegistryType = {
 	DATABASE_CONNECTOR: databaseConnectorExecutor,
 	DATABASE_OPERATOR: databaseOperatorExecutor,
 	DATABASE_ANALYSER: databaseAnalyserExecutor,
-	GRAPH_GENERATOR: graphGeneratorExecutor
+	GRAPH_GENERATOR: graphGeneratorExecutor,
+	ENTITY_EXTRACTOR: entityExtractorExecutor
 }
