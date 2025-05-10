@@ -21,12 +21,26 @@ export const TextElaboratorTask = {
 		},
 		{
 			name: "level",
-			type: TaskParamType.STRING,
-			helperText: "high medium low",
+			type: TaskParamType.NUMBER,
+			helperText: "1-5",
 			required: true,
 			hideHandle: true,
 		},
 
+		{
+			name: "style",
+			type: TaskParamType.STRING,
+			helperText: "academic creative journalistic technical",
+			required: true,
+			hideHandle: true,
+		},
+		{
+			name: "targetLength",
+			type: TaskParamType.STRING,
+			helperText: "short medium long xlong",
+			required: true,
+			hideHandle: true,
+		},
 	] as const,
 	outputs: [
 		{ name: "AI Response", type: TaskParamType.AI_RESPONSE }
