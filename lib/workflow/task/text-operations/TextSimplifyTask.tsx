@@ -21,12 +21,18 @@ export const TextSimplifyTask = {
 		},
 		{
 			name: "level",
-			type: TaskParamType.STRING,
-			helperText: "high medium low",
+			type: TaskParamType.NUMBER,
+			helperText: "0-5",
 			required: true,
 			hideHandle: true,
 		},
-
+		{
+			name: "audience",
+			type: TaskParamType.STRING,
+			helperText: "children non-native dyslexic",
+			required: true,
+			hideHandle: true,
+		},
 	] as const,
 	outputs: [
 		{ name: "AI Response", type: TaskParamType.AI_RESPONSE }
