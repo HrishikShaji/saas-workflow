@@ -33,13 +33,13 @@ export default function NodeHeader({ taskType, nodeId }: Props) {
 					{task.credits}
 				</Badge>
 				*/}
+				<Button variant="ghost" size="icon"
+					onClick={() => {
+						deleteElements({ nodes: [{ id: nodeId }] })
+					}}
+				><TrashIcon size={12} /></Button>
 				{!task.isEntryPoint && (
 					<>
-						<Button variant="ghost" size="icon"
-							onClick={() => {
-								deleteElements({ nodes: [{ id: nodeId }] })
-							}}
-						><TrashIcon size={12} /></Button>
 						<Button variant="ghost" size="icon"
 							onClick={() => {
 								const node = getNode(nodeId) as AppNode

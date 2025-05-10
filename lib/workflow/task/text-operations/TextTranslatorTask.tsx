@@ -26,6 +26,28 @@ export const TextTranslatorTask = {
 			required: true,
 			hideHandle: true,
 		},
+		{
+			name: "source language",
+			type: TaskParamType.STRING,
+			helperText: "auto",
+			required: true,
+			hideHandle: true,
+		},
+		{
+			name: "style",
+			type: TaskParamType.STRING,
+			helperText: "formal technical general",
+			required: true,
+			hideHandle: true,
+		},
+		{
+			name: "cultural adaptation",
+			type: TaskParamType.STRING,
+			helperText: "literal adaptive",
+			required: true,
+			hideHandle: true,
+		},
+
 
 	] as const,
 	outputs: [

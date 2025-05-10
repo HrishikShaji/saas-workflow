@@ -1,5 +1,5 @@
 // types/textTransform.ts
-export type LanguageCode = 'en' | 'es' | 'fr' | 'de' | 'it' | 'pt' | 'ru' | 'zh' | 'ja' | 'ko';
+export type LanguageCode = 'en' | 'es' | 'fr' | 'de' | 'it' | 'pt' | 'ru' | 'zh' | 'ja' | 'ko' | "ml" | "hi";
 export type TextFormat = 'json' | 'xml' | 'csv' | 'yaml';
 export type ComplexityLevel = 'high' | 'medium' | 'low';
 
