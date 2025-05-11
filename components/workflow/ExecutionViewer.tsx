@@ -20,6 +20,8 @@ import { cn } from "@/lib/utils"
 import { LogLevel } from "@/types/log"
 import PhaseStatusBadge from "./PhaseStatusBadge"
 import ViewResponse from "./ViewResponse"
+import { TabsContent, TabsList, TabsTrigger, Tabs } from "../ui/tabs"
+import ViewPreview from "./previews/ViewPreview"
 
 type ExecutionData = Awaited<ReturnType<typeof getWorkflowExecutionWithPhases>>
 
@@ -29,8 +31,10 @@ interface Props {
 
 export default function ExecutionViewer({ initialData }: Props) {
 	const [selectedPhase, setSelectedPhase] = useState<string | null>(null)
+	const [preview, setPreview] = useState(false)
+	const [finalPhase, setFinalPhase] = useState("")
 
-	const { data, isLoading } = useQuery({
+	const { data, isLoading, isSuccess } = useQuery({
 		queryKey: ["execution", initialData?.id],
 		initialData,
 		queryFn: () => getWorkflowExecutionWithPhases(initialData!.id),
@@ -44,6 +48,13 @@ export default function ExecutionViewer({ initialData }: Props) {
 	})
 
 	const isRunning = data?.status === WorkflowExecutionStatus.RUNNING
+
+	useEffect(() => {
+		if (isSuccess && data) {
+			const lastPhase = data.phases[data.phases.length - 1]
+			setSelectedPhase(lastPhase.id)
+		}
+	}, [isSuccess, data])
 
 	{/*
 
@@ -64,6 +75,9 @@ export default function ExecutionViewer({ initialData }: Props) {
 
 	const creditsConsumed = getPhasesTotalCost(data?.phases || [])
 
+	console.log("@@PHASEDETAILS", phaseDetails)
+	if (preview && phaseDetails.data?.outputs) return <ViewPreview outputs={phaseDetails.data.outputs} />
+
 	return <div className="w-full h-[calc(100vh_-_110px)]">
 		<div className="w-full h-[50px]  flex gap-5 border-b-[1px] border-gray-300">
 
@@ -82,6 +96,9 @@ export default function ExecutionViewer({ initialData }: Props) {
 				label="Duration"
 				value={duration ? duration : <Loader className="animate-spin " size={20} />}
 			/>
+			<Button onClick={() => setPreview(true)}>
+				See Preview
+			</Button>
 			{/*
 				<ExecutionLabel
 					icon={CoinsIcon}
@@ -118,7 +135,7 @@ export default function ExecutionViewer({ initialData }: Props) {
 					))}
 				</div>
 			</aside>
-			<div className="flex w-full h-full p-5">
+			<div className="flex w-full h-full px-5">
 				{/*
 					{isRunning && (
 				<div className="flex items-center flex-col gap-2 justify-center h-full w-full">
@@ -138,8 +155,8 @@ export default function ExecutionViewer({ initialData }: Props) {
 
 		*/}
 				{selectedPhase && phaseDetails.data && (
-					<div className="flex flex-col py-4 container gap-4 overflow-auto">
-						<div className="flex gap-2 items-center">
+					<div className="flex flex-col pb-4 container gap-4 overflow-auto">
+						<div className="flex gap-2 py-2 items-center">
 							{/*
 						<Badge variant="outline" className="space-x-4">
 							<div className="flex gap-1 items-center">
@@ -159,21 +176,37 @@ export default function ExecutionViewer({ initialData }: Props) {
 								</div>
 							</Badge>
 						</div>
-						<ParameterViewer
-							type="input"
-							title="Inputs"
-							subTitle="Inputs used for this phase"
-							paramJSON={phaseDetails.data.inputs}
-						/>
-						<ParameterViewer
-							type="output"
-							title="Outputs"
-							subTitle="Outputs used for this phase"
-							paramJSON={phaseDetails.data.outputs}
-						/>
-						<LogViewer
-							logs={phaseDetails.data.logs}
-						/>
+						<Tabs defaultValue="inputs" className="w-full">
+							<TabsList className="grid w-full grid-cols-3">
+								<TabsTrigger value="inputs">Inputs</TabsTrigger>
+								<TabsTrigger value="outputs">Outputs</TabsTrigger>
+								<TabsTrigger value="logs">Logs</TabsTrigger>
+							</TabsList>
+							<TabsContent value="inputs">
+
+								<ParameterViewer
+									type="input"
+									title="Inputs"
+									subTitle="Inputs used for this phase"
+									paramJSON={phaseDetails.data.inputs}
+								/>
+							</TabsContent>
+							<TabsContent value="outputs">
+
+								<ParameterViewer
+									type="output"
+									title="Outputs"
+									subTitle="Outputs used for this phase"
+									paramJSON={phaseDetails.data.outputs}
+								/>
+							</TabsContent>
+							<TabsContent value="logs">
+
+								<LogViewer
+									logs={phaseDetails.data.logs}
+								/>
+							</TabsContent>
+						</Tabs>
 					</div>
 				)}
 
