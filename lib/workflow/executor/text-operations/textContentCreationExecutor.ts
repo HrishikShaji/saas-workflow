@@ -1,8 +1,26 @@
 import { ExecutionEnvironment } from "@/types/executor";
-import { getOpenRouterResponse } from "../../ai/getOpenRouterResponse";
 import { TextContentCreationTask } from "../../task/text-operations/TextContentCreationTask";
+import { z } from "zod";
+import { callStructuredLLM } from "../../ai/callStructuredLLM";
 
-export async function textContentCreationExecutor(environment: ExecutionEnvironment<typeof TextContentCreationTask>) {
+// Define your output schema
+const contentResponseSchema = z.object({
+	title: z.string().describe("The title of the generated content"),
+	introduction: z.string().describe("Engaging introduction paragraph"),
+	body: z.array(
+		z.object({
+			heading: z.string().describe("Section heading"),
+			content: z.string().describe("Section content"),
+		})
+	).describe("Main content sections with headings"),
+	conclusion: z.string().describe("Strong concluding paragraph"),
+	tone: z.string().describe("The tone used in the content").optional(),
+	wordCount: z.number().describe("Approximate word count").optional(),
+});
+
+export async function textContentCreationExecutor(
+	environment: ExecutionEnvironment<typeof TextContentCreationTask>
+) {
 	try {
 		const topic = environment.getInput("topic");
 		const contentType = environment.getInput("contentType");
@@ -13,47 +31,84 @@ export async function textContentCreationExecutor(environment: ExecutionEnvironm
 		const model = environment.getSetting("Model");
 		const temperature = parseFloat(environment.getSetting("Temperature"));
 		const maxTokens = parseInt(environment.getSetting("Max Tokens"));
-		const providersOrder = JSON.parse(environment.getSetting("Providers Order"));
 
-		let systemMessage: string;
-		let query: string;
+		// Build the prompt template based on content type
+		let promptTemplate: string;
+		let inputVariables: string[] = ["topic", "length", "style", "audience"];
 
 		if (contentType === "article") {
-			systemMessage = `You are a professional content creator specializing in high-quality articles. 
-      Follow these guidelines:
-      1. Structure content with clear headings and logical flow
-      2. Use ${style} tone
-      3. Support claims with evidence when possible
-      4. Maintain perfect grammar and style
-      5. Target audience: ${audience || 'general readers'}`;
-
-			query = `Write a ${length}-length article about "${topic}"`;
-		} else { // report
-			//const sections = JSON.parse(environment.getInput("sections"));
-			systemMessage = `You are a professional report writer. Create a well-structured ${style} report with:
-      1. Clear section organization
-      2. Professional tone
-      3. Data-driven insights where applicable
-      4. Target audience: ${audience || 'business stakeholders'}`;
-
-			//query = `Create a ${length} report on "${topic}" with these sections:\n${sections.join('\n')}`;
-			query = `Create a ${length} report on "${topic}" `;
+			promptTemplate = `
+        You are a professional content creator specializing in high-quality articles.
+        Create a {length}-length {style} article about "{topic}" for {audience}.
+        
+        Requirements:
+        1. Include a compelling title
+        2. Write an engaging introduction
+        3. Structure the body with clear sections
+        4. End with a strong conclusion
+        5. Maintain perfect grammar and style
+        
+        {format_instructions}
+      `;
+		} else {
+			promptTemplate = `
+        You are a professional report writer.
+        Create a {length}-length {style} report about "{topic}" for {audience}.
+        
+        Requirements:
+        1. Include a professional title
+        2. Provide an executive summary
+        3. Structure the body with clear sections
+        4. Include data-driven insights where applicable
+        5. End with actionable recommendations
+        
+        {format_instructions}
+      `;
 		}
 
-		const content = await getOpenRouterResponse({
-			systemMessage,
-			query,
-			model,
-			temperature,
-			maxTokens,
-			providersOrder
-		});
 
-		environment.setOutput("AI Response", content);
+		environment.log.info(`calling ${model}`);
+		const result = await callStructuredLLM(
+			{
+				topic,
+				length,
+				style,
+				audience: audience || (contentType === "article" ? "general readers" : "business stakeholders"),
+			},
+			{
+				model,
+				temperature,
+				schema: contentResponseSchema,
+				promptTemplate,
+				inputVariables,
+			}
+		);
+
+		console.log("@@RESULT", result)
+
+		if (!result.success) {
+			throw new Error(result.error || "Failed to generate content");
+		}
+
+		// Format the structured output for your system
+		const formattedContent = formatContent(result.data, contentType);
+
+		environment.setOutput("AI Response", formattedContent);
 		environment.log.info("Content generated successfully");
 		return true;
 	} catch (error: any) {
 		environment.log.error(`Content creation failed: ${error.message}`);
 		return false;
+	}
+}
+
+// Helper function to format the structured output
+function formatContent(data: z.infer<typeof contentResponseSchema>, contentType: string): string {
+	if (contentType === "article") {
+		return `# ${data.title}\n\n${data.introduction}\n\n${data.body.map(s => `## ${s.heading}\n\n${s.content}`).join('\n\n')
+			}\n\n${data.conclusion}`;
+	} else {
+		return `REPORT: ${data.title}\n\nEXECUTIVE SUMMARY:\n${data.introduction}\n\n${data.body.map(s => `SECTION: ${s.heading}\n\n${s.content}`).join('\n\n')
+			}\n\nCONCLUSIONS & RECOMMENDATIONS:\n${data.conclusion}`;
 	}
 }
