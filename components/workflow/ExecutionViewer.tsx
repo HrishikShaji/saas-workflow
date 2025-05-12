@@ -32,7 +32,6 @@ interface Props {
 export default function ExecutionViewer({ initialData }: Props) {
 	const [selectedPhase, setSelectedPhase] = useState<string | null>(null)
 	const [preview, setPreview] = useState(false)
-	const [finalPhase, setFinalPhase] = useState("")
 
 	const { data, isLoading, isSuccess } = useQuery({
 		queryKey: ["execution", initialData?.id],
@@ -76,27 +75,29 @@ export default function ExecutionViewer({ initialData }: Props) {
 	const creditsConsumed = getPhasesTotalCost(data?.phases || [])
 
 	console.log("@@PHASEDETAILS", phaseDetails)
-	if (preview && phaseDetails.data?.outputs) return <ViewPreview outputs={phaseDetails.data.outputs} />
+	if (preview && phaseDetails.data?.outputs) return <ViewPreview setPreview={setPreview} outputs={phaseDetails.data.outputs} />
 
 	return <div className="w-full h-[calc(100vh_-_110px)]">
-		<div className="w-full h-[50px]  flex gap-5 border-b-[1px] border-gray-300">
+		<div className="w-full h-[50px]  flex gap-5 justify-between pr-10 border-b-[1px] border-gray-300">
 
-			<ExecutionLabel
-				icon={CircleDashedIcon}
-				label="Status"
-				value={data?.status}
-			/>
-			<ExecutionLabel
-				icon={CalendarIcon}
-				label="Started at"
-				value={data?.startedAt ? formatDistanceToNow(new Date(data.startedAt), { addSuffix: true }) : "-"}
-			/>
-			<ExecutionLabel
-				icon={ClockIcon}
-				label="Duration"
-				value={duration ? duration : <Loader className="animate-spin " size={20} />}
-			/>
-			<Button onClick={() => setPreview(true)}>
+			<div className="flex gap-5">
+				<ExecutionLabel
+					icon={CircleDashedIcon}
+					label="Status"
+					value={data?.status}
+				/>
+				<ExecutionLabel
+					icon={CalendarIcon}
+					label="Started at"
+					value={data?.startedAt ? formatDistanceToNow(new Date(data.startedAt), { addSuffix: true }) : "-"}
+				/>
+				<ExecutionLabel
+					icon={ClockIcon}
+					label="Duration"
+					value={duration ? duration : <Loader className="animate-spin " size={20} />}
+				/>
+			</div>
+			<Button onClick={() => setPreview(true)} className="bg-green-500 hover:bg-green-600">
 				See Preview
 			</Button>
 			{/*
@@ -119,16 +120,17 @@ export default function ExecutionViewer({ initialData }: Props) {
 				<Separator />
 				<div className="overflow-auto h-full px-2 py-4 flex flex-col gap-1">
 					{data?.phases.map((phase, i) => (
-						<Button key={phase.id} className="w-full justify-between"
+						<Button key={phase.id} className="w-full justify-between bg-gray-100 hover:bg-gray-200 text-black"
 							onClick={() => {
 								//if (isRunning) return;
 								setSelectedPhase(phase.id)
 							}}
-							style={{ background: selectedPhase === phase.id ? "blue" : "" }}
 						>
 							<div className="flex items-center gap-2">
-								<Badge variant="outline" className="text-white">{i + 1}</Badge>
-								<p className="font-semibold text-white">{phase.name}</p>
+								<Badge variant="outline" className=""
+									style={{ color: selectedPhase === phase.id ? "#22c55e" : "" }}
+								>{i + 1}</Badge>
+								<p className="font-semibold " style={{ color: selectedPhase === phase.id ? "#22c55e" : "" }}>{phase.name}</p>
 							</div>
 							<PhaseStatusBadge status={phase.status as ExecutionPhaseStatus} />
 						</Button>
