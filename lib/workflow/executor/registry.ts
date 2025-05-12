@@ -23,6 +23,11 @@ import { textSimplifyExecutor } from "./text-operations/textSimplifyExecutor";
 import { textElaboratorExecutor } from "./text-operations/textElaboratorExecutor";
 import { textFormatConverterExecutor } from "./text-operations/textFormatConverterExecutor";
 import { textEntityExtractorExecutor } from "./text-operations/textEntityExtractorExecutor";
+import { textContentCreationExecutor } from "./text-operations/textContentCreationExecutor";
+import { textTemplateFillingExecutor } from "./text-operations/textTemplateFillingExecutor";
+import { textMessageDraftingExecutor } from "./text-operations/textMessageDraftingExecutor";
+import { textCodeGenerationExecutor } from "./text-operations/textCodeGenerationExecutor";
+import { textStoryWritingExecutor } from "./text-operations/textStoryWritingExecutor";
 
 type ExecutorFn<T extends WorkflowTask> = (environment: ExecutionEnvironment<T>) => Promise<boolean>
 
@@ -52,5 +57,10 @@ export const ExecutorRegistry: RegistryType = {
 	TEXT_TRANSLATOR: textTranslatorExecutor,
 	TEXT_SIMPLIFY: textSimplifyExecutor,
 	TEXT_ELABORATOR: textElaboratorExecutor,
-	TEXT_FORMAT_CONVERTER: textFormatConverterExecutor
+	TEXT_FORMAT_CONVERTER: textFormatConverterExecutor,
+	TEXT_CONTENT_CREATION: textContentCreationExecutor,
+	TEXT_TEMPLATE_FILLING: textTemplateFillingExecutor,
+	TEXT_MESSAGE_DRAFTING: textMessageDraftingExecutor,
+	TEXT_CODE_GENERATION: textCodeGenerationExecutor,
+	TEXT_STORY_WRITING: textStoryWritingExecutor
 }

@@ -22,6 +22,11 @@ import { TextSimplifyTask } from "./text-operations/TextSimplifyTask";
 import { TextElaboratorTask } from "./text-operations/TextElaboratorTask";
 import { TextFormatConverterTask } from "./text-operations/TextFormatConverter";
 import { TextEntityExtractorTask } from "./text-operations/TextEntityExtractor";
+import { TextContentCreationTask } from "./text-operations/TextContentCreationTask";
+import { TextTemplateFillingTask } from "./text-operations/TextTemplateFillingTask";
+import { TextMessageDraftingTask } from "./text-operations/TextMessageDraftingTask";
+import { TextCodeGenerationTask } from "./text-operations/TextCodeGenerationTask";
+import { TextStoryWritingTask } from "./text-operations/TextStoryWritingTask";
 
 type Registry = {
 	[K in TaskType]: WorkflowTask & { type: K }
@@ -49,5 +54,10 @@ export const TaskRegistry: Registry = {
 	TEXT_TRANSLATOR: TextTranslatorTask,
 	TEXT_SIMPLIFY: TextSimplifyTask,
 	TEXT_ELABORATOR: TextElaboratorTask,
-	TEXT_FORMAT_CONVERTER: TextFormatConverterTask
+	TEXT_FORMAT_CONVERTER: TextFormatConverterTask,
+	TEXT_CONTENT_CREATION: TextContentCreationTask,
+	TEXT_TEMPLATE_FILLING: TextTemplateFillingTask,
+	TEXT_MESSAGE_DRAFTING: TextMessageDraftingTask,
+	TEXT_CODE_GENERATION: TextCodeGenerationTask,
+	TEXT_STORY_WRITING: TextStoryWritingTask
 }
