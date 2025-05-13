@@ -120,7 +120,7 @@ export function SchemaBuilderForm() {
 					<ScrollArea className="h-[calc(50vh-120px)] pr-2 -mr-2">
 						{fields.length === 0 ? (
 							<div className="text-center py-8 text-gray-500">
-								No fields added yet. Go to "Add Field" tab to create your first field.
+								{`								No fields added yet. Go to "Add Field" tab to create your first field.`}
 							</div>
 						) : (
 							fields.map((field, index) => (
