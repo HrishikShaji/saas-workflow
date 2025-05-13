@@ -58,7 +58,12 @@ export default function NodeSettings({ task, nodeId }: Props) {
 					</TabsContent>
 					<TabsContent value="schema">
 						<div>
-							<SchemaBuilderForm />
+							<SchemaBuilderForm
+								param={task.settings.find((item) => item.name === "Schema") as any}
+								disabled={false}
+								nodeId={nodeId}
+
+							/>
 						</div>
 					</TabsContent>
 				</Tabs>

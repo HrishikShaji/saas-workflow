@@ -2,6 +2,7 @@ import { ExecutionEnvironment } from "@/types/executor";
 import { TextContentCreationTask } from "../../task/text-operations/TextContentCreationTask";
 import { z } from "zod";
 import { callStructuredLLM } from "../../ai/callStructuredLLM";
+import { jsonSchemaToZod } from "json-schema-to-zod"
 
 // Define your output schema
 const contentResponseSchema = z.object({
@@ -31,6 +32,19 @@ export async function textContentCreationExecutor(
 		const model = environment.getSetting("Model");
 		const temperature = parseFloat(environment.getSetting("Temperature"));
 		const maxTokens = parseInt(environment.getSetting("Max Tokens"));
+		const schemaString = environment.getSetting("Schema")
+		//console.log("this is schema", schemaString)
+
+		const schemaObj = JSON.parse(schemaString)
+		const zodSchemaString = jsonSchemaToZod(schemaObj);
+		//console.log("schema string", zodSchemaString);
+
+		// Wrap the schema in a self-executing function that receives z
+		const wrappedSchemaFn = `(function(z) { return ${zodSchemaString} })`;
+		const createSchema = eval(wrappedSchemaFn);
+		const zodSchema = createSchema(z);
+
+		//console.log("Actual Zod schema instance:", zodSchema);
 
 		// Build the prompt template based on content type
 		let promptTemplate: string;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GeneratedSchema } from './GeneratedSchema';
 import { generateZodSchema } from '@/lib/schemaUtils';
@@ -9,8 +9,17 @@ import { Input } from '@/components/ui/input';
 import { ScrollArea } from '@/components/ui/scroll-area';
 import { Button } from '@/components/ui/button';
 import { SchemaField } from './SchemaField';
+import { SettingsParam } from '@/types/settings';
+import { useReactFlow } from '@xyflow/react';
+import { AppNode } from '@/types/appNode';
+import { generateJsonSchema } from '@/lib/generateJsonSchema';
 
-export function SchemaBuilderForm() {
+interface Props {
+	param: SettingsParam;
+	nodeId: string;
+	disabled: boolean;
+}
+export function SchemaBuilderForm({ param, nodeId, disabled }: Props) {
 	const [fields, setFields] = useState<SchemaFieldType[]>([]);
 	const [newField, setNewField] = useState<SchemaFieldType>({
 		name: '',
@@ -22,6 +31,21 @@ export function SchemaBuilderForm() {
 	const [schemaName, setSchemaName] = useState('');
 	const [generatedSchema, setGeneratedSchema] = useState('');
 	const [activeTab, setActiveTab] = useState('add');
+
+	const { updateNodeData, getNode } = useReactFlow()
+	const node = getNode(nodeId) as AppNode
+
+	console.log(node.data.settings)
+	const value = node?.data.settings?.[param.name] || param.value
+	const updateNodeParamValue = useCallback((newValue: string) => {
+		console.log("this is updated", newValue, "with", param.name)
+		updateNodeData(nodeId, {
+			settings: {
+				...node?.data.settings,
+				[param.name]: newValue
+			}
+		})
+	}, [param.name, updateNodeData, node?.data.settings, nodeId])
 
 	const addField = () => {
 		if (!newField.name) {
@@ -66,7 +90,9 @@ export function SchemaBuilderForm() {
 			}
 
 			const schema = generateZodSchema(fields, schemaName);
+			const jsonSchema = generateJsonSchema(fields)
 			setGeneratedSchema(schema);
+			updateNodeParamValue(jsonSchema)
 			setActiveTab('schema');
 			toast('Schema generated successfully');
 		} catch (error) {
@@ -150,7 +176,7 @@ export function SchemaBuilderForm() {
 				</TabsContent>
 
 				<TabsContent value="schema">
-					<ScrollArea className="h-[calc(60vh-80px)]">
+					<ScrollArea className="h-[calc(50vh-120px)]">
 						<GeneratedSchema schema={generatedSchema} />
 					</ScrollArea>
 

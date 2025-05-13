@@ -87,11 +87,10 @@ export function generateZodSchema(fields: SchemaField[], schemaName: string = 'G
         }
 
         // Construct the final schema
-        const schemaCode = `import { z } from 'zod';\n\n` +
-                `export const ${schemaName} = z.object({\n` +
+        const schemaCode = `export const ${schemaName} = z.object({\n` +
                 `  ${fieldDefinitions.join(',\n  ')}\n` +
-                `});\n\n` +
-                `export type ${schemaName}Type = z.infer<typeof ${schemaName}>;`;
+                `});\n\n`
+
 
         return schemaCode;
 }

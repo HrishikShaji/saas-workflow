@@ -5,7 +5,8 @@ export const nodeSettings = [
         { name: "Model", type: SettingsParamType.DROPDOWN, value: "meta-llama/llama-4-maverick" },
         { name: "Temperature", type: SettingsParamType.NUMBER, value: "" },
         { name: "Max Tokens", type: SettingsParamType.NUMBER, value: "" },
-        { name: "Providers Order", type: SettingsParamType.ORDER, value: "" }
+        { name: "Providers Order", type: SettingsParamType.ORDER, value: "" },
+        { name: "Schema", type: SettingsParamType.STRING, value: "" }
 ] as const satisfies SettingsParam[];
 
 export const models = [
