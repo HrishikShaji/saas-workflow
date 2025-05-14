@@ -1,4 +1,4 @@
-import { useCallback, useState } from 'react';
+import { useCallback, useEffect, useState } from 'react';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { GeneratedSchema } from './GeneratedSchema';
 import { generateZodSchema } from '@/lib/schemaUtils';
@@ -13,6 +13,7 @@ import { SettingsParam } from '@/types/settings';
 import { useReactFlow } from '@xyflow/react';
 import { AppNode } from '@/types/appNode';
 import { generateJsonSchema } from '@/lib/generateJsonSchema';
+import { parseJsonSchemaToFields } from '@/lib/parseJsonSchemaToFields';
 
 interface Props {
 	param: SettingsParam;
@@ -35,8 +36,19 @@ export function SchemaBuilderForm({ param, nodeId, disabled }: Props) {
 	const { updateNodeData, getNode } = useReactFlow()
 	const node = getNode(nodeId) as AppNode
 
-	console.log(node.data.settings)
-	const value = node?.data.settings?.[param.name] || param.value
+	//console.log(node.data.settings)
+
+	const value = node?.data.settings[param.name] || param.value
+
+	useEffect(() => {
+		const values = node.data.settings[param.name]
+		const parsedFields = parseJsonSchemaToFields(values)
+		console.log("@@PARSED", parsedFields)
+		setFields(parsedFields)
+
+	}, [node.data.settings, param.name])
+
+	console.log("@@VALUE", value)
 	const updateNodeParamValue = useCallback((newValue: string) => {
 		console.log("this is updated", newValue, "with", param.name)
 		updateNodeData(nodeId, {

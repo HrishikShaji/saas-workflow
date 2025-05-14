@@ -141,8 +141,8 @@ export default function FlowEditor({ workflow }: Props) {
 			onNodesChange={onNodesChange}
 			onEdgesChange={onEdgesChange}
 			nodeTypes={nodeTypes}
-			snapToGrid={true}
-			snapGrid={snapGrid}
+			//			snapToGrid={true}
+			//			snapGrid={snapGrid}
 			fitView
 			fitViewOptions={fitViewOptions}
 			onDragOver={onDragOver}

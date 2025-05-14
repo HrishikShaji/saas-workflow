@@ -149,7 +149,7 @@ export async function textContentCreationExecutor(
 			{
 				model,
 				temperature,
-				schema: jsonSchema,
+				schema: userSchema,
 				promptTemplate,
 				inputVariables,
 			}
@@ -163,7 +163,8 @@ export async function textContentCreationExecutor(
 
 		// Format the structured output for your system
 
-		if (!result.data) {
+
+		if (!jsonResult.data) {
 			environment.log.error("no data")
 			return false
 		}

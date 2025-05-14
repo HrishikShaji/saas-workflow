@@ -43,7 +43,7 @@ export async function callStructuredLLMwithJSON(
 		});
 		console.log("@@RESPONSE", response.content)
 
-		let finalResponse;
+		let finalResponse: string;
 
 		try {
 			const parsed = JSON.parse(response.content as string)
