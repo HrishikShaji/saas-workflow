@@ -3,6 +3,8 @@ import { TextContentCreationTask } from "../../task/text-operations/TextContentC
 import { z } from "zod";
 import { callStructuredLLM } from "../../ai/callStructuredLLM";
 import { jsonSchemaToZod } from "json-schema-to-zod"
+import { env } from "@huggingface/transformers";
+import { callStructuredLLMwithJSON } from "../../ai/callStructuredLLMwithJSON";
 
 // Define your output schema
 const contentResponseSchema = z.object({
@@ -18,6 +20,54 @@ const contentResponseSchema = z.object({
 	tone: z.string().describe("The tone used in the content").optional(),
 	wordCount: z.number().describe("Approximate word count").optional(),
 });
+
+const jsonSchema = {
+	"$schema": "http://json-schema.org/draft-07/schema#",
+	"type": "object",
+	"properties": {
+		"title": {
+			"type": "string",
+			"description": "The title of the generated content"
+		},
+		"introduction": {
+			"type": "string",
+			"description": "Engaging introduction paragraph"
+		},
+		"body": {
+			"type": "array",
+			"description": "Main content sections with headings",
+			"items": {
+				"type": "object",
+				"properties": {
+					"heading": {
+						"type": "string",
+						"description": "Section heading"
+					},
+					"content": {
+						"type": "string",
+						"description": "Section content"
+					}
+				},
+				"required": ["heading", "content"],
+				"additionalProperties": false
+			}
+		},
+		"conclusion": {
+			"type": "string",
+			"description": "Strong concluding paragraph"
+		},
+		"tone": {
+			"type": "string",
+			"description": "The tone used in the content"
+		},
+		"wordCount": {
+			"type": "number",
+			"description": "Approximate word count"
+		}
+	},
+	"required": ["title", "introduction", "body", "conclusion"],
+	"additionalProperties": false
+}
 
 export async function textContentCreationExecutor(
 	environment: ExecutionEnvironment<typeof TextContentCreationTask>
@@ -35,14 +85,7 @@ export async function textContentCreationExecutor(
 		const schemaString = environment.getSetting("Schema")
 		//console.log("this is schema", schemaString)
 
-		const schemaObj = JSON.parse(schemaString)
-		const zodSchemaString = jsonSchemaToZod(schemaObj);
-		//console.log("schema string", zodSchemaString);
-
-		// Wrap the schema in a self-executing function that receives z
-		const wrappedSchemaFn = `(function(z) { return ${zodSchemaString} })`;
-		const createSchema = eval(wrappedSchemaFn);
-		const zodSchema = createSchema(z);
+		const userSchema = JSON.parse(schemaString)
 
 		//console.log("Actual Zod schema instance:", zodSchema);
 
@@ -61,8 +104,8 @@ export async function textContentCreationExecutor(
         3. Structure the body with clear sections
         4. End with a strong conclusion
         5. Maintain perfect grammar and style
-        
-        {format_instructions}
+       
+{format_instructions}
       `;
 		} else {
 			promptTemplate = `
@@ -76,7 +119,7 @@ export async function textContentCreationExecutor(
         4. Include data-driven insights where applicable
         5. End with actionable recommendations
         
-        {format_instructions}
+{format_instructions}
       `;
 		}
 
@@ -98,6 +141,22 @@ export async function textContentCreationExecutor(
 			}
 		);
 
+		const jsonResult = await callStructuredLLMwithJSON(
+			{
+				topic,
+				length,
+				style,
+				audience: audience || (contentType === "article" ? "general readers" : "business stakeholders"),
+			},
+			{
+				model,
+				temperature,
+				schema: jsonSchema,
+				promptTemplate,
+				inputVariables,
+			}
+		);
+		console.log("@@JSONRESULT", jsonResult)
 		console.log("@@RESULT", result)
 
 		if (!result.success) {
@@ -105,9 +164,12 @@ export async function textContentCreationExecutor(
 		}
 
 		// Format the structured output for your system
-		const formattedContent = formatContent(result.data, contentType);
 
-		environment.setOutput("AI Response", formattedContent);
+		if (!result.data) {
+			environment.log.error("no data")
+			return false
+		}
+		environment.setOutput("AI Response", result.data);
 		environment.log.info("Content generated successfully");
 		return true;
 	} catch (error: any) {
@@ -116,13 +178,4 @@ export async function textContentCreationExecutor(
 	}
 }
 
-// Helper function to format the structured output
-function formatContent(data: z.infer<typeof contentResponseSchema>, contentType: string): string {
-	if (contentType === "article") {
-		return `# ${data.title}\n\n${data.introduction}\n\n${data.body.map(s => `## ${s.heading}\n\n${s.content}`).join('\n\n')
-			}\n\n${data.conclusion}`;
-	} else {
-		return `REPORT: ${data.title}\n\nEXECUTIVE SUMMARY:\n${data.introduction}\n\n${data.body.map(s => `SECTION: ${s.heading}\n\n${s.content}`).join('\n\n')
-			}\n\nCONCLUSIONS & RECOMMENDATIONS:\n${data.conclusion}`;
-	}
-}
+

@@ -1,30 +1,29 @@
-// lib/llmService.ts
 import { ChatOpenAI } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
-import { z } from "zod";
 import { StructuredOutputParser } from "langchain/output_parsers";
+import { RunnableSequence } from "@langchain/core/runnables";
 
 interface LLMCallOptions {
 	model?: string;
 	temperature?: number;
 	streaming?: boolean;
-	schema: z.ZodSchema<any>;
+	schema: Record<string, any>;
 	promptTemplate: string;
 	inputVariables: string[];
 }
 
-export async function callStructuredLLM(
+export async function callStructuredLLMwithJSON(
 	inputData: Record<string, any>,
 	options: LLMCallOptions
 ) {
 	try {
-		const parser = StructuredOutputParser.fromZodSchema(options.schema);
+		const parser = StructuredOutputParser.fromNamesAndDescriptions(options.schema);
 
 		const prompt = PromptTemplate.fromTemplate(
 			`${options.promptTemplate}\n\n{format_instructions}`
 		);
 
-		const chat = new ChatOpenAI({
+		const llm = new ChatOpenAI({
 			model: options.model || "gpt-4o",
 			temperature: options.temperature || 0.7,
 			streaming: options.streaming || false,
@@ -33,8 +32,13 @@ export async function callStructuredLLM(
 				baseURL: "https://openrouter.ai/api/v1",
 			},
 		});
+		const chain = RunnableSequence.from([
+			prompt,
+			llm,
+			parser,
+		]);
 
-		const chain = prompt.pipe(chat).pipe(parser);
+
 
 		const response = await chain.invoke({
 			...inputData,
