@@ -19,8 +19,9 @@ export async function callStructuredLLMwithJSON(
 	try {
 		const parser = StructuredOutputParser.fromNamesAndDescriptions(options.schema);
 
+		// Update the prompt template to explicitly request valid JSON without Markdown formatting
 		const prompt = PromptTemplate.fromTemplate(
-			`${options.promptTemplate}\n\n{format_instructions}`
+			`${options.promptTemplate}\n\n{format_instructions}\n\nIMPORTANT: Return ONLY the JSON output without any markdown code blocks, explanations, or backticks. Ensure all quotes are double quotes, not backticks.`
 		);
 
 		const llm = new ChatOpenAI({
@@ -32,25 +33,33 @@ export async function callStructuredLLMwithJSON(
 				baseURL: "https://openrouter.ai/api/v1",
 			},
 		});
-		const chain = RunnableSequence.from([
-			prompt,
-			llm,
-			parser,
-		]);
 
+		const chain = prompt.pipe(llm)
 
 
 		const response = await chain.invoke({
 			...inputData,
 			format_instructions: parser.getFormatInstructions(),
 		});
+		console.log("@@RESPONSE", response.content)
+
+		let finalResponse;
+
+		try {
+			const parsed = JSON.parse(response.content as string)
+			console.log("@@PARSED", parsed.properties)
+			finalResponse = JSON.stringify(parsed.properties)
+		} catch (err) {
+			throw err
+		}
 
 		return {
 			success: true,
-			data: response,
+			data: finalResponse,
 			error: null,
 		};
 	} catch (error) {
+		console.error("Full error:", error);
 		return {
 			success: false,
 			data: null,

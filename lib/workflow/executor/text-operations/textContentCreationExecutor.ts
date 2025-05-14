@@ -104,8 +104,7 @@ export async function textContentCreationExecutor(
         3. Structure the body with clear sections
         4. End with a strong conclusion
         5. Maintain perfect grammar and style
-       
-{format_instructions}
+        
       `;
 		} else {
 			promptTemplate = `
@@ -119,7 +118,6 @@ export async function textContentCreationExecutor(
         4. Include data-driven insights where applicable
         5. End with actionable recommendations
         
-{format_instructions}
       `;
 		}
 
@@ -156,8 +154,8 @@ export async function textContentCreationExecutor(
 				inputVariables,
 			}
 		);
-		console.log("@@JSONRESULT", jsonResult)
-		console.log("@@RESULT", result)
+		//		console.log("@@JSONRESULT", jsonResult)
+		//		console.log("@@RESULT", result)
 
 		if (!result.success) {
 			throw new Error(result.error || "Failed to generate content");
@@ -169,7 +167,7 @@ export async function textContentCreationExecutor(
 			environment.log.error("no data")
 			return false
 		}
-		environment.setOutput("AI Response", result.data);
+		environment.setOutput("AI Response", jsonResult.data);
 		environment.log.info("Content generated successfully");
 		return true;
 	} catch (error: any) {
