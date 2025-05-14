@@ -52,7 +52,7 @@ export function ValidationRulesComponent({ type, rules, onChange }: ValidationRu
 	if (type === 'string') {
 		return (
 			<div className="space-y-3">
-				<div className="grid grid-cols-2 gap-2">
+				<div className="grid grid-cols-4 gap-2">
 					<div>
 						<Label htmlFor="min" className="text-xs">Min Length</Label>
 						<Input
@@ -75,9 +75,6 @@ export function ValidationRulesComponent({ type, rules, onChange }: ValidationRu
 							className="h-8"
 						/>
 					</div>
-				</div>
-
-				<div className="grid grid-cols-2 gap-2">
 					<div>
 						<Label htmlFor="length" className="text-xs">Exact Length</Label>
 						<Input
@@ -101,6 +98,7 @@ export function ValidationRulesComponent({ type, rules, onChange }: ValidationRu
 						/>
 					</div>
 				</div>
+
 
 				<div className="grid grid-cols-3 gap-2">
 					<div className="flex items-center space-x-2">

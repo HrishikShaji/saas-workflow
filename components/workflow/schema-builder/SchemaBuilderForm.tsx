@@ -14,6 +14,7 @@ import { useReactFlow } from '@xyflow/react';
 import { AppNode } from '@/types/appNode';
 import { generateJsonSchema } from '@/lib/generateJsonSchema';
 import { parseJsonSchemaToFields } from '@/lib/parseJsonSchemaToFields';
+import { JsonEditor } from "json-edit-react"
 
 interface Props {
 	param: SettingsParam;
@@ -29,9 +30,9 @@ export function SchemaBuilderForm({ param, nodeId, disabled }: Props) {
 		required: true,
 		rules: {},
 	});
-	const [schemaName, setSchemaName] = useState('');
 	const [generatedSchema, setGeneratedSchema] = useState('');
 	const [activeTab, setActiveTab] = useState('add');
+	const [editorData, setEditorData] = useState<Record<string, any>>({})
 
 	const { updateNodeData, getNode } = useReactFlow()
 	const node = getNode(nodeId) as AppNode
@@ -42,15 +43,18 @@ export function SchemaBuilderForm({ param, nodeId, disabled }: Props) {
 
 	useEffect(() => {
 		const values = node.data.settings[param.name]
+		const parsedValue = JSON.parse(values)
+		setEditorData(parsedValue)
 		const parsedFields = parseJsonSchemaToFields(values)
-		console.log("@@PARSED", parsedFields)
+		console.log("@@PARSED", parsedValue)
 		setFields(parsedFields)
+		setGeneratedSchema(values)
 
 	}, [node.data.settings, param.name])
 
-	console.log("@@VALUE", value)
+	//console.log("@@VALUE", value)
 	const updateNodeParamValue = useCallback((newValue: string) => {
-		console.log("this is updated", newValue, "with", param.name)
+		//	console.log("this is updated", newValue, "with", param.name)
 		updateNodeData(nodeId, {
 			settings: {
 				...node?.data.settings,
@@ -101,9 +105,8 @@ export function SchemaBuilderForm({ param, nodeId, disabled }: Props) {
 				return;
 			}
 
-			const schema = generateZodSchema(fields, schemaName);
 			const jsonSchema = generateJsonSchema(fields)
-			setGeneratedSchema(schema);
+			setGeneratedSchema(jsonSchema);
 			updateNodeParamValue(jsonSchema)
 			setActiveTab('schema');
 			toast('Schema generated successfully');
@@ -114,26 +117,20 @@ export function SchemaBuilderForm({ param, nodeId, disabled }: Props) {
 		}
 	};
 
+	function editorSubmit(value: string) {
+		setGeneratedSchema(value)
+		updateNodeParamValue(value)
+	}
+
 	return (
 		<div className="w-full max-h-[70vh]">
-			<div className="mb-4">
-				<Label htmlFor="schema-name" className="text-sm font-medium">
-					Schema Name
-				</Label>
-				<Input
-					id="schema-name"
-					value={schemaName}
-					onChange={(e) => setSchemaName(e.target.value)}
-					placeholder="UserSchema"
-					className="mt-1"
-				/>
-			</div>
 
 			<Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
-				<TabsList className="grid grid-cols-3 mb-4">
+				<TabsList className="grid grid-cols-4 mb-4">
 					<TabsTrigger value="add">Add Field</TabsTrigger>
 					<TabsTrigger value="fields">Fields ({fields.length})</TabsTrigger>
 					<TabsTrigger value="schema">Generated Schema</TabsTrigger>
+					<TabsTrigger value="editor">Editor</TabsTrigger>
 				</TabsList>
 
 				<TabsContent value="add" className="space-y-4">
@@ -206,6 +203,19 @@ export function SchemaBuilderForm({ param, nodeId, disabled }: Props) {
 						>
 							Regenerate Schema
 						</Button>
+					</div>
+				</TabsContent>
+				<TabsContent value='editor'>
+					<div>
+						<JsonEditor
+							data={editorData}
+							setData={(data: any) => setEditorData(data)}
+							onUpdate={() => console.log("update ran")}
+							onEdit={() => console.log("edit ran")}
+							collapse={true}
+							showCollectionCount={true}
+							onEditEvent={() => console.log("edit event ran")}
+						/>
 					</div>
 				</TabsContent>
 			</Tabs>
