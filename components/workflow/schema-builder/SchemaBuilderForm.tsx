@@ -117,9 +117,20 @@ export function SchemaBuilderForm({ param, nodeId, disabled }: Props) {
 		}
 	};
 
-	function editorSubmit(value: string) {
-		setGeneratedSchema(value)
-		updateNodeParamValue(value)
+	function editorSubmit(data: any) {
+		console.log("@@EDIT", data)
+		//setGeneratedSchema(value)
+		//
+		try {
+			const stringified = JSON.stringify(data.newData)
+			const parsed = JSON.parse(stringified)
+			setEditorData(data.newData)
+			updateNodeParamValue(stringified)
+		} catch (err) {
+			console.error(err)
+			setEditorData(data.currentData)
+			toast.error("wrong json format")
+		}
 	}
 
 	return (
@@ -211,7 +222,7 @@ export function SchemaBuilderForm({ param, nodeId, disabled }: Props) {
 							data={editorData}
 							setData={(data: any) => setEditorData(data)}
 							onUpdate={() => console.log("update ran")}
-							onEdit={() => console.log("edit ran")}
+							onEdit={(data) => editorSubmit(data)}
 							collapse={true}
 							showCollectionCount={true}
 							onEditEvent={() => console.log("edit event ran")}
