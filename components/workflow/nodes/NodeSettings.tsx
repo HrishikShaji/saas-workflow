@@ -14,6 +14,7 @@ import { Settings } from "lucide-react"
 import NodeSettingsParamField from "./NodeSettingsParamField"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import SchemaBuilderForm from "../schema-builder/SchemaBuilderForm"
+import NodeIncomingVariables from "./NodeIncomingVariables"
 
 interface Props {
 	task: WorkflowTask;
@@ -40,9 +41,10 @@ export default function NodeSettings({ task, nodeId }: Props) {
 					</DialogDescription>
 				</DialogHeader>
 				<Tabs defaultValue="configuration" className="w-full">
-					<TabsList className="grid w-full grid-cols-2">
+					<TabsList className="grid w-full grid-cols-3">
 						<TabsTrigger value="configuration">Configuration</TabsTrigger>
 						<TabsTrigger value="schema">Schema</TabsTrigger>
+						<TabsTrigger value="incoming-variables">Incoming Variables</TabsTrigger>
 					</TabsList>
 					<TabsContent value="configuration">
 						<div className="grid gap-4">
@@ -64,6 +66,11 @@ export default function NodeSettings({ task, nodeId }: Props) {
 								nodeId={nodeId}
 
 							/>
+						</div>
+					</TabsContent>
+					<TabsContent value="incoming-variables">
+						<div>
+							<NodeIncomingVariables nodeId={nodeId} />
 						</div>
 					</TabsContent>
 				</Tabs>

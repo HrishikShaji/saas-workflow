@@ -43,12 +43,19 @@ export function SchemaBuilderForm({ param, nodeId, disabled }: Props) {
 
 	useEffect(() => {
 		const values = node.data.settings[param.name]
-		const parsedValue = JSON.parse(values)
-		setEditorData(parsedValue)
-		const parsedFields = parseJsonSchemaToFields(values)
-		console.log("@@PARSED", parsedValue)
-		setFields(parsedFields)
-		setGeneratedSchema(values)
+		if (values) {
+			try {
+
+				const parsedValue = JSON.parse(values)
+				setEditorData(parsedValue)
+				const parsedFields = parseJsonSchemaToFields(values)
+				console.log("@@PARSED", parsedValue)
+				setFields(parsedFields)
+				setGeneratedSchema(values)
+			} catch (err) {
+				console.error(err)
+			}
+		}
 
 	}, [node.data.settings, param.name])
 
