@@ -1,8 +1,5 @@
-import { TaskRegistry } from "@/lib/workflow/task/registry";
-import { AppNode, AppNodeData } from "@/types/appNode";
 import { getIncomers, Node, useReactFlow } from "@xyflow/react";
-import { JsonEditor } from "json-edit-react"
-import { useEffect, useState } from "react";
+import IncomingNodeCard from "./IncomingNodeCard";
 
 interface Props {
 	nodeId: string;
@@ -30,34 +27,4 @@ export default function NodeIncomingVariables({ nodeId }: Props) {
 	</div>
 }
 
-function IncomingNodeCard({ node }: { node: Node }) {
-	const nodeData = node.data as AppNodeData
-	const nodeType = TaskRegistry[nodeData.type]
-	const [editorData, setEditorData] = useState(null)
 
-	useEffect(() => {
-		const schema = nodeData.settings["Schema"]
-		if (schema) {
-			try {
-				const parsed = JSON.parse(schema)
-				setEditorData(parsed)
-			} catch (err) {
-				console.error(err)
-			}
-		}
-	}, [node])
-	console.log("@@INCOMINGNODE", nodeType, nodeData)
-
-	if (!editorData) {
-		return <div>No incoming schema defined</div>
-	}
-
-	return <div>
-		<h1>{nodeType.label}</h1>
-		<div>
-			<JsonEditor
-				data={editorData}
-			/>
-		</div>
-	</div>
-}
