@@ -14,9 +14,10 @@ import { useTheme } from "next-themes";
 
 interface Props {
 	node: Node;
+	updateNodeParamValue: (value: string) => void;
 }
 
-export default function IncomingNodeCard({ node }: Props) {
+export default function IncomingNodeCard({ node, updateNodeParamValue }: Props) {
 	const { theme } = useTheme();
 	const nodeData = node.data as AppNodeData;
 	const nodeType = TaskRegistry[nodeData.type];
@@ -116,7 +117,7 @@ export default function IncomingNodeCard({ node }: Props) {
 			// Create a context with the variables
 			const context: Record<string, any> = {};
 			variables.forEach(variable => {
-				context[variable.name] = variable.value;
+				context[variable.name] = variable.path;
 			});
 
 			// Create a function that takes all variables as parameters
@@ -137,6 +138,7 @@ export default function IncomingNodeCard({ node }: Props) {
 			if (result && result.error) {
 				setOutput(`Error: ${result.error}`);
 			} else {
+				updateNodeParamValue(JSON.stringify(result))
 				setOutput(JSON.stringify(result, null, 2) || "Code executed successfully (no return value)");
 			}
 		} catch (error: any) {

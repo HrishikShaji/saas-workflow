@@ -1,9 +1,27 @@
 
 import { Environment, ExecutionEnvironment } from "@/types/executor"
-import { getAIResponse } from "../ai/getAIResponse"
-import { RiskReviewAgentTask } from "../task/RiskReviewAgent"
 import { PolisherAgentTask } from "../task/PolisherAgent"
-import { getOpenRouterResponse } from "../ai/getOpenRouterResponse"
+import { callStructuredLLMwithJSON } from "../ai/callStructuredLLMwithJSON"
+
+function transform(input: Record<string, any>, outputFormat: Record<string, any>) {
+	const result = {};
+
+	for (const [newKey, path] of Object.entries(outputFormat)) {
+		// Extract the property path (e.g., 'properties.title' → ['title'])
+		const pathParts = path.split('.').slice(1); // Ignore 'properties'
+		let value = input;
+
+		// Traverse the path to get the value
+		for (const part of pathParts) {
+			value = value[part];
+			if (value === undefined) break;
+		}
+		//@ts-ignore
+		result[newKey] = value;
+	}
+
+	return result;
+}
 
 export async function polisherAgentExecutor(environment: ExecutionEnvironment<typeof PolisherAgentTask>) {
 	try {
@@ -15,23 +33,54 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 		const maxTokens = parseInt(environment.getSetting("Max Tokens"))
 		const providersOrder = JSON.parse(environment.getSetting("Providers Order"))
 
+		const outputFormat = environment.getSetting("Output format")
+		const schemaString = environment.getSetting("Schema")
+		const userSchema = JSON.parse(schemaString)
+
+		const parsed = JSON.parse(input)
+		const intro = parsed.intro
+
+
 		environment.log.info(`Sending request to ${model},temperature:${temperature},max tokens:${maxTokens},providers order:${JSON.stringify(providersOrder)}`)
 
 
-		const systemMessage = "You are a professional formatter"
-		const query = `Polish the following legal draft into a clean, professional document ready for export:
+		const promptTemplate = `You are a professional formatter. Polish the following legal draft into a clean, professional document ready for export:
                 ---
-                ${input}
+                ${intro}
                 `
-		const aiResponse = await getOpenRouterResponse({
-			systemMessage,
-			query,
-			model,
-			temperature,
-			maxTokens,
-			providersOrder
-		})
-		environment.setOutput("AI Response", aiResponse)
+		const jsonResult = await callStructuredLLMwithJSON(
+			{
+			},
+			{
+				model,
+				temperature,
+				schema: userSchema,
+				promptTemplate,
+				inputVariables: [],
+			}
+		);
+		//console.log("@@USERSCHEMA", userSchema)
+		//console.log("@@JSONRESULT", jsonResult)
+		console.log("@@INPUT", parsed)
+		const parsedOutputFormat = JSON.parse(outputFormat)
+		console.log("@@OUTPUTFORMAT", parsedOutputFormat)
+
+		const transformedValues = transform(parsed, parsedOutputFormat)
+
+		console.log("@@TRANSFORMED", transformedValues)
+
+		if (!jsonResult.success) {
+			throw new Error(jsonResult.error || "Failed to generate content");
+		}
+
+		// Format the structured output for your system
+
+
+		if (!jsonResult.data) {
+			environment.log.error("no data")
+			return false
+		}
+		environment.setOutput("AI Response", JSON.stringify(jsonResult.data))
 		environment.log.info("Polishing process completed successfully")
 
 		return true

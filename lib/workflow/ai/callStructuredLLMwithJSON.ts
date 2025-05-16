@@ -41,13 +41,13 @@ export async function callStructuredLLMwithJSON(
 			...inputData,
 			format_instructions: parser.getFormatInstructions(),
 		});
-		console.log("@@RESPONSE", response.content)
+		//console.log("@@RESPONSE", response.content)
 
 		let finalResponse: string;
 
 		try {
 			const parsed = JSON.parse(response.content as string)
-			console.log("@@PARSED", parsed.properties)
+			//	console.log("@@PARSED", parsed.properties)
 			finalResponse = JSON.stringify(parsed.properties)
 		} catch (err) {
 			throw err

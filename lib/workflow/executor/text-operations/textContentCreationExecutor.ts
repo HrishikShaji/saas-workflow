@@ -123,7 +123,8 @@ export async function textContentCreationExecutor(
 
 
 		environment.log.info(`calling ${model}`);
-		const result = await callStructuredLLM(
+		{/*
+			const result = await callStructuredLLM(
 			{
 				topic,
 				length,
@@ -138,6 +139,8 @@ export async function textContentCreationExecutor(
 				inputVariables,
 			}
 		);
+
+	*/}
 
 		const jsonResult = await callStructuredLLMwithJSON(
 			{
@@ -157,8 +160,8 @@ export async function textContentCreationExecutor(
 		//		console.log("@@JSONRESULT", jsonResult)
 		//		console.log("@@RESULT", result)
 
-		if (!result.success) {
-			throw new Error(result.error || "Failed to generate content");
+		if (!jsonResult.success) {
+			throw new Error(jsonResult.error || "Failed to generate content");
 		}
 
 		// Format the structured output for your system

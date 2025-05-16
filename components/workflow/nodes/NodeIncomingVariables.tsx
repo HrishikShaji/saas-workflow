@@ -1,5 +1,7 @@
 import { getIncomers, Node, useReactFlow } from "@xyflow/react";
 import IncomingNodeCard from "./IncomingNodeCard";
+import { useCallback } from "react";
+import { AppNode, AppNodeData } from "@/types/appNode";
 
 interface Props {
 	nodeId: string;
@@ -7,11 +9,22 @@ interface Props {
 
 export default function NodeIncomingVariables({ nodeId }: Props) {
 	console.log("@@NODEID", nodeId)
-	const { getNodes, getEdges, getNode } = useReactFlow()
+	const { getNodes, getEdges, getNode, updateNodeData } = useReactFlow()
 	const nodes = getNodes()
 	const edges = getEdges()
-	const node = getNode(nodeId)
+	const node = getNode(nodeId) as Node<AppNodeData>
 
+
+	const updateNodeParamValue = useCallback((newValue: string) => {
+		if (node) {
+			updateNodeData(nodeId, {
+				settings: {
+					...node.data.settings,
+					["Output format"]: newValue
+				}
+			})
+		}
+	}, [updateNodeData, node?.data.settings, nodeId])
 	if (!node) return null
 
 	const incomingNodes = getIncomers(node, nodes, edges)
@@ -22,7 +35,7 @@ export default function NodeIncomingVariables({ nodeId }: Props) {
 	}
 	return <div>
 		{incomingNodes.map((node) => (
-			<IncomingNodeCard key={node.id} node={node} />
+			<IncomingNodeCard updateNodeParamValue={updateNodeParamValue} key={node.id} node={node} />
 		))}
 	</div>
 }

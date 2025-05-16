@@ -6,7 +6,8 @@ export const nodeSettings = [
         { name: "Temperature", type: SettingsParamType.NUMBER, value: "" },
         { name: "Max Tokens", type: SettingsParamType.NUMBER, value: "" },
         { name: "Providers Order", type: SettingsParamType.ORDER, value: "" },
-        { name: "Schema", type: SettingsParamType.STRING, value: "" }
+        { name: "Schema", type: SettingsParamType.STRING, value: "" },
+        { name: "Output format", type: SettingsParamType.STRING, value: "" }
 ] as const satisfies SettingsParam[];
 
 export const models = [
