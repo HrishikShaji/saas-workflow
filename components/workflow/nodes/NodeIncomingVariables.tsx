@@ -25,6 +25,16 @@ export default function NodeIncomingVariables({ nodeId }: Props) {
 			})
 		}
 	}, [updateNodeData, node?.data.settings, nodeId])
+	const updateCustomInputsValue = useCallback((newValue: string) => {
+		if (node) {
+			updateNodeData(nodeId, {
+				inputs: {
+					...node.data.inputs,
+					["content"]: newValue
+				}
+			})
+		}
+	}, [updateNodeData, node?.data.settings, nodeId])
 	if (!node) return null
 
 	const incomingNodes = getIncomers(node, nodes, edges)
@@ -35,7 +45,7 @@ export default function NodeIncomingVariables({ nodeId }: Props) {
 	}
 	return <div>
 		{incomingNodes.map((node) => (
-			<IncomingNodeCard currentNodeId={nodeId} updateNodeParamValue={updateNodeParamValue} key={node.id} node={node} />
+			<IncomingNodeCard updateCustomInputs={updateCustomInputsValue} currentNodeId={nodeId} updateNodeParamValue={updateNodeParamValue} key={node.id} node={node} />
 		))}
 	</div>
 }

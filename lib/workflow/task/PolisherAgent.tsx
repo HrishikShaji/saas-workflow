@@ -12,7 +12,7 @@ export const PolisherAgentTask = {
 	isEntryPoint: false,
 	inputs: [
 		{
-			name: "AI Generated Content",
+			name: "content",
 			type: TaskParamType.AI_RESPONSE,
 			required: true,
 		}

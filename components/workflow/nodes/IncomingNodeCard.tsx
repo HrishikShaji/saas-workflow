@@ -16,15 +16,17 @@ interface Props {
 	node: Node;
 	updateNodeParamValue: (value: string) => void;
 	currentNodeId: string;
+	updateCustomInputs: (value: string) => void;
 }
 
-export default function IncomingNodeCard({ node, updateNodeParamValue, currentNodeId }: Props) {
+export default function IncomingNodeCard({ node, updateNodeParamValue, currentNodeId, updateCustomInputs }: Props) {
 	const { theme } = useTheme();
 	const nodeData = node.data as AppNodeData;
 	const nodeType = TaskRegistry[nodeData.type];
 	const [editorData, setEditorData] = useState(null);
 	const [variables, setVariables] = useState<{ name: string; path: string; value: any }[]>([]);
 	const [selectedField, setSelectedField] = useState("");
+	const [customInputs, setCustomInputs] = useState({})
 	const [customName, setCustomName] = useState("");
 	const { getNode } = useReactFlow()
 	const currentNode = getNode(currentNodeId) as Node<AppNodeData>
@@ -105,6 +107,7 @@ export default function IncomingNodeCard({ node, updateNodeParamValue, currentNo
 			}
 		]);
 		//setCustomName("");
+		setCustomInputs(prev => ({ ...prev, [inputName]: selectedField }))
 		setSelectedField("");
 	};
 
@@ -150,6 +153,11 @@ export default function IncomingNodeCard({ node, updateNodeParamValue, currentNo
 		}
 	};
 
+	function saveCustomInputs() {
+		const stringifiedCustomInputs = JSON.stringify(customInputs)
+		updateCustomInputs(stringifiedCustomInputs)
+	}
+
 	if (!editorData) {
 		return <div className="p-4 text-muted-foreground">No incoming schema defined</div>;
 	}
@@ -192,6 +200,7 @@ export default function IncomingNodeCard({ node, updateNodeParamValue, currentNo
 									<Button onClick={() => handleAddVariable(input.name)}>Add Variable</Button>
 								</div>
 							))}
+							<Button onClick={saveCustomInputs}>save custom inputs</Button>
 						</div>
 
 						<div>

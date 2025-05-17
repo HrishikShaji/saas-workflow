@@ -26,8 +26,10 @@ function transform(input: Record<string, any>, outputFormat: Record<string, any>
 export async function polisherAgentExecutor(environment: ExecutionEnvironment<typeof PolisherAgentTask>) {
 	try {
 		environment.log.info("Starting polishing process")
-		const input = environment.getInput("AI Generated Content")
 
+		let validInput;
+
+		const input = environment.getInput("content")
 		const model = environment.getSetting("Model")
 		const temperature = parseInt(environment.getSetting("Temperature"))
 		const maxTokens = parseInt(environment.getSetting("Max Tokens"))
@@ -35,10 +37,25 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 
 		const outputFormat = environment.getSetting("Output format")
 		const schemaString = environment.getSetting("Schema")
+		const customInputsString = environment.getSetting("customInputs")
+		const customInputs = JSON.parse(customInputsString)
 		const userSchema = JSON.parse(schemaString)
 
-		const parsed = JSON.parse(input)
-		const intro = parsed.intro
+		try {
+			const parsed = JSON.parse(input)
+			const parsedOutputFormat = JSON.parse(outputFormat)
+			const transformedValues = transform(parsed, parsedOutputFormat)
+			console.log("@@PARSEDINPUT", parsed)
+			console.log("@@PARSEDOUTPUTFORMAT", parsedOutputFormat)
+			console.log("@@TRANSFORMEDVALUES", transformedValues)
+
+		} catch (err) {
+			validInput = input
+		}
+
+
+		//const parsed = JSON.parse(input)
+		//const intro = parsed.intro
 
 
 		environment.log.info(`Sending request to ${model},temperature:${temperature},max tokens:${maxTokens},providers order:${JSON.stringify(providersOrder)}`)
@@ -46,7 +63,7 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 
 		const promptTemplate = `You are a professional formatter. Polish the following legal draft into a clean, professional document ready for export:
                 ---
-                ${intro}
+                ${input}
                 `
 		const jsonResult = await callStructuredLLMwithJSON(
 			{
@@ -61,13 +78,15 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 		);
 		//console.log("@@USERSCHEMA", userSchema)
 		//console.log("@@JSONRESULT", jsonResult)
-		console.log("@@INPUT", parsed)
-		const parsedOutputFormat = JSON.parse(outputFormat)
-		console.log("@@OUTPUTFORMAT", parsedOutputFormat)
+		//console.log("@@INPUT", parsed)
+		//const parsedOutputFormat = JSON.parse(outputFormat)
+		//console.log("@@OUTPUTFORMAT", parsedOutputFormat)
 
-		const transformedValues = transform(parsed, parsedOutputFormat)
+		//console.log("@@CUSTOMINPUTS", customInputsString)
 
-		console.log("@@TRANSFORMED", transformedValues)
+		//const transformedValues = transform(parsed, parsedOutputFormat)
+
+		//console.log("@@TRANSFORMED", transformedValues)
 
 		if (!jsonResult.success) {
 			throw new Error(jsonResult.error || "Failed to generate content");
