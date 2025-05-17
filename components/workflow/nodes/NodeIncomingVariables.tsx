@@ -35,7 +35,7 @@ export default function NodeIncomingVariables({ nodeId }: Props) {
 	}
 	return <div>
 		{incomingNodes.map((node) => (
-			<IncomingNodeCard updateNodeParamValue={updateNodeParamValue} key={node.id} node={node} />
+			<IncomingNodeCard currentNodeId={nodeId} updateNodeParamValue={updateNodeParamValue} key={node.id} node={node} />
 		))}
 	</div>
 }

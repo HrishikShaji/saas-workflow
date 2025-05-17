@@ -15,9 +15,10 @@ import { useTheme } from "next-themes";
 interface Props {
 	node: Node;
 	updateNodeParamValue: (value: string) => void;
+	currentNodeId: string;
 }
 
-export default function IncomingNodeCard({ node, updateNodeParamValue }: Props) {
+export default function IncomingNodeCard({ node, updateNodeParamValue, currentNodeId }: Props) {
 	const { theme } = useTheme();
 	const nodeData = node.data as AppNodeData;
 	const nodeType = TaskRegistry[nodeData.type];
@@ -25,6 +26,9 @@ export default function IncomingNodeCard({ node, updateNodeParamValue }: Props) 
 	const [variables, setVariables] = useState<{ name: string; path: string; value: any }[]>([]);
 	const [selectedField, setSelectedField] = useState("");
 	const [customName, setCustomName] = useState("");
+	const { getNode } = useReactFlow()
+	const currentNode = getNode(currentNodeId) as Node<AppNodeData>
+	const currentNodeType = TaskRegistry[currentNode.data.type]
 	const [code, setCode] = useState(`// Write your code here
 // Access variables directly by their names
 // Example:
@@ -88,19 +92,19 @@ export default function IncomingNodeCard({ node, updateNodeParamValue }: Props) 
 
 	const availableFields = getAvailableFields(editorData);
 
-	const handleAddVariable = () => {
-		if (!selectedField || !customName) return;
+	const handleAddVariable = (inputName: string) => {
+		if (!selectedField || !inputName) return;
 
 		const value = getValueFromPath(editorData, selectedField);
 		setVariables(prev => [
 			...prev,
 			{
-				name: customName,
+				name: inputName,
 				path: selectedField,
 				value
 			}
 		]);
-		setCustomName("");
+		//setCustomName("");
 		setSelectedField("");
 	};
 
@@ -162,25 +166,32 @@ export default function IncomingNodeCard({ node, updateNodeParamValue }: Props) 
 					</div>
 
 					<div className="flex-1 space-y-4">
-						<div className="flex gap-2">
-							<Input
-								placeholder="Variable name"
-								value={customName}
-								onChange={(e) => setCustomName(e.target.value)}
-							/>
+						<div className="flex flex-col gap-2">
+							{currentNodeType.inputs.map((input, i) => (
 
-							<Select value={selectedField} onValueChange={setSelectedField}>
-								<SelectTrigger className="w-[180px]">
-									<SelectValue placeholder="Select field" />
-								</SelectTrigger>
-								<SelectContent>
-									{availableFields.map(field => (
-										<SelectItem key={field} value={field}>{field}</SelectItem>
-									))}
-								</SelectContent>
-							</Select>
+								<div className="flex gap-2" key={i}>
+									{/*
+									<Input
+										placeholder="Variable name"
+										value={customName}
+										onChange={(e) => setCustomName(e.target.value)}
+									/>
+									*/}
+									<h1 className="w-[200px]">{input.name}</h1>
+									<Select value={selectedField} onValueChange={setSelectedField}>
+										<SelectTrigger className="w-[180px]">
+											<SelectValue placeholder="Select field" />
+										</SelectTrigger>
+										<SelectContent>
+											{availableFields.map(field => (
+												<SelectItem key={field} value={field}>{field}</SelectItem>
+											))}
+										</SelectContent>
+									</Select>
 
-							<Button onClick={handleAddVariable}>Add Variable</Button>
+									<Button onClick={() => handleAddVariable(input.name)}>Add Variable</Button>
+								</div>
+							))}
 						</div>
 
 						<div>
