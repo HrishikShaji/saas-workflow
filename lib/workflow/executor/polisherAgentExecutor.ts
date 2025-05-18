@@ -2,6 +2,7 @@
 import { Environment, ExecutionEnvironment } from "@/types/executor"
 import { PolisherAgentTask } from "../task/PolisherAgent"
 import { callStructuredLLMwithJSON } from "../ai/callStructuredLLMwithJSON"
+import { TaskRegistry } from "../task/registry";
 
 function transform(input: Record<string, any>, outputFormat: Record<string, any>) {
 	const result = {};
@@ -29,33 +30,48 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 
 		let validInput;
 
-		const input = environment.getInput("content")
+		const content = environment.getInput("content")
+
+		try {
+			const parsedContent = JSON.parse(content)
+			console.log("@@PARSE_SUCCESS", parsedContent)
+			validInput = parsedContent
+		} catch (error) {
+			console.log("@@PARSE_FAIL", error)
+			validInput = content
+		}
+
+		console.log("@@VALID-INPUT", validInput)
+
+		const customInputsString = environment.getSetting("customInputs")
+		const customInputs = JSON.parse(customInputsString)
+		const transformedValues = transform(validInput, customInputs)
+
+		console.log("@@TRANSFORMED-VALUES", transformedValues)
+
 		const model = environment.getSetting("Model")
+		const polisherAgentInputs = TaskRegistry["POLISHER_AGENT"].inputs
+
+
 		const temperature = parseInt(environment.getSetting("Temperature"))
 		const maxTokens = parseInt(environment.getSetting("Max Tokens"))
 		const providersOrder = JSON.parse(environment.getSetting("Providers Order"))
 
-		const outputFormat = environment.getSetting("Output format")
-		const schemaString = environment.getSetting("Schema")
-		const customInputsString = environment.getSetting("customInputs")
-		const customInputs = JSON.parse(customInputsString)
-		const userSchema = JSON.parse(schemaString)
 
+		{/*
 		try {
-			const parsed = JSON.parse(input)
-			const parsedOutputFormat = JSON.parse(outputFormat)
-			const transformedValues = transform(parsed, parsedOutputFormat)
+			console.log("@@CONTENT", content)
+			console.log("@@CUSTOMINPUTS", customInputs)
+			const parsed = JSON.parse(content)
+			const transformedValues = transform(parsed, polisherAgentInputs)
 			console.log("@@PARSEDINPUT", parsed)
-			console.log("@@PARSEDOUTPUTFORMAT", parsedOutputFormat)
 			console.log("@@TRANSFORMEDVALUES", transformedValues)
-
+			validInput = "make some document"
 		} catch (err) {
-			validInput = input
+			validInput = content
 		}
+	*/}
 
-
-		//const parsed = JSON.parse(input)
-		//const intro = parsed.intro
 
 
 		environment.log.info(`Sending request to ${model},temperature:${temperature},max tokens:${maxTokens},providers order:${JSON.stringify(providersOrder)}`)
@@ -63,8 +79,10 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 
 		const promptTemplate = `You are a professional formatter. Polish the following legal draft into a clean, professional document ready for export:
                 ---
-                ${input}
+                ${content}
                 `
+
+		{/*
 		const jsonResult = await callStructuredLLMwithJSON(
 			{
 			},
@@ -76,30 +94,16 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 				inputVariables: [],
 			}
 		);
-		//console.log("@@USERSCHEMA", userSchema)
-		//console.log("@@JSONRESULT", jsonResult)
-		//console.log("@@INPUT", parsed)
-		//const parsedOutputFormat = JSON.parse(outputFormat)
-		//console.log("@@OUTPUTFORMAT", parsedOutputFormat)
-
-		//console.log("@@CUSTOMINPUTS", customInputsString)
-
-		//const transformedValues = transform(parsed, parsedOutputFormat)
-
-		//console.log("@@TRANSFORMED", transformedValues)
-
 		if (!jsonResult.success) {
 			throw new Error(jsonResult.error || "Failed to generate content");
 		}
-
-		// Format the structured output for your system
-
-
 		if (!jsonResult.data) {
 			environment.log.error("no data")
 			return false
 		}
-		environment.setOutput("AI Response", JSON.stringify(jsonResult.data))
+	*/}
+
+		environment.setOutput("AI Response", JSON.stringify("sample"))
 		environment.log.info("Polishing process completed successfully")
 
 		return true

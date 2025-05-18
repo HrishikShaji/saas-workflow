@@ -28,9 +28,9 @@ export default function NodeIncomingVariables({ nodeId }: Props) {
 	const updateCustomInputsValue = useCallback((newValue: string) => {
 		if (node) {
 			updateNodeData(nodeId, {
-				inputs: {
-					...node.data.inputs,
-					["content"]: newValue
+				settings: {
+					...node.data.settings,
+					["customInputs"]: newValue
 				}
 			})
 		}
