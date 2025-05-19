@@ -50,6 +50,7 @@ export async function callStructuredLLMwithJSON(
 			//	console.log("@@PARSED", parsed.properties)
 			finalResponse = JSON.stringify(parsed.properties)
 		} catch (err) {
+			console.error(err)
 			throw err
 		}
 

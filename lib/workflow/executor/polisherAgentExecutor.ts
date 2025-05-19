@@ -1,8 +1,6 @@
-
 import { Environment, ExecutionEnvironment } from "@/types/executor"
 import { PolisherAgentTask } from "../task/PolisherAgent"
 import { callStructuredLLMwithJSON } from "../ai/callStructuredLLMwithJSON"
-import { TaskRegistry } from "../task/registry";
 
 function transform(input: Record<string, any>, outputFormat: Record<string, any>) {
 	const result = {};
@@ -31,11 +29,17 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 		let validInput;
 
 		const content = environment.getInput("content")
+		const customInputsString = environment.getSetting("customInputs")
 
 		try {
 			const parsedContent = JSON.parse(content)
-			console.log("@@PARSE_SUCCESS", parsedContent)
-			validInput = parsedContent
+			const customInputs = JSON.parse(customInputsString)
+			const transformedValues = transform(parsedContent, customInputs)
+
+			//			console.log("@@TRANSFORMED-VALUES", transformedValues)
+			//			console.log("@@PARSE_SUCCESS", parsedContent)
+			//@ts-ignore
+			validInput = transformedValues.content
 		} catch (error) {
 			console.log("@@PARSE_FAIL", error)
 			validInput = content
@@ -43,34 +47,17 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 
 		console.log("@@VALID-INPUT", validInput)
 
-		const customInputsString = environment.getSetting("customInputs")
-		const customInputs = JSON.parse(customInputsString)
-		const transformedValues = transform(validInput, customInputs)
-
-		console.log("@@TRANSFORMED-VALUES", transformedValues)
 
 		const model = environment.getSetting("Model")
-		const polisherAgentInputs = TaskRegistry["POLISHER_AGENT"].inputs
-
+		const userSchemaString = environment.getSetting("Schema")
+		//		console.log("@@USERSCHEMASTRING", userSchemaString)
+		const userSchema = JSON.parse(userSchemaString)
+		console.log("@@PARSEDUSERSCHEMA", userSchema)
 
 		const temperature = parseInt(environment.getSetting("Temperature"))
 		const maxTokens = parseInt(environment.getSetting("Max Tokens"))
 		const providersOrder = JSON.parse(environment.getSetting("Providers Order"))
 
-
-		{/*
-		try {
-			console.log("@@CONTENT", content)
-			console.log("@@CUSTOMINPUTS", customInputs)
-			const parsed = JSON.parse(content)
-			const transformedValues = transform(parsed, polisherAgentInputs)
-			console.log("@@PARSEDINPUT", parsed)
-			console.log("@@TRANSFORMEDVALUES", transformedValues)
-			validInput = "make some document"
-		} catch (err) {
-			validInput = content
-		}
-	*/}
 
 
 
@@ -79,10 +66,11 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 
 		const promptTemplate = `You are a professional formatter. Polish the following legal draft into a clean, professional document ready for export:
                 ---
-                ${content}
+                ${validInput}
                 `
 
-		{/*
+		environment.log.info(`input used:${validInput}`)
+
 		const jsonResult = await callStructuredLLMwithJSON(
 			{
 			},
@@ -101,13 +89,13 @@ export async function polisherAgentExecutor(environment: ExecutionEnvironment<ty
 			environment.log.error("no data")
 			return false
 		}
-	*/}
 
-		environment.setOutput("AI Response", JSON.stringify("sample"))
+		environment.setOutput("AI Response", JSON.stringify(jsonResult.data))
 		environment.log.info("Polishing process completed successfully")
 
 		return true
 	} catch (error: any) {
+		console.error(error)
 		environment.log.error(`Draft generation failed: ${error.message}`)
 		return false
 	}

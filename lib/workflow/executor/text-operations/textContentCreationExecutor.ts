@@ -86,7 +86,7 @@ export async function textContentCreationExecutor(
 		//console.log("this is schema", schemaString)
 
 		const userSchema = JSON.parse(schemaString)
-
+		console.log("@@CONTENTCREATIONSCHEMA", userSchema)
 		//console.log("Actual Zod schema instance:", zodSchema);
 
 		// Build the prompt template based on content type
