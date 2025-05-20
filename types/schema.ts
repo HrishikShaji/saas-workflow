@@ -16,6 +16,7 @@ export interface SchemaField {
         type: FieldType;
         description?: string;
         required: boolean;
+        value: string;
         rules: {
                 min?: number;
                 max?: number;

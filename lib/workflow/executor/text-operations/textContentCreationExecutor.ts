@@ -1,73 +1,7 @@
 import { ExecutionEnvironment } from "@/types/executor";
 import { TextContentCreationTask } from "../../task/text-operations/TextContentCreationTask";
-import { z } from "zod";
-import { callStructuredLLM } from "../../ai/callStructuredLLM";
-import { jsonSchemaToZod } from "json-schema-to-zod"
-import { env } from "@huggingface/transformers";
 import { callStructuredLLMwithJSON } from "../../ai/callStructuredLLMwithJSON";
 
-// Define your output schema
-const contentResponseSchema = z.object({
-	title: z.string().describe("The title of the generated content"),
-	introduction: z.string().describe("Engaging introduction paragraph"),
-	body: z.array(
-		z.object({
-			heading: z.string().describe("Section heading"),
-			content: z.string().describe("Section content"),
-		})
-	).describe("Main content sections with headings"),
-	conclusion: z.string().describe("Strong concluding paragraph"),
-	tone: z.string().describe("The tone used in the content").optional(),
-	wordCount: z.number().describe("Approximate word count").optional(),
-});
-
-const jsonSchema = {
-	"$schema": "http://json-schema.org/draft-07/schema#",
-	"type": "object",
-	"properties": {
-		"title": {
-			"type": "string",
-			"description": "The title of the generated content"
-		},
-		"introduction": {
-			"type": "string",
-			"description": "Engaging introduction paragraph"
-		},
-		"body": {
-			"type": "array",
-			"description": "Main content sections with headings",
-			"items": {
-				"type": "object",
-				"properties": {
-					"heading": {
-						"type": "string",
-						"description": "Section heading"
-					},
-					"content": {
-						"type": "string",
-						"description": "Section content"
-					}
-				},
-				"required": ["heading", "content"],
-				"additionalProperties": false
-			}
-		},
-		"conclusion": {
-			"type": "string",
-			"description": "Strong concluding paragraph"
-		},
-		"tone": {
-			"type": "string",
-			"description": "The tone used in the content"
-		},
-		"wordCount": {
-			"type": "number",
-			"description": "Approximate word count"
-		}
-	},
-	"required": ["title", "introduction", "body", "conclusion"],
-	"additionalProperties": false
-}
 
 export async function textContentCreationExecutor(
 	environment: ExecutionEnvironment<typeof TextContentCreationTask>
@@ -111,37 +45,12 @@ export async function textContentCreationExecutor(
         You are a professional report writer.
         Create a {length}-length {style} report about "{topic}" for {audience}.
         
-        Requirements:
-        1. Include a professional title
-        2. Provide an executive summary
-        3. Structure the body with clear sections
-        4. Include data-driven insights where applicable
-        5. End with actionable recommendations
         
       `;
 		}
 
 
 		environment.log.info(`calling ${model}`);
-		{/*
-			const result = await callStructuredLLM(
-			{
-				topic,
-				length,
-				style,
-				audience: audience || (contentType === "article" ? "general readers" : "business stakeholders"),
-			},
-			{
-				model,
-				temperature,
-				schema: contentResponseSchema,
-				promptTemplate,
-				inputVariables,
-			}
-		);
-
-	*/}
-
 		const jsonResult = await callStructuredLLMwithJSON(
 			{
 				topic,

@@ -28,6 +28,8 @@ import { textTemplateFillingExecutor } from "./text-operations/textTemplateFilli
 import { textMessageDraftingExecutor } from "./text-operations/textMessageDraftingExecutor";
 import { textCodeGenerationExecutor } from "./text-operations/textCodeGenerationExecutor";
 import { textStoryWritingExecutor } from "./text-operations/textStoryWritingExecutor";
+import { simplePromptExecutor } from "./llm-operations/simplePromptExecutor";
+import { mapRendererExecutor } from "./renderers/mapRendererExecutor";
 
 type ExecutorFn<T extends WorkflowTask> = (environment: ExecutionEnvironment<T>) => Promise<boolean>
 
@@ -62,5 +64,7 @@ export const ExecutorRegistry: RegistryType = {
 	TEXT_TEMPLATE_FILLING: textTemplateFillingExecutor,
 	TEXT_MESSAGE_DRAFTING: textMessageDraftingExecutor,
 	TEXT_CODE_GENERATION: textCodeGenerationExecutor,
-	TEXT_STORY_WRITING: textStoryWritingExecutor
+	TEXT_STORY_WRITING: textStoryWritingExecutor,
+	SIMPLE_PROMPT: simplePromptExecutor,
+	MAP_RENDERER: mapRendererExecutor
 }

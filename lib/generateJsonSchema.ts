@@ -25,6 +25,10 @@ export function generateJsonSchema(fields: SchemaField[]): string {
                         fieldSchema.description = field.description;
                 }
 
+                if (field.value) {
+                        fieldSchema.value = field.value
+                }
+
                 // Add validation rules
                 if (field.type === 'string') {
                         if (field.rules.min !== undefined) {

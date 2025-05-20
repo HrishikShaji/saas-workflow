@@ -23,6 +23,14 @@ export default function TaskMenu() {
 					<TaskMenuBtn taskType={TaskType.OPTIONS_AGENT} />
 				</AccordionContent>
 			</AccordionItem>
+			<AccordionItem value="llm">
+				<AccordionTrigger className="font-bold">
+					LLM
+				</AccordionTrigger>
+				<AccordionContent className="flex flex-cl gap-1">
+					<TaskMenuBtn taskType={TaskType.SIMPLE_PROMPT} />
+				</AccordionContent>
+			</AccordionItem>
 			<AccordionItem value="database">
 				<AccordionTrigger className="font-bold">
 					Database
@@ -60,6 +68,14 @@ export default function TaskMenu() {
 					<TaskMenuBtn taskType={TaskType.TEXT_SIMPLIFY} />
 					<TaskMenuBtn taskType={TaskType.TEXT_ELABORATOR} />
 					<TaskMenuBtn taskType={TaskType.TEXT_FORMAT_CONVERTER} />
+				</AccordionContent>
+			</AccordionItem>
+			<AccordionItem value="renderers">
+				<AccordionTrigger className="font-bold">
+					Renderers
+				</AccordionTrigger>
+				<AccordionContent className="flex flex-col gap-1">
+					<TaskMenuBtn taskType={TaskType.MAP_RENDERER} />
 				</AccordionContent>
 			</AccordionItem>
 			<AccordionItem value="generators">

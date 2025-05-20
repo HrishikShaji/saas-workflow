@@ -75,6 +75,7 @@ export default function ExecutionViewer({ initialData }: Props) {
 	const creditsConsumed = getPhasesTotalCost(data?.phases || [])
 
 	console.log("@@PHASEDETAILS", phaseDetails)
+	console.log("@@SELECTEDPHASE", selectedPhase)
 	if (preview && phaseDetails.data?.outputs) return <ViewPreview setPreview={setPreview} outputs={phaseDetails.data.outputs} />
 
 	return <div className="w-full h-[calc(100vh_-_110px)]">

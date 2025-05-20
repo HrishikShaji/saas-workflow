@@ -21,7 +21,7 @@ export async function callStructuredLLMwithJSON(
 
 		// Update the prompt template to explicitly request valid JSON without Markdown formatting
 		const prompt = PromptTemplate.fromTemplate(
-			`${options.promptTemplate}\n\n{format_instructions}\n\nIMPORTANT: Return ONLY the JSON output without any markdown code blocks, explanations, or backticks. Ensure all quotes are double quotes, not backticks.`
+			`${options.promptTemplate}\n\n{format_instructions}\n\nIMPORTANT: Return ONLY a simple JSON object with the required fields, without any schema structure or markdown formatting, markdown code blocks, explanations, or backticks. Ensure all quotes are double quotes, not backticks.`
 		);
 
 		const llm = new ChatOpenAI({
@@ -41,7 +41,7 @@ export async function callStructuredLLMwithJSON(
 			...inputData,
 			format_instructions: parser.getFormatInstructions(),
 		});
-		//console.log("@@RESPONSE", response.content)
+		console.log("@@RESPONSE", response.content)
 
 		let finalResponse: string;
 

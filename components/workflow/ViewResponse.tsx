@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/dialog"
 import styles from "../../styles/document.module.css"
 import GraphResponse from "./GraphResponse";
+import MapResponse from "./MapResponse";
 
 interface Props {
 	response: string;
@@ -38,15 +39,17 @@ export default function ViewResponse({ response, type, name }: Props) {
 					{name === "Graph Response" ?
 						<GraphResponse data={response} />
 						:
-
-						<div className={styles.markdown}>
-							<ReactMarkdown
-								remarkPlugins={[remarkGfm]}
-								rehypePlugins={[rehypeRaw]}
-							>
-								{response}
-							</ReactMarkdown>
-						</div>
+						name === "Map Response" ?
+							<MapResponse data={response} />
+							:
+							<div className={styles.markdown}>
+								<ReactMarkdown
+									remarkPlugins={[remarkGfm]}
+									rehypePlugins={[rehypeRaw]}
+								>
+									{response}
+								</ReactMarkdown>
+							</div>
 					}
 				</div>
 			</DialogContent>

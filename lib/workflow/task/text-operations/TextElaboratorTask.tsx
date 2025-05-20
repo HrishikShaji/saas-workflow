@@ -10,14 +10,14 @@ export const TextElaboratorTask = {
 	icon: (props: LucideProps) => (
 		<File className="stroke-pink-500" {...props} />
 	),
-	isEntryPoint: true,
+	isEntryPoint: false,
 	inputs: [
 		{
 			name: "input",
-			type: TaskParamType.STRING,
+			type: TaskParamType.AI_RESPONSE,
 			helperText: "Text to examine",
 			required: true,
-			hideHandle: true
+			hideHandle: false
 		},
 		{
 			name: "level",

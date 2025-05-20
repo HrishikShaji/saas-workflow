@@ -27,6 +27,7 @@ export function SchemaBuilderForm({ param, nodeId, disabled }: Props) {
 		name: '',
 		type: 'string',
 		description: '',
+		value: 'This is where the value should be',
 		required: true,
 		rules: {},
 	});
@@ -85,6 +86,7 @@ export function SchemaBuilderForm({ param, nodeId, disabled }: Props) {
 			description: '',
 			required: true,
 			rules: {},
+			value: "This is where the value should be"
 		});
 		setActiveTab('fields');
 		toast('Field added successfully');

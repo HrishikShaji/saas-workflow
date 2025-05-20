@@ -1,7 +1,6 @@
 import { ExecutionEnvironment } from "@/types/executor"
-import { PolisherAgentTask } from "../../task/PolisherAgent"
 
-export default function parseSettings(environment: ExecutionEnvironment<typeof PolisherAgentTask>) {
+export default function parseSettings(environment: ExecutionEnvironment<any>) {
 	const settings: any = {
 		model: environment.getSetting("Model"),
 		userSchemaString: environment.getSetting("Schema"),
