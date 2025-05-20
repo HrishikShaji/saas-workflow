@@ -35,7 +35,7 @@ export default function MapResponse({ data }: Props) {
 
 	return <GenericMap
 		geoUrl="https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
-		data={mapData.properties.data.map(item => ({
+		data={mapData.properties.data.items.map(item => ({
 			id: item.id,
 			name: item.state,
 			value: item.income

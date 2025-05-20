@@ -1,6 +1,7 @@
 "use client"
 
 import { GenericMap } from "@/components/maps/GenericMap"
+import JsonBuilder from "@/components/workflow/json-builder/JsonBuilder"
 import { stateIncomeData } from "@/lib/constants"
 import { useState } from "react"
 
@@ -16,14 +17,6 @@ const incomeColorScale = (income: number) => {
 export default function Page() {
 
   return (
-    <GenericMap
-      geoUrl="https://cdn.jsdelivr.net/npm/us-atlas@3/states-10m.json"
-      data={stateIncomeData.map(item => ({
-        id: item.id,
-        name: item.state,
-        value: item.income
-      }))}
-      colorScale={incomeColorScale}
-    />
+    <JsonBuilder />
   )
 }

@@ -1,7 +1,6 @@
 import { ChatOpenAI } from "@langchain/openai";
 import { PromptTemplate } from "@langchain/core/prompts";
 import { StructuredOutputParser } from "langchain/output_parsers";
-import { RunnableSequence } from "@langchain/core/runnables";
 
 interface LLMCallOptions {
 	model?: string;
@@ -21,7 +20,7 @@ export async function callStructuredLLMwithJSON(
 
 		// Update the prompt template to explicitly request valid JSON without Markdown formatting
 		const prompt = PromptTemplate.fromTemplate(
-			`${options.promptTemplate}\n\n{format_instructions}\n\nIMPORTANT: Return ONLY a simple JSON object with the required fields, without any schema structure or markdown formatting, markdown code blocks, explanations, or backticks. Ensure all quotes are double quotes, not backticks.`
+			`${options.promptTemplate}\n\n{format_instructions}\n\nIMPORTANT: Return ONLY the actual data as a simple JSON object matching the schema, without any additional schema information, markdown formatting, code blocks, or explanations. Just return the raw JSON data.`
 		);
 
 		const llm = new ChatOpenAI({

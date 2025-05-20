@@ -10,6 +10,8 @@ export async function simplePromptExecutor(environment: ExecutionEnvironment<typ
 
 		environment.log.info(`Sending request to ${model}, temperature: ${temperature}, max tokens: ${maxTokens}, providers order: ${JSON.stringify(providersOrder)}`)
 
+		console.log("@@USERSCHEMA", userSchema)
+
 		const jsonResult = await callStructuredLLMwithJSON(
 			{},
 			{
