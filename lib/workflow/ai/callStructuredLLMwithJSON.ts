@@ -42,6 +42,7 @@ export async function callStructuredLLMwithJSON(
 		});
 		console.log("@@RESPONSE", response.content)
 
+		{/*
 		let finalResponse: string;
 
 		try {
@@ -52,10 +53,11 @@ export async function callStructuredLLMwithJSON(
 			console.error(err)
 			throw err
 		}
+	*/}
 
 		return {
 			success: true,
-			data: finalResponse,
+			data: response.content,
 			error: null,
 		};
 	} catch (error) {

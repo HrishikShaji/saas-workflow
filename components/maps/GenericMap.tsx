@@ -3,6 +3,7 @@ import { useState } from "react"
 import { ComposableMap, Geographies, Geography } from "react-simple-maps"
 import { Tooltip, TooltipTrigger, TooltipContent, TooltipProvider } from "@/components/ui/tooltip"
 
+
 interface LocationData {
 	id: string
 	name: string
@@ -11,6 +12,7 @@ interface LocationData {
 
 interface MapProps {
 	geoUrl: string
+	geoJSON: any
 	data: LocationData[]
 	colorScale: (value: number) => string
 	tooltipFormatter?: (location: string, value: number) => string
@@ -55,6 +57,7 @@ export function GenericMap({
 	tooltipFormatter = defaultTooltipFormatter,
 	projectionConfig = { scale: 1000 },
 	styleConfig = defaultStyleConfig,
+	geoJSON
 }: MapProps) {
 	const [tooltipContent, setTooltipContent] = useState("")
 	const [selectedLocation, setSelectedLocation] = useState<string | null>(null)
@@ -63,7 +66,7 @@ export function GenericMap({
 		<TooltipProvider>
 			<ComposableMap
 				projection="geoAlbersUsa"
-				projectionConfig={projectionConfig}
+				//projectionConfig={projectionConfig}
 				className="w-full h-full"
 			>
 				<Geographies geography={geoUrl}>

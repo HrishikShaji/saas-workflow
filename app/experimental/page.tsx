@@ -4,6 +4,7 @@ import { GenericMap } from "@/components/maps/GenericMap"
 import JsonBuilder from "@/components/workflow/json-builder/JsonBuilder"
 import { stateIncomeData } from "@/lib/constants"
 import { useState } from "react"
+import MapBox from "./components/MapBox"
 
 // Example color scale
 const incomeColorScale = (income: number) => {
@@ -17,6 +18,6 @@ const incomeColorScale = (income: number) => {
 export default function Page() {
 
   return (
-    <JsonBuilder />
+    <MapBox />
   )
 }

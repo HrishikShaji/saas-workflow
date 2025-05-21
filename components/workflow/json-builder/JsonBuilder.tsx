@@ -31,14 +31,14 @@ const JsonBuilder: React.FC = () => {
 			</CardHeader>
 
 			<CardContent className="p-0">
-				<div className="flex flex-col lg:flex-row divide-y lg:divide-y-0 lg:divide-x divide-slate-200 dark:divide-slate-700">
-					<div className="lg:w-1/2 p-6">
+				<div className="flex flex-col ">
+					<div className=" p-6">
 						<ScrollArea className="h-[calc(100vh-20rem)]">
 							<JsonForm onSave={handleSave} />
 						</ScrollArea>
 					</div>
 
-					<div className="lg:w-1/2 p-6">
+					<div className=" p-6">
 						<div className="flex justify-between items-center mb-4">
 							<h3 className="text-lg font-semibold text-slate-900 dark:text-white">JSON Preview</h3>
 							<Button

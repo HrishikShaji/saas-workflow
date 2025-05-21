@@ -1,14 +1,20 @@
 import React, { useState, useEffect } from 'react';
 import { JsonFieldProps, JsonFieldType } from './types';
-import {
-	Type,
-	Trash2,
-	Plus,
-	ChevronDown,
-	ChevronRight
-} from 'lucide-react';
+import { Type, Trash2, Plus, ChevronDown, ChevronRight } from 'lucide-react';
 import JsonObjectField from './JsonObjectField';
 import JsonArrayField from './JsonArrayField';
+import { Input } from '@/components/ui/input';
+import { Button } from '@/components/ui/button';
+import {
+	Select,
+	SelectContent,
+	SelectItem,
+	SelectTrigger,
+	SelectValue,
+} from '@/components/ui/select';
+import { Label } from '@/components/ui/label';
+import { Card, CardContent } from '@/components/ui/card';
+import { Badge } from '@/components/ui/badge';
 
 const JsonField: React.FC<JsonFieldProps> = ({
 	path,
@@ -33,8 +39,7 @@ const JsonField: React.FC<JsonFieldProps> = ({
 		setFieldValue(value);
 	}, [value]);
 
-	const handleTypeChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-		const newType = e.target.value as JsonFieldType;
+	const handleTypeChange = (newType: JsonFieldType) => {
 		let newValue: any;
 
 		switch (newType) {
@@ -65,7 +70,7 @@ const JsonField: React.FC<JsonFieldProps> = ({
 		onUpdate(path, newValue);
 	};
 
-	const handleValueChange = (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) => {
+	const handleValueChange = (e: React.ChangeEvent<HTMLInputElement>) => {
 		let newValue: any = e.target.value;
 
 		if (fieldType === 'number') {
@@ -86,7 +91,7 @@ const JsonField: React.FC<JsonFieldProps> = ({
 		const parentPath = parts.slice(0, parts.length - 1).join('.');
 		const newPath = parentPath ? `${parentPath}.${newKey}` : newKey;
 
-		onUpdate(path, undefined, newPath); // Optional third parameter to indicate path change
+		onUpdate(path, undefined, newPath);
 	};
 
 	const handleToggleExpand = () => {
@@ -97,32 +102,39 @@ const JsonField: React.FC<JsonFieldProps> = ({
 		switch (fieldType) {
 			case 'string':
 				return (
-					<input
+					<Input
 						type="text"
 						value={fieldValue || ''}
 						onChange={handleValueChange}
-						className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+						className="w-full"
 					/>
 				);
 			case 'number':
 				return (
-					<input
+					<Input
 						type="number"
 						value={fieldValue}
 						onChange={handleValueChange}
-						className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+						className="w-full"
 					/>
 				);
 			case 'boolean':
 				return (
-					<select
+					<Select
 						value={String(fieldValue)}
-						onChange={handleValueChange}
-						className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+						onValueChange={(val) => {
+							setFieldValue(val === 'true');
+							onUpdate(path, val === 'true');
+						}}
 					>
-						<option value="true">true</option>
-						<option value="false">false</option>
-					</select>
+						<SelectTrigger className="w-full">
+							<SelectValue placeholder="Select boolean" />
+						</SelectTrigger>
+						<SelectContent>
+							<SelectItem value="true">true</SelectItem>
+							<SelectItem value="false">false</SelectItem>
+						</SelectContent>
+					</Select>
 				);
 			case 'object':
 				return (
@@ -148,7 +160,7 @@ const JsonField: React.FC<JsonFieldProps> = ({
 				);
 			case 'null':
 				return (
-					<div className="text-gray-500 italic px-3 py-2 border border-gray-300 rounded-md bg-gray-50">
+					<div className="flex items-center justify-center h-10 px-4 py-2 text-sm text-muted-foreground border rounded-md bg-muted">
 						null
 					</div>
 				);
@@ -157,67 +169,85 @@ const JsonField: React.FC<JsonFieldProps> = ({
 		}
 	};
 
-	const getTypeColor = () => {
+	const getTypeVariant = () => {
 		switch (fieldType) {
-			case 'string': return 'text-green-600 bg-green-50 border-green-200';
-			case 'number': return 'text-blue-600 bg-blue-50 border-blue-200';
-			case 'boolean': return 'text-purple-600 bg-purple-50 border-purple-200';
-			case 'object': return 'text-amber-600 bg-amber-50 border-amber-200';
-			case 'array': return 'text-red-600 bg-red-50 border-red-200';
-			case 'null': return 'text-gray-600 bg-gray-50 border-gray-200';
-			default: return 'text-gray-600 bg-gray-50 border-gray-200';
+			case 'string': return 'secondary';
+			case 'number': return 'outline';
+			case 'boolean': return 'destructive';
+			case 'object': return 'default';
+			case 'array': return 'default';
+			case 'null': return 'outline';
+			default: return 'outline';
 		}
 	};
 
 	return (
-		<div className={`mb-4 rounded-md ${isRoot ? '' : 'border border-gray-200 p-4'} transition-all duration-200`}>
-			<div className="flex items-start mb-2">
-				{!isRoot && (
-					<>
-						<div className="w-1/3 mr-2">
-							<input
-								type="text"
-								value={key}
-								onChange={handleKeyChange}
-								className="block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
-								placeholder="Key name"
-							/>
-						</div>
-						<div className="w-1/4 mr-2">
-							<div className="relative">
-								<select
-									value={fieldType}
-									onChange={handleTypeChange}
-									className={`block w-full appearance-none px-3 py-2 rounded-md shadow-sm focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm border ${getTypeColor()}`}
-								>
-									<option value="string">String</option>
-									<option value="number">Number</option>
-									<option value="boolean">Boolean</option>
-									<option value="object">Object</option>
-									<option value="array">Array</option>
-									<option value="null">Null</option>
-								</select>
-								<div className="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
-									<Type className="h-4 w-4" />
+		<Card className={`mb-4 ${isRoot ? 'border-0 shadow-none' : ''}`}>
+			<CardContent className="pt-4">
+				<div className="flex flex-col space-y-2">
+					<div className="flex items-start gap-2">
+						{!isRoot && (
+							<>
+								<div className="w-[200px]">
+									<Label htmlFor={`key-${path}`} className="sr-only">
+										Key
+									</Label>
+									<Input
+										id={`key-${path}`}
+										type="text"
+										value={key}
+										onChange={handleKeyChange}
+										placeholder="Key name"
+									/>
 								</div>
-							</div>
+								<div className="w-[150px]">
+									<Select
+										value={fieldType}
+										onValueChange={(val) => handleTypeChange(val as JsonFieldType)}
+									>
+										<SelectTrigger className="w-full">
+											<div className="flex items-center gap-2">
+												<Type className="h-4 w-4" />
+												<SelectValue placeholder="Type" />
+											</div>
+										</SelectTrigger>
+										<SelectContent>
+											<SelectItem value="string">String</SelectItem>
+											<SelectItem value="number">Number</SelectItem>
+											<SelectItem value="boolean">Boolean</SelectItem>
+											<SelectItem value="object">Object</SelectItem>
+											<SelectItem value="array">Array</SelectItem>
+											<SelectItem value="null">Null</SelectItem>
+										</SelectContent>
+									</Select>
+								</div>
+							</>
+						)}
+						<div className="flex-1 min-w-0">
+							{renderFieldValue()}
 						</div>
-					</>
-				)}
-				<div className={`${isRoot ? 'w-full' : 'w-5/12'} mr-2`}>
-					{renderFieldValue()}
+						{!isRoot && (
+							<Button
+								variant="ghost"
+								size="icon"
+								onClick={() => onDelete(path)}
+								className="text-muted-foreground hover:text-destructive"
+								title="Delete field"
+							>
+								<Trash2 className="h-4 w-4" />
+							</Button>
+						)}
+					</div>
+					{!isRoot && (
+						<div className="flex justify-end">
+							<Badge variant={getTypeVariant()} className="text-xs">
+								{fieldType}
+							</Badge>
+						</div>
+					)}
 				</div>
-				{!isRoot && (
-					<button
-						onClick={() => onDelete(path)}
-						className="p-2 text-gray-400 hover:text-red-500 focus:outline-none transition-colors duration-200"
-						title="Delete field"
-					>
-						<Trash2 className="h-5 w-5" />
-					</button>
-				)}
-			</div>
-		</div>
+			</CardContent>
+		</Card>
 	);
 };
 

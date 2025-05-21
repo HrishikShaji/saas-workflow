@@ -3,6 +3,19 @@ import { SimplePromptTask } from "../../task/llm-operations/SimplePromptTask"
 import parseSettings from "../lib/parseSettings"
 import { callStructuredLLMwithJSON } from "../../ai/callStructuredLLMwithJSON"
 
+const sampleSchema = {
+	"title": "title of the content",
+	"geoUrl": "The correct geo url for the prompt from jsDelivr json file that can be used in react-simple-maps library",
+	"geoJson": {},
+	"data": [
+		{
+			"id": "",
+			"state": "",
+			"income": ""
+		}
+	]
+}
+
 export async function simplePromptExecutor(environment: ExecutionEnvironment<typeof SimplePromptTask>) {
 	try {
 		const prompt = environment.getInput("prompt")
@@ -12,13 +25,14 @@ export async function simplePromptExecutor(environment: ExecutionEnvironment<typ
 
 		console.log("@@USERSCHEMA", userSchema)
 
+		const promptTemplate = `for the input: ${prompt},include valid full complete geoJSON data that can be shown as accurate map.`
 		const jsonResult = await callStructuredLLMwithJSON(
 			{},
 			{
 				model,
 				temperature,
-				schema: userSchema,
-				promptTemplate: prompt,
+				schema: sampleSchema,
+				promptTemplate: promptTemplate,
 				inputVariables: [],
 			}
 		)
@@ -31,7 +45,9 @@ export async function simplePromptExecutor(environment: ExecutionEnvironment<typ
 			throw new Error("AI response contained no data")
 		}
 
-		environment.setOutput("Response", JSON.stringify(jsonResult.data))
+		console.log("@@FINALDATA", jsonResult.data)
+
+		environment.setOutput("Response", jsonResult.data as string)
 		environment.log.info("Polishing process completed successfully")
 
 		return true
