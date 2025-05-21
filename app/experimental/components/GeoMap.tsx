@@ -8,6 +8,8 @@ interface Props {
   countryQuery: string;
 }
 
+const url = "https://raw.githubusercontent.com/HrishikShaji/saas-workflow/refs/heads/main/lib/maps/us-geodata.json"
+
 const GeoMap = ({ countryQuery }: Props) => {
   const [geojsonData, setGeojsonData] = useState(null);
 
@@ -56,7 +58,7 @@ const GeoMap = ({ countryQuery }: Props) => {
       mapboxAccessToken={MAPBOX_TOKEN}
     >
       {geojsonData && (
-        <Source id="geojson" type="geojson" data="../../../lib/maps/us-geodata.json">
+        <Source id="geojson" type="geojson" data={url}>
           <Layer
             id="geojson-layer"
             type="fill"
