@@ -3,9 +3,11 @@
 import { GenericMap } from "@/components/maps/GenericMap"
 import JsonBuilder from "@/components/workflow/json-builder/JsonBuilder"
 import { stateIncomeData } from "@/lib/constants"
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import MapBox from "./components/MapBox"
 import GeoMap from "./components/GeoMap"
+import { mockStateIncomeData } from "@/lib/maps/mockStateIncomeData"
+import RenderMap from "./components/RenderMap"
 
 // Example color scale
 const incomeColorScale = (income: number) => {
@@ -18,17 +20,56 @@ const incomeColorScale = (income: number) => {
 
 export default function Page() {
   const [country, setCountry] = useState('India');
+  const [geojson, setGeojson] = useState<any>(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchGeoJSON = async () => {
+      try {
+        const response = await fetch("https://raw.githubusercontent.com/HrishikShaji/saas-workflow/main/lib/maps/us-1.json");
+        const data = await response.json();
+        const enrichedFeatures = data.features.map(feature => {
+          const stateData = mockStateIncomeData.find(
+            state => state.name.toLowerCase() === feature.properties.NAME_1.toLowerCase()
+          );
+
+          return {
+            ...feature,
+            properties: {
+              ...feature.properties,
+              averageIncome: stateData?.averageIncome || 50000
+            }
+          };
+        });
+
+        setGeojson({
+          ...data,
+          features: enrichedFeatures
+        });
+
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching GeoJSON:", error);
+        setLoading(false);
+      }
+    };
+
+    fetchGeoJSON();
+  }, []);
+
+  if (loading) {
+    return <div>Loading map...</div>;
+  }
+
+  if (!geojson) {
+    return <div>Error loading map data</div>;
+  }
 
   return (
     <div>
-      <h1>GeoJSON Viewer</h1>
-      <input
-        type="text"
-        value={country}
-        onChange={(e) => setCountry(e.target.value)}
-        placeholder="Enter country name"
-      />
-      <GeoMap countryQuery={country} />
+      {geojson ? (
+        <RenderMap geoJson={geojson} dataKey="averageIncome" mapType="heatmap" />
+      ) : <div>Loading...</div>}
     </div>
   );
 };
