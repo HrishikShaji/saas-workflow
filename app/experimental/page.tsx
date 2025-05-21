@@ -5,6 +5,7 @@ import JsonBuilder from "@/components/workflow/json-builder/JsonBuilder"
 import { stateIncomeData } from "@/lib/constants"
 import { useState } from "react"
 import MapBox from "./components/MapBox"
+import GeoMap from "./components/GeoMap"
 
 // Example color scale
 const incomeColorScale = (income: number) => {
@@ -16,8 +17,18 @@ const incomeColorScale = (income: number) => {
 }
 
 export default function Page() {
+  const [country, setCountry] = useState('India');
 
   return (
-    <MapBox />
-  )
-}
+    <div>
+      <h1>GeoJSON Viewer</h1>
+      <input
+        type="text"
+        value={country}
+        onChange={(e) => setCountry(e.target.value)}
+        placeholder="Enter country name"
+      />
+      <GeoMap countryQuery={country} />
+    </div>
+  );
+};
