@@ -10,14 +10,14 @@ export const MapRendererTask = {
 	icon: (props: LucideProps) => (
 		<Bot className="stroke-pink-500" {...props} />
 	),
-	isEntryPoint: false,
+	isEntryPoint: true,
 	inputs: [
 		{
-			name: "mapData",
+			name: "input",
 			type: TaskParamType.STRING,
-			helperText: "Map data",
+			helperText: "Map input",
 			required: true,
-			hideHandle: false
+			hideHandle: true
 		},
 
 	] as const,

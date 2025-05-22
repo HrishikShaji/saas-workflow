@@ -1,9 +1,11 @@
+"use client"
+
 import React from 'react';
 import Map, { Source, Layer } from 'react-map-gl/mapbox';
 
 const MAPBOX_TOKEN = process.env.NEXT_PUBLIC_MAPBOX_API_KEY_1;
 
-interface GeoMapProps {
+export interface GeoMapProps {
   geoJson: any; // GeoJSON FeatureCollection
   dataKey?: string; // Property key used for styling
   mapType?: 'choropleth' | 'point' | 'heatmap' | 'symbol';
@@ -23,7 +25,7 @@ const defaultView = {
   zoom: 3
 };
 
-const defaultColorStops: [number, string][] = [
+export const defaultColorStops: [number, string][] = [
   [40000, '#000000'],
   [50000, '#9ecae1'],
   [60000, '#4292c6'],

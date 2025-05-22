@@ -47,15 +47,5 @@ export default function MapResponse({ data }: Props) {
 
 	//console.log("@@MapDATa", mapData)
 
-	return <GenericMap
-		geoUrl={sampleUrl}
-		geoJSON={worldJson}
-		data={finalData.map(item => ({
-			id: item.id,
-			name: item.state,
-			value: item.income
-		}))}
-		colorScale={incomeColorScale}
-	/>
-
+	return <div></div>
 }

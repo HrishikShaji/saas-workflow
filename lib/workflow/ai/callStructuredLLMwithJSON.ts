@@ -40,7 +40,7 @@ export async function callStructuredLLMwithJSON(
 			...inputData,
 			format_instructions: parser.getFormatInstructions(),
 		});
-		console.log("@@RESPONSE", response.content)
+		//		console.log("@@RESPONSE", response.content)
 
 		{/*
 		let finalResponse: string;
