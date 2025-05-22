@@ -10,7 +10,7 @@ export async function mapRendererExecutor(environment: ExecutionEnvironment<type
 	try {
 		environment.log.info("Generating map from user prompt...");
 		const input = environment.getInput("input")
-		const res = await fetch("https://raw.githubusercontent.com/HrishikShaji/saas-workflow/main/lib/maps/us-1.json");
+		const res = await fetch("https://raw.githubusercontent.com/HrishikShaji/maps/refs/heads/main/us-1.json");
 		const geoJson = await res.json();
 		// Define the schema for structured LLM output
 		const schema = {

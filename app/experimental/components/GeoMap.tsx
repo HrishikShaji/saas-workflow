@@ -68,7 +68,7 @@ const GeoMap = ({ countryQuery }: Props) => {
   useEffect(() => {
     const fetchGeoJSON = async () => {
       try {
-        const response = await fetch("https://raw.githubusercontent.com/HrishikShaji/saas-workflow/main/lib/maps/us-1.json");
+        const response = await fetch("https://raw.githubusercontent.com/HrishikShaji/maps/refs/heads/main/us-1.json");
         const data = await response.json();
         const enrichedFeatures = data.features.map(feature => {
           const stateData = mockStateIncomeData.find(
