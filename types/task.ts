@@ -27,7 +27,9 @@ export enum TaskType {
         TEXT_CODE_GENERATION = "TEXT_CODE_GENERATION",
         TEXT_STORY_WRITING = "TEXT_STORY_WRITING",
         SIMPLE_PROMPT = "SIMPLE_PROMPT",
-        MAP_RENDERER = "MAP_RENDERER"
+        MAP_RENDERER = "MAP_RENDERER",
+        VARIABLE = "VARIABLE",
+        OPERATION = "OPERATION"
 }
 
 export enum TaskParamType {

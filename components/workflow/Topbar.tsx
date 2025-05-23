@@ -6,6 +6,7 @@ import TooltipWrapper from "./TooltipWrapper";
 import { ChevronLeft } from "lucide-react";
 import SaveButton from "./SaveButton";
 import ExecuteButton from "./ExecuteButton";
+import ExperimentalExecuteButton from "./ExperimentalExecutionButton";
 
 interface Props {
 	title: string;
@@ -33,6 +34,7 @@ export default function Topbar({ workflowId, title, subTitle, hideButtons = fals
 		<div className="flex gap-1 flex-1 justify-end">
 			{hideButtons === false && (
 				<>
+					<ExperimentalExecuteButton workflowId={workflowId} />
 					<ExecuteButton workflowId={workflowId} />
 					<SaveButton workflowId={workflowId} />
 				</>

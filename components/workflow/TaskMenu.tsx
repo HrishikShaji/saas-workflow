@@ -23,6 +23,15 @@ export default function TaskMenu() {
 					<TaskMenuBtn taskType={TaskType.OPTIONS_AGENT} />
 				</AccordionContent>
 			</AccordionItem>
+			<AccordionItem value="math">
+				<AccordionTrigger className="font-bold">
+					Math
+				</AccordionTrigger>
+				<AccordionContent className="flex flex-col gap-1">
+					<TaskMenuBtn taskType={TaskType.VARIABLE} />
+					<TaskMenuBtn taskType={TaskType.OPERATION} />
+				</AccordionContent>
+			</AccordionItem>
 			<AccordionItem value="llm">
 				<AccordionTrigger className="font-bold">
 					LLM

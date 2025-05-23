@@ -29,6 +29,8 @@ import { TextCodeGenerationTask } from "./text-operations/TextCodeGenerationTask
 import { TextStoryWritingTask } from "./text-operations/TextStoryWritingTask";
 import { SimplePromptTask } from "./llm-operations/SimplePromptTask";
 import { MapRendererTask } from "./renderers/MapRendererTask";
+import { VariableTask } from "./math/VariableTask";
+import { OperationTask } from "./math/OperationTask";
 
 type Registry = {
 	[K in TaskType]: WorkflowTask & { type: K }
@@ -63,5 +65,7 @@ export const TaskRegistry: Registry = {
 	TEXT_CODE_GENERATION: TextCodeGenerationTask,
 	TEXT_STORY_WRITING: TextStoryWritingTask,
 	SIMPLE_PROMPT: SimplePromptTask,
-	MAP_RENDERER: MapRendererTask
+	MAP_RENDERER: MapRendererTask,
+	VARIABLE: VariableTask,
+	OPERATION: OperationTask
 }
